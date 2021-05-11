@@ -21,10 +21,11 @@
 *.kate-swp
 CMakeFiles/*
 CMakeCache.txt
-Makefile
 cmake_install.cmake
 stats/*
-build/*
 !build/Makefile
 !build/*.make
 *.swp
+
+# at least until the book is in a more stable state
+build/*.html
