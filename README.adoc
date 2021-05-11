@@ -1,0 +1,17 @@
+= Untitled MIPS book
+
+This is where I'll write the book and hopefully my unorganized hodgepodge
+method of writing will culminate in an organized cohesive book.
+
+I already am torn between writing a ground up book, (ie start with data types, move
+to branches, loops, functions, calling conventions stack etc.).
+
+Or more jump in, start with a full "Hello world" program and overview all the features
+and then move on to more and more complicated programs explaining things as necessary.
+
+This is I think more popular, it's more how I tutor (I'm usually in a rush to help them)
+but then I'd also want more appendices/reference chapters at the end maybe.
+
+Lastly, I could forgo both techniques and literally just create a "cookbook", where it's got dozens of programs and snippets in C and the MIPS equivalent.
+
+
