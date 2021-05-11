@@ -1,0 +1,128 @@
+= Chapter 1: Data
+
+In MIPS, you can declare global variables in the `.data` section.
+
+At a minimum this is where you would declare/define any literal strings
+your program will be printing, since virtually every program has
+at least 1 or 2 of those.
+
+When declaring something in the `.data` section, the format is
+
+`variable_name: .directive value(s)`
+
+where whitespace between the 3 is arbitrary.  The possible directives are listed
+in the following table:
+
+.MIPS data types
+[cols="1,1,2"]
+|===
+| Directive | Size | C equivalent
+
+| .byte | 1 | char
+
+| .half | 2 | short
+
+| .word | 4 | int
+
+| .float | 4 | float
+
+| .double | 8 | double
+
+| .ascii | NA | char str[5] = "hello"; (no '\0')
+
+| .asciiz | NA | char str[] = "hello"; (includes the '\0')
+
+| .space  | NA | typeless, unitinialized space, can be used for any type/array
+|===
+
+
+As you can see it's pretty straightforward, but there are a few more details
+about actually using them so let's move onto some examples.
+
+Say you wanted to convert the following simple program to MIPS:
+
+[source,c]
+----
+#include <stdio.h>
+
+int main()
+{
+	char name[30];
+	int age;
+	printf("What's your name and age?\n");
+	scanf("%s %d", name, &age);
+	printf("Hello %s, nice to meet you!\n", name);
+	return 0;
+}
+----
+
+The first thing you have to remember is that when converting from a higher level
+language to assembly (any assembly) is that what matters is whether it's functionally
+the same, not that everything is done in exactly the same way.  In this instance,
+that means realizing that your literal strings and the name array become globals in
+MIPS.
+
+[source,mips]
+----
+.data
+age:         .word 0  # can be initialized to anything
+
+ask_name:    .asciiz "What's your name and age?\n"
+hello_space: .asciiz "Hello "
+nice_meet:   .asciiz ", nice to meet you!\n"
+
+name:        .space 30
+
+.text
+
+# main goes here
+
+----
+
+As you can see in the example, we just extract all the string literals and
+the character array name and declare them as MIPS globals.  One thing to note
+is the second printf.  Because it prints a variable, name, using the conversion
+specifier, we break the literal into pieces around that.  Since there is no
+built-in printf function in MIPS, you have to handle printing variables yourself
+with the appropriate system calls.
+
+
+== Arrays
+
+Declaring arrays is just an extension of declaring single variables.  Obviously
+strings are special cases, that can be handled with `.ascii` or `.asciiz` for literals,
+but for other types or user inputed strings how do we do it?
+
+Well the first way, which was demonstrated in the snippet above is to use `.space`
+to just declare array of the necessary byte size.  Keep in mind that the size is
+specified in bytes not elements, so it only matches for character arrays.  For
+arrays of ints/words, floats, doubles etc. you'd have to multiply by the sizeof(type).
+
+"But, `.space` only lets you declare uninitialized arrays, how do I do initialized ones?"
+
+Well, it's just an extension of declaring a single variable of that type.  You specify
+all the values, comma separated.  This actually gives you another way to declare a string
+or a character array, though I can't really think of a reason you'd want to.  You could
+declare a `.byte` array and list all the characters individually.  See below for examples.
+
+[source,c]
+----
+int a[20];
+double b[20];
+int c[10] = { 9,8,7,6,5,4,3,2,1,0 };
+char d[3] = { 'a', 'b', 'c' }
+----
+
+becomes
+
+[source,mips]
+----
+.data
+a:        .space 80
+b:        .space 160
+c:        .word 9,8,7,6,5,4,3,2,1,0
+d:        .byte 'a', 'b', 'c'
+----
+
+
+
