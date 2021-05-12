@@ -1,2 +1,119 @@
 = Chapter 0: Hello World
 
+=== Prereqs
+While someone with no programming experience could probably learn MIPS from this
+book, it is definitely preferable to have at least some experience in a higher
+level imperative programming language. I say imperative, because programming
+in assembly is the antithesis of functional programming, everything is about
+state, with each line changing the state of the CPU and sometimes memory. Given
+that, experience in functional languages like Lisp, Scheme etc. are less helpful
+than experience in C/C++, Java, Python, Javascript etc.
+
+Of all of the latter, C is the best, with C++ being a close second because at least
+all of C exists in C++. There are many reasons C is the best prior experience when
+learning assembly (any assembly, not just MIPS), including the following:
+
+* Pointers, concepts and symmetry of "address of" and "dereference" operators
+* pointer/array syntax equivalence
+* Stack allocation as the default
+* manual memory management, no garbage collector
+* Global data
+* Rough equivalence in structure of a C program and an assembly program (vs. say Java)
+* Pass by value
+
+There's some overlap between those and there's probably more but you can see than
+most other languages that are commonly taught as first languages are missing most if
+not all of those things.
+
+Even C++, which technically has all of them, being a superset of C, is usually taught in
+a way that mostly ignores all of those things.  They teach C++ as if it's Java,
+never teaching the fundamentals. In any case this is getting into
+my problems with CS pedagogy of the last 20 years based on my experience as a CS
+major myself ('12) and as a programming tutor helping college students across the
+country since 2016, and I should save it for a proper essay/rant sometime.
+
+Long story short, I use C code and C syntax to help explain and teach MIPS.  I'll
+try to provide enough explanation regardless of past experience as best I can.
+
+=== System Setup
+As I tell all of my tutoring students, if you're majoring in CS or anything related
+I highly recommend you use Linux. It's just easier in every way to do dev work
+on Linux vs Windows or Mac.  Many assignments require it, which often necessitates
+using a virtual machine (which is painful, especially on laptops) and/or ssh-ing
+into a school Linux server, which is also less than ideal.  In general, you'll have
+to learn how to use the unix terminal eventually and will probably use it to some
+extent in your career so it also just makes sense to get used to it asap.
+
+That being said, Windows does now have WSL so you can get the full Ubuntu or Debian
+or Fedora etc. terminal based system on Windows without having to setup a real
+virtual machine (or dealing with the slowdown that would cause). I've even heard
+that they'll get support for Linux GUI programs soon.
+
+Mac on the other hand is technically a Unix based system and you can use their
+terminal and install virtually any program from there using Macports or Homebrew
+or similar.
+
+There are 3 commonly used MIPS simulators that I know of:
+
+* SPIM is probably the oldest and is terminal only
+* QtSpim is a GUI front end for SPIM
+* MARS is a Java GUI based simulator with dozens of extra syscalls, syntactic
+sugar and features like graphics, memory mapped I/O, etc.
+
+SPIM and QtSpim are in the Debian/Ubuntu repos so you can install them with the following
+
+....
+$ sudo apt install qtspim spim
+....
+
+You can probably find them in the repos for other distros too and install them similarly.
+
+If it's not in your repos or you're on Windows (and not using WSL) or Mac you can
+download them, and MARS at these addresses
+
+* https://courses.missouristate.edu/KenVollmar/mars/download.htm[MARS]
+* https://sourceforge.net/projects/spimsimulator/files/[QtSpim]
+
+
+=== Hello World
+
+Let's start with the classic hello world program, first in C, then in MIPS, and go
+over all the pieces in overview.
+
+[source,c]
+----
+#include <stdio.h>
+
+int main()
+{
+	printf("Hello World!\n");
+	return 0;
+}
+----
+
+It's pretty self explanatory.  You have to include stdio.h so you can use the function printf
+(though in the real world I'd use puts here), the function main is the start of any C/C++
+program, which is a function that returns an int.  We call printf to display the string
+"Hello World!\n" to the user and then return 0 to exit.  0 indicates success, no error btw.
+
+[source,mips]
+----
+.data
+hello:   .asciiz "Hello World!\n"
+
+.text
+main:
+	li   $v0, 4      # print string system call
+	la   $a0, hello  # load address of string to print into a0
+	syscall
+
+	li   $v0, 10     # exit syscall
+	syscall
+----
+
+
+
+
+
+
+
