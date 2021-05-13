@@ -1,1 +1,43 @@
-= Chapter 2: Syscalls
+:mars_syscalls: footnote:[https://courses.missouristate.edu/KenVollmar/mars/Help/SyscallHelp.html]
+
+= Chapter 2: System Calls
+
+We mentioned system calls (aka syscalls from now on) in chapter 0 when we were
+going over our "Hello World" program, but what exactly are they?
+
+Essentially, they are the built in functions of a operating system, in this case,
+the simple operating system of the MIPS simulators.  They provide access to all the
+fundamental features, like input and output to/from both the console and files,
+allocating memory, and exiting.  That covers all the 17 syscalls supported by spim,
+but MARS supports many more, for things from playing MIDI sounds, to getting a random
+number, to creating GUI dialogs{mars_syscalls}
+
+NOTE: Except for the MARS specific chapters/sections, I'll be sticking to SPIM compatible
+code throughout this book, meaning we only use the first 17 syscalls, and don't get
+to use some of the syntactic sugar available in MARS.
+
+.SPIM supported syscalls
+.MIPS data types
+[cols="1,1,1,2"]
+|===
+| Name | $v0 | Arguments | Result
+
+| print integer | 1 | $a0 = integer to print |
+
+| print float | 2 | $f12 = float to print |
+
+| print double | 3 | $f12 = double to print |
+
+| print string | 4 | $a0 = address of string
+
+| read integer | 5 | | $v0 = integer read
+
+| .ascii | NA | char str[5] = "hello"; (no '\0')
+
+| .asciiz | NA | char str[] = "hello"; (includes the '\0')
+
+| .space  | NA | typeless, unitinialized space, can be used for any type/array
+|===
+
+
+
