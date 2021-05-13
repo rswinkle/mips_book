@@ -1,4 +1,14 @@
+
+:mars_slow: footnote:[Starting up the MARS GUI (an old Java app) is often annoyingly slow]
+:mars_versions: footnote:[Some schools/professors have their own versions with extra features and other improvements over the old version available on the MARS website]
+:mars_commandline: footnote:[https://courses.missouristate.edu/KenVollmar/mars/Help/MarsHelpCommand.html]
+
+
+
+
 = Chapter 0: Hello World
+
+In which we lay the groundwork for the rest of the book...
 
 === Prereqs
 While someone with no programming experience could probably learn MIPS from this
@@ -78,7 +88,8 @@ download them, and MARS at these addresses
 === Hello World
 
 Let's start with the classic hello world program, first in C, then in MIPS, and go
-over all the pieces in overview.
+over all the pieces in overview.  You can copy paste these into your editor of choice
+(mine being neovim), or just use the files in the associated repo to follow along.
 
 [source,c]
 ----
@@ -96,6 +107,17 @@ It's pretty self explanatory.  You have to include stdio.h so you can use the fu
 program, which is a function that returns an int.  We call printf to display the string
 "Hello World!\n" to the user and then return 0 to exit.  0 indicates success, no error btw.
 
+You can compile and run it in a linux/unix terminal with as show below.  You
+can substitute clang or another compiler for gcc if you want.
+
+....
+$ gcc -o hello hello.c
+$ ./hello
+Hello World!
+....
+
+Now, the same program in MIPS:
+
 [source,mips]
 ----
 .data
@@ -111,9 +133,70 @@ main:
 	syscall
 ----
 
+The `.data` section is where you declare global variables, which includes string
+literals as in this case.  We'll cover them in more detail later.
 
+The `.text` section is where any code goes.  Here we declare a single label main
+indicating the start of our main function.
 
+We then put the number 4 in the $v0 register to select the print string system call.
+It takes one argument, the address of the string to print, in the $a0 register which we
+do on the next line. Finally, we call the system call using the syscall instruction.
+Finally we call the exit system call which takes no arguments and exits the program.
+Again we'll cover system calls in a later chapter, this is just an intro/overiew.
 
+=== Building and Running
 
+Now that we have our hello world MIPS program, how do we run it?  Well the easiest
+and quickest{mars_slow} way is of course to do it on the command line, which can be done like
+this for spim:
+
+....
+$ spim -file hello.s
+SPIM Version 8.0 of January 8, 2010
+Copyright 1990-2010, James R. Larus.
+All Rights Reserved.
+See the file README for a full copyright notice.
+Loaded: /usr/lib/spim/exceptions.s
+Hello World!
+....
+
+or this for MARS:
+
+....
+$ java -jar ~/Mars4_5.jar hello.s
+MARS 4.5  Copyright 2003-2014 Pete Sanderson and Kenneth Vollmar
+
+Hello World!
+
+....
+
+The name of your MARS jar file may be different{mars_versions},
+but just use the correct name and path.  For me I just keep the jar file in my home
+directory so I can use tilde to access it no matter where I am.  You can also just
+copy it into your working directory (ie wherever you have your source code) so you
+don't have to specify a path at all.  There are lots of useful command line options
+that you can use{mars_commandline}, some of which we'll touch on later.
+
+Running the jar directly on the command line works even in the DOS command line though
+I've never done it and it's probably not worth it.
+
+Alternatively, you can just start up MARS or QtSpim like a normal GUI application and
+then load your source file.  MARS requires you to hit "assemble" then "run", whereas
+QtSpim, you just hit "run".
+
+QtSpim does let you start and load the file in one step from the command line
+....
+$ qtspim hello.s
+....
+
+but there is no way to simply run it with out starting the GUI, which makes sense
+since the whole point is to be a GUI wrapper around spim.
+
+=== Conclusion
+
+Well, there you have it, you've written and run your first MIPS program.  Another
+few chapters and you'll have no trouble with almost anything you'd want to do
+in in MIPS for a class or just for fun with these simulators.
 
 
