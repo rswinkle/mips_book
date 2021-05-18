@@ -70,5 +70,137 @@ cdo file I/O using calls identical to POSIX functions (open, read, write, close;
 see man pages), allocate memory, and exit.  Even so, they're sufficient to build
 anything you want.
 
+So, what does that table mean?  How do these actually work?
+
+The process is, put the number for the syscall you want in $v0, fill in the appropriate
+arguments, if any, and then do the syscall:
+
+....
+	li    $v0, 1  # 1 is print integer
+	li    $a0, 42  # takes 1 arg in a0, the number to print
+	syscall        # actually execute syscall
+....
+
+You can think of the above as `print_integer(42);`.  Let's look at an actual
+program that uses a few more syscalls next.
+
+=== Examples
+
+[source,c]
+----
+#include <stdio.h>
+
+int main()
+{
+	int age;
+	int height;
+	char name[50];
+	printf("What's your name? ");
+	fgets(name, 50, stdin);
+
+	printf("Hello %s", name);
+
+	printf("How old are you? ");
+	scanf("%d", &age);
+
+	printf("Enter your height in inches: ");
+	scanf("%d", &height);
+
+	printf("Your age + height = %d\n", age + height);
+
+	return 0;
+}
+----
+
+I'm using `fgets()` instead of `scanf("%s", name)` because fgets works the same as the
+read string syscall (8).
+
+[source,mips]
+----
+.data
+
+name:     .space 50
+
+nameprompt:  .asciiz "What's your name? "
+hello_space: .asciiz "Hello "
+how_old:     .asciiz "How old are you? "
+ask_height:  .asciiz "Enter your height in inches: "
+ageplusheight: .asciiz "Your age + height = "
+
+
+.text
+main:
+	li   $v0, 4      # print string system call
+	la   $a0, nameprompt  # load address of string to print into a0
+	syscall
+
+	li   $v0, 8      # read string
+	la   $a0, name
+	li   $a1, 50
+	syscall
+
+	li   $v0, 4
+	la   $a0, hello_space
+	syscall
+
+	la   $a0, name  # note 4 is still in $v0
+	syscall
+
+	# don't print a newline here because
+	# one will be part of name
+
+	li   $v0, 4
+	la   $a0, how_old
+	syscall
+
+	li   $v0, 5   # read integer
+	syscall
+	move $t0, $v0  # save age in t0
+
+	li   $v0, 4
+	la   $a0, ask_height
+	syscall
+
+	li   $v0, 5   # read integer
+	syscall
+	add  $t0, $t0, $v0 # t0 += height
+
+
+	li   $v0, 4
+	la   $a0, ageplusheight
+	syscall
+
+	li   $v0, 1  # print int
+	move $a0, $t0  # a0 = age + height
+	syscall
+	
+	# print newline
+	li   $v0, 11   # print char
+	li   $a0, 10   # ascii value of '\n'
+	syscall
+
+
+	li   $v0, 10     # exit syscall
+	syscall
+----
+
+There a few things to note from the example.
+
+We don't declare global variables for age or height.  We could, but there's no reason
+to since we have to have them in registers to do the addition anyway.  So we just
+copy/save height to $t0 so we can use $v0 for overwrite $v0 for 2 more syscalls,
+then add age to t0.
+
+This is generally how it works.  Use registers for local variables unless
+required to do otherwise.  We'll cover more about register use when we
+cover the MIPS calling convention.
+
+Another thing is when we print their name, we don't put 4 in $v0 again because it
+is still/already 4 from the lines above.  Unless the syscall says it writes to $v0
+you can assume it is unmodified.
+
+Lastly, many people will declare a string `"\n"` and use print string to print a newline,
+but it's easier to just use the print char syscall as we do just before exiting.
+
 
 
