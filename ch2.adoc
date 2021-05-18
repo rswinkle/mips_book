@@ -10,7 +10,7 @@ the simple operating system of the MIPS simulators.  They provide access to all 
 fundamental features, like input and output to/from both the console and files,
 allocating memory, and exiting.  That covers all the 17 syscalls supported by spim,
 but MARS supports many more, for things from playing MIDI sounds, to getting a random
-number, to creating GUI dialogs{mars_syscalls}
+number, to creating GUI dialogs.{mars_syscalls}
 
 NOTE: Except for the MARS specific chapters/sections, I'll be sticking to SPIM compatible
 code throughout this book, meaning we only use the first 17 syscalls, and don't get

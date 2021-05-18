@@ -1,0 +1,65 @@
+greensheet: footnote:[https://inst.eecs.berkeley.edu/~cs61c/resources/MIPS_Green_Sheet.pdf]
+
+= Chapter 3: Branches and Logic
+
+We can't go much farther in our MIPS programming journey without covering branching.
+Almost every non-trivial program requires some logic, even if it's just a few if or
+if-else statements.  In other words, almost every program requires branching, a way
+to do code a istead of code b, or to do code a only if certain conditions are met.
+
+You already know how do do this in higher level languages, the aforementioned if
+statement.  In assembly it's more complicated.  You're only tool is the ability
+to jump to a label on other line based on the result of various comparisons.  The
+relevant instructions are listed in the following table:
+
+
+.MIPS branching related instructions (and pseudoinstructions)
+[cols="3,1,2,2"]
+|===
+| Name | Opcode | Format | Operation
+
+| Branch On Equal | beq | beq rs, rt, label | if (rs == rt) goto label
+
+| Branch On Not Equal | bne | bne rs, rt, label | if (rs != rt) goto label
+
+| Branch Less Than | blt | blt rs, rt, label | if (rs < rt) goto label
+
+| Branch Greater Than | bgt | bgt rs, rt, label | if (rs > rt) goto label
+
+| Branch Less Than Or Equal | ble | ble rs, rt, label | if (rs <= rt) goto label
+
+| Branch Greater Than Or Equal | bge | bge rs, rt, label | if (rs >= rt) goto label
+
+| Set Less Than | slt | slt rd, rs, rt | rd = (rs < rt) ? 1 : 0
+
+| Set Less Than Immediate | slti | slt rd, rs, imm | rd = (rs < imm) ? 1 : 0
+
+| Set Less Than Immediate Unsigned | sltiu | slt rd, rs, imm | rd = (rs < imm) ? 1 : 0
+
+| Set Less Than Unsigned | sltu | sltu rd, rs, imm | rd = (rs < imm) ? 1 : 0
+
+|===
+
+You can see the same information and more (like which ones are pseudoinstructions)
+on the MIPS greensheet.{greensheet}
+
+There are additional pseudoinstructions in the form of beq/bne/blt/bgt/ble/bge + 'z' which
+are just shortcuts to compare a register against 0, ie the 0 register.
+
+So the following:
+....
+	beq     $t0, $0, label
+	bne     $t1, $0, label
+	blt     $t2, $0, label
+....
+would be equivalent to:
+....
+	beqz    $t0, label
+	bnez    $t1, label
+	bltz    $t2, label
+....
+
+Note `$0` is the same as `zero` and is just the hard coded 0 register.  I'll cover
+registers in more detail in the chapter on functions and the calling conventions.
+
+
