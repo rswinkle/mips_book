@@ -1,7 +1,5 @@
 .data
 
-.eqv print_str 4
-
 name:     .space 50
 
 nameprompt:  .asciiz "What's your name? "
