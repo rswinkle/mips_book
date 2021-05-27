@@ -327,16 +327,19 @@ Morgan's laws are 2 equivalencies, a way to an or to an and and vice versa.
 They are (in C notation):
 
 `!(A || B) == !A && !B`
+
 `!(A && B) == !A || !B`
 
 Essentially you can think of it as splitting the not across the terms and changing
 the logical operation.  The law works for arbitrary numbers of terms, not just 2:
 
-`(A && B && C)`
+....
+(A && B && C)
 is really
-`((A && B) && C)`
+((A && B) && C)
 so when you apply De Morgan's Law recursively you get:
-`!((A && B) && C) == !(A && B) || !C == !A || !B || !C`
+!((A && B) && C) == !(A && B) || !C == !A || !B || !C
+....
 
 
 Let's apply the law to our current example.  Of course the negation of comparisons

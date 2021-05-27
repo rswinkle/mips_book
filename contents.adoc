@@ -1,0 +1,13 @@
+= Table of Contents
+
+[start=0]
+. Hello World
+. Data
+. System Calls
+. Branching and Logic
+. Loops
+. Functions and the MIPS Calling Convention
+. Floating Point Types
+. Tips and Tricks
+. MARS Extras
+
