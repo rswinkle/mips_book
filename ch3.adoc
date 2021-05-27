@@ -71,6 +71,8 @@ They must start with a letter or underscore and the rest can be letters, undersc
 The rest of this chapter will be going over many examples, looking at snippets
 of code in C and translating them to MIPS.
 
+==== Basics
+
 Let's start with the most basic if statement.  The code in and after
 the if statement is arbitrary.
 
@@ -209,7 +211,7 @@ code are using/modifying the same variable), you can use a temporary variable;
 i.e. copy the value into a spare register.  You still save yourself an unecessary
 jump and label.
 
-=== Compound Conditions
+==== Compound Conditions
 
 These first 2 examples have been based on simple conditions, but what if you
 have compound conditions?  How does that work with branch operations that only
@@ -360,17 +362,186 @@ no_add20:
 ....
 
 See how that works?  Or's do not need to remember state.  Just the fact that
-you reached a line in a multi term or expression means the previous checks
+you reached a line in a multi-term or expression means the previous checks
 were false, otherwise you'd have jumped.  If you tried to emulate the same
 thing with an and, as you saw in the larger snippet above, you'd need a
 bunch of extra labels and jumps for each term.
 
 // TODO add example of mixed compond expression if (A || B && C)
+What about mixed compound statements?
 
+....
+	if (a > 10 || c > 100 && b >= c)
+		printf("true\n");
+	
+	b |= 0xAA;
+....
 
+Well, the first thing to remember is that `&&` has a higher priority than `||`,
+which is why most compilers these days will give a warning for the above code
+about putting parenthesis around the `&&` expression to show you meant it (even
+though it's completely legal as is).
+
+So with that in mind, let's change it to jump format to better see what we
+need to do.  While we're at it, let's apply De Morgan's law to the `&&`.
+
+....
+	if (a > 10)
+		goto do_true;
+	if (c <= 100)
+		goto done_if;
+	if (b < c)
+		goto done_if;
+do_true:
+	printf("true\n");
+
+done_if:
+	b |= 0xAA;
+....
+
+This one is trickier because we don't flip the initial expression like normal.
+Instead of jumping _over_ the body which would require testing for the opposite,
+we jump to the true case.  We do this because we don't want to have multiple
+print statements and it lets us fall through the following conditions.  We would
+need multiple print statements because failure for the first expression _is not_
+failure for the entire expression.  Here's how it would look otherwise:
+
+....
+	if (a <= 10)
+		goto check_and;
+	printf("true\n");
+	goto done_if;
+check_and:
+	if (c <= 100)
+		goto done_if;
+	if (b < c)
+		goto done_if;
+
+	printf("true\n");
+
+done_if:
+	b |= 0xAA;
+....
+
+That is harder to read and has both an extra print and an extra jump.
+
+So let's convert the better version to MIPS (a,b,c = t0, t1, t2):
+
+....
+.data
+true_str: .asciiz "true\n"
+
+.text
+	li    $t8, 10   # just get the necessary literals in some unused regs
+	li    $t9, 100
+
+	bgt   $t0, $t8, do_true   # if (a > 10) goto do_true
+	ble   $t2, $t9, done_if   # if (c <= 100) goto done_if
+	blt   $t1, $t2, done_if   # if (b < c) goto done_if
+
+do_true:
+	li    $v0, 4           # print string
+	la    $a0, true_str    # address of str in a0
+	syscall
+
+done_if:
+	ori   $t1, $t1, 0xAA   # b |= 0xAA
+....
+
+		
+
+==== If-Else Chain
 
 Ok, let's look at a larger example.  Let's say you're trying to determine
 a student's letter grade based on their score.  We're going to need a chain
+of if-else-if's to handle all cases.  Assume `score` is declared and
+set somewhere before.
+
+....
+	char letter_grade;
+	if (score >= 90) {
+		letter_grade = 'A';
+	} else if (score >= 80) {
+		letter_grade = 'B';
+	} else if (score >= 70) {
+		letter_grade = 'C';
+	} else if (score >= 60) {
+		letter_grade = 'D';
+	} else {
+		letter_grade = 'F';
+	}
+
+	printf("You got a %c\n", letter_grade);
+}
+....
+
+With chains like these, you following everything we've learned before, it
+comes out looking like this (assuming score is t0 and letter_grade is t1):
+
+....
+.data
+grade_str: .asciiz "You got a "
+
+.text
+	li     $t1, 70   # letter_grade default to 'F' ascii value
+	
+	li     $t2, 90
+	blt    $t0, $t2, not_a   # if (score < 90) goto not_a
+	li     $t1, 65           # leter_grade = 'A'
+	j      grade_done
+
+not_a:
+	li     $t2, 80
+	blt    $t0, $t2, not_b   # if (score < 80) goto not_b
+	li     $t1, 66           # leter_grade = 'B'
+	j      grade_done
+
+not_b:
+	li     $t2, 70
+	blt    $t0, $t2, not_c   # if (score < 70) goto not_c
+	li     $t1, 67           # leter_grade = 'C'
+	j      grade_done
+
+not_c:
+	li     $t2, 60
+	blt    $t0, $t2, grade_done   # if (score < 60) goto grade_done
+	li     $t1, 68           # leter_grade = 'D'
+
+grade_done:
+	li     $v0, 4      # print str
+	la     $a0, grade_str
+	syscall
+
+	li     $v0, 11     # print character
+	move   $a0, $t1    # char to print
+	syscall
+
+	move   $a0, 10    # print '\n'
+	syscall
+....
+	
+You can see how we set a default value and then test for the opposite
+of each condition to jump to the next test, until we get one that fails
+(aka was true in the original C condition) and set the appropriate grade.
+
+You can arrange chains like this in either direction, it doesn't have to match
+the order of the C code.  As long as it works the same, do whatever makes the 
+code simpler and more sensible to you.
+
+==== Conclusion
+
+Branching and logic and learning to translate from higher level code to assembly
+is something that just takes a lot of practice but eventually it'll become
+second nature.  We'll get more practice in the chapter on looping which naturally
+also involves branching.
+
+One final note, there's really no reason to use `slt` family of opcodes _unless_
+your professor requires it, ie he says you can't use pseudoinstructions so you're
+left with `beq`, `bne`, `j` and the `slt` ops.  I'll show how you can code without
+using pseudoinstructions in a later chapter.
+
+// TODO reference to extra's chapter covering stupid professor requirements
+
 
 
 
