@@ -42,7 +42,6 @@ for to while in our head as an intermediary step before going to assembly.
 Speaking of "jump-form", lets apply it to the loop above:
 
 ....
-
 	int i=0;
 	if (i >= a)
 		goto done_loop;
@@ -55,8 +54,216 @@ loop:
 done_loop:
 ....
 
+You can see how that starts to look more like assembly.  Another thing to note is that
+unlike with if statements where we test for the opposite to jump over the block of code,
+when you're doing the test for a loop at the bottom, like a do-while loop, it is unchanged
+from C, because you are jumping to continue the loop.  If you put the test at the top it
+becomes inverted, and you put an unconditional jump at the bottom:
+
+....
+	int i=0;
+loop:
+	if (i >= a)
+		goto done_loop;
+	do_something;
+	i++
+	goto loop:
+
+done_loop:
+....
+
+In general it's better to test at the bottom, both because it's closer to C with the matching
+condition, and because, when you know the loop is going to execute at least once, it requires
+only one jump + label, rather than 2 because you can forgo the the initial if check:
+
+....
+	for (int i=0; i<10; i++)
+		do_something;
+
+	// becomes
+
+	int i=0;
+loop:
+	do_something;
+	i++
+	if (i < a)
+		goto loop;
+....
+
+Ok, now that we've got the theory and structure out of the way, let's try doing a simple
+one in MIPS.
+
+....
+	int sum = 0;
+	for (int i=0; i<100; i++) {
+		sum += i;
+	}
+....
+
+That's about as basic as it gets, add up 1 to 99.
+
+....
+	li    $t0, 0   # sum = 0
+	li    $t1, 1   # i = 1  we can start at 1 because obviously adding 0 is pointless
+	li    $t2, 100
+loop:
+	addi  $t0, $t0, $t1    # sum += i
+	addi  $t1, $t1, 1      # i++
+	blt   $t1, $t2, loop   # while (i < 100)
+....
+
+Ok I don't think there's much point in doing any more without getting to what loops
+are most often used for, looping through data structures, most commonly arrays.
 
 
+=== Looping Through Arrays
+
+Looping and arrays go together for obvious reasons.  An array a sequence of
+variables of the same type, almost always related in some way.  Naturally you
+want to operate on them all together in various ways; sorting, searching,
+accumulating, etc.  So in this section we'll cover looping through arrays in
+various ways, and dealing with multi-dimentional arrays.
+
+==== 1D Arrays
+
+Let's pretend there's an array `int numbers[10];` filled with 10 random numbers.
+
+....
+	int total = 0;
+	for (int i=0; i<10; i++) {
+		total += numbers[i];
+	}
+....
+
+There are several ways to do this.  The first is the most literal translation.
+
+....
+	li    $t0, 0     # total = 0
+	li    $t1, 0     # i = 0
+	la    $t2, numbers   # t2 = numbers
+	li    $t3, 10
+sum_loop:
+	sll   $t4, $t1, 2    # t4 = i*sizeof(int) == i*4
+	add   $t4, $t4, $t2  # t4 = &numbers[i]
+	lw    $t4, 0($t4)    # t4 = numbers[i]
+	add   $t0, $t0, $t4  # total += numbers[i]
+
+	addi  $t1, $t1, 1    # i++
+	blt   $t1, $t3, sum_loop   # while (i < 10)
+....
+
+So we initialize the relevant variables before hand (numbers and 10 could be set
+every iteration but that's less efficient).  Now what's with the i*4?  We already
+discussed using shifts to multiply and divide by powers of 2 in a previous chapter,
+but here we're doing something that higher level languages do automatically for you
+every time you do an array access.  When you access the i'th element, under the hood
+it is multiplying i by the size of the type of the array and adding that number of
+bytes to the base address and then loading the element located there.
+
+If you're unfamiliar with the C syntax in the comments, & means "address of", so t4
+is being set to the address of the i'th element.  Actually that C syntax is redundant
+because the the & counteracts the brackets.  In C adding a number to a pointer does
+pointer math (ie it multiplies by the size of the items as discussed above).  This
+means that these 2 expressions are equivalent:
+
+`&numbers[i] == numbers + i`
+
+also
+
+`&numbers[0] == numbers`
+
+The reason I use the left form in C/C++ even when I can use the right is it makes it
+more explicit and obvious that I'm getting the address of an element of an array.
+If you were scanning the code quickly and saw the expression on the right, you might
+not realize that's an address at all, it could just be some mathematical expression
+(though the array name would hopefully clue you in if it was picked well).
+
+Anyway, back to the MIPS code.  After we get the address of the element we want, we
+have to load it.  Since it's an array of words (aka 4 byte ints) we can use `lw`.
+
+Finally we add that value to total, increment i, and perform the loop check.
+
+Now, I said at the beginning that this was the most literal, direct translation
+(not counting the restructuring to a do-while form).  It is not however my preferred
+form because it's not the simplest or shortest.
+
+Rather than calculate the element address every iteration, why not just keep a pointer
+to the current element and iterate through the array with it?  In C what we're doing
+is this:
+
+....
+	int* p = &numbers[0];
+	int i = 0, total = 0;
+	do {
+		total += *p;
+		i++;
+		p++;
+	} while (i < 10);
+....
+
+In other words, we set p to point at the first element and then increment it every
+step to keep it pointing at numbers[i].  Again, all mathematical operations on pointers
+in C deal in increments of the byte syze of the type, so `p++` is really adding 1*sizeof(int).
+
+
+....
+	li    $t0, 0     # total = 0
+	li    $t1, 0     # i = 0
+	la    $t2, numbers   # p = numbers
+	li    $t3, 10
+sum_loop:
+	lw    $t4, 0($t2)    # t4 = *p
+	add   $t0, $t0, $t4  # total += *p
+
+	addi  $t1, $t1, 1    # i++
+	addi  $t2, $t2, 4    # p++  ie p += sizeof(int)
+	blt   $t1, $t3, sum_loop   # while (i < 10)
+....
+	
+Now, that may not look much better, we only saved 1 instuction total, and if we were
+looping through a string (aka an array of characters, sizeof(char) == 1) we wouldn't
+have saved any.  However, imagine if we weren't using sll to do the multiply but
+mul.  That would take 3 instructions, not 1.  Even mul would take 2.  And we'd
+have to use one of those if we were iterating through an array of structures with
+a size that wasn't a power of 2.
+
+But there is one more variant that you can use that can save a few more instructions.
+Instead of using i and i<10 to control the loop, use p and the address just past the
+end of the array.  In C it would be this:
+
+....
+	int* p = &numbers[0];
+	int* end = &numbers[10];
+	int total = 0;
+	do {
+		total += *p;
+		p++;
+	} while (p < end);
+....
+
+You could also use != instead of <.  This is similar to using the .end() method on many C++
+data structures when using iterators.
+
+....
+	li    $t0, 0     # total = 0
+	la    $t2, numbers   # p = numbers
+	addi  $t3, $t2, 40   # end = &numbers[10] = numbers + 10*sizeof(int)
+sum_loop:
+	lw    $t4, 0($t2)    # t4 = *p
+	add   $t0, $t0, $t4  # total += *p
+
+	addi  $t2, $t2, 4    # p++  ie p += sizeof(int)
+	blt   $t2, $t3, sum_loop   # while (p < end)
+....
+
+So we dropped from 10 to 7 and even more if we had had to do mul or mult originally.
+And this was just for a 1D array.  Imagine if you had 2 or 3 indices you had to use
+to calculate the correct offset.  That's in the next section.
+
+
+==== 2D Arrays
+
+// TODO
 
 
 

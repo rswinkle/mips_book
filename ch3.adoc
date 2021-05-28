@@ -538,13 +538,11 @@ is something that just takes a lot of practice but eventually it'll become
 second nature.  We'll get more practice in the chapter on looping which naturally
 also involves branching.
 
-One final note, there's really no reason to use `slt` family of opcodes _unless_
+One final note, there's really no reason to use the `slt` family of opcodes _unless_
 your professor requires it, ie he says you can't use pseudoinstructions so you're
 left with `beq`, `bne`, `j` and the `slt` ops.  I'll show how you can code without
 using pseudoinstructions in a later chapter.
 
 // TODO reference to extra's chapter covering stupid professor requirements
-
-
 
 
