@@ -261,7 +261,8 @@ to calculate the correct offset.  That's in the next section.
 
 ==== 2D Arrays
 
-// TODO
+The first thing to understand is what's really happening when you declare a 2D array in C/C++.
+
 
 
 
