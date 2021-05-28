@@ -4,5 +4,59 @@ de_morgans: footnote:[https://en.wikipedia.org/wiki/De_Morgan%27s_laws]
 
 = Chapter 4: Loops
 
+TODO intro
+
+Before we get into the MIPS, I want to cover something that may be obvious to some but
+may have never occurred to others.  Any loop structure can be converted to any other
+(possibly with the addition of an if statement).  So a for can be written as a while
+and vice versa.  Even a do-while can be written as a for or while loop.  Let's look
+at some equivalencies.
+
+....
+	for (int i=0; i<a; i++) {
+		do_something;
+	}
+
+	int i = 0;
+	while (i < a) {
+		do_something;
+		i++;
+	}
+
+	int i = 0;
+	if (i < a) {
+		do {
+			do_something;
+			i++;
+		} while (i < a);
+	}
+	// you could also have an if (i >= a) goto loop_done; to jump over do-while
+....
+
+I think in general, when writing assembly, it can help to think more in terms of while or
+do-while rather than for because the former more resemble what the assembly looks like
+in terms of what goes where.  So just like in the last chapter, we would think of the
+if-else statements in "jump-form" or "branch-form", we can do the same here, converting
+for to while in our head as an intermediary step before going to assembly.
+
+Speaking of "jump-form", lets apply it to the loop above:
+
+....
+
+	int i=0;
+	if (i >= a)
+		goto done_loop;
+loop:
+	do_something;
+	i++
+	if (i < a)
+		goto loop;
+
+done_loop:
+....
+
+
+
+
 
 
