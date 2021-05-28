@@ -1,5 +1,5 @@
-greensheet: footnote:[https://inst.eecs.berkeley.edu/~cs61c/resources/MIPS_Green_Sheet.pdf]
-de_morgans: footnote:[https://en.wikipedia.org/wiki/De_Morgan%27s_laws]
+:greensheet: footnote:[https://inst.eecs.berkeley.edu/~cs61c/resources/MIPS_Green_Sheet.pdf]
+:de_morgans: footnote:[https://en.wikipedia.org/wiki/De_Morgan%27s_laws]
 
 = Chapter 3: Branches and Logic
 

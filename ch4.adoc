@@ -1,10 +1,8 @@
 
-greensheet: footnote:[https://inst.eecs.berkeley.edu/~cs61c/resources/MIPS_Green_Sheet.pdf]
-de_morgans: footnote:[https://en.wikipedia.org/wiki/De_Morgan%27s_laws]
-
 = Chapter 4: Loops
 
-TODO intro
+[quote, Unknown, Often misattributed to Albert Einstein]
+"Insanity is doing the same thing over and over again and expecting different results."
 
 Before we get into the MIPS, I want to cover something that may be obvious to some but
 may have never occurred to others.  Any loop structure can be converted to any other
