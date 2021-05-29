@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
 
 
@@ -8,6 +10,7 @@ int main()
 #define COLS 4
 
 	int array[ROWS][COLS] = { { 1, 2, 3, 4 }, { 5, 6, 7, 8 } };
+	int array1d[8] = { 1, 2, 3, 4, 5, 6, 7, 8 };
 
 	for (int i=0; i<ROWS; i++) {
 		for (int j=0; j<COLS; j++) {
@@ -24,7 +27,12 @@ int main()
 		printf("%d ", *p);
 	}
 
-	puts("\nLook at that\n");
+	puts("\n\nLook at that.  Or this:");
+	
+	if (!memcmp(array, array1d, 8*sizeof(int))) {
+		puts("memcmp(array, array1d, 8*sizeof(int)) == 0\narray and array1d are identical\n");
+	}
+	
 	
 	// Now let's look at the common but stupid way to allocate a 2D array
 	int** my2darray = malloc(ROWS * sizeof(int*));
