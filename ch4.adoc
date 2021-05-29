@@ -261,8 +261,19 @@ to calculate the correct offset.  That's in the next section.
 
 ==== 2D Arrays
 
-The first thing to understand is what's really happening when you declare a 2D array in C/C++.
+The first thing to understand is what's really happening when you declare a 2D
+array in C.  The contents of a 2D array are tightly packed, in row-major order,
+meaning that all the elements from the first row are followed by all the elements
+of the second row and so on.  What this means is that a 2D array is equivalent
+to a 1D array with rows*cols elements in the same order:
 
+....
+	// The memory of these two arrays are identical
+	int array2d[2][4] = { { 1, 2, 3, 4 }, { 5, 6, 7, 8 } };
+	int array1d[8] = { 1, 2, 3, 4, 5, 6, 7, 8 };
+....
+
+See the code example 2d_arrays.c for more details.
 
 
 
