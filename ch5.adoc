@@ -18,12 +18,14 @@ is good practice to only have a single return instruction associated with a
 function.{one_return}  A comment above the label is also helpful.  Together those help you
 quickly see the start and end of the function.
 
+[source,c,linenums]
 ----
 void func1() {}
 ----
 
 would be
 
+[source,mips,linenums]
 ----
 # void func1()
 func1:
