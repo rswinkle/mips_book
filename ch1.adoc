@@ -1,3 +1,5 @@
+:source-highlighter: pygments
+
 = Chapter 1: Data
 
 In MIPS, you can declare global variables in the `.data` section.
@@ -41,7 +43,7 @@ about actually using them so let's move onto some examples.
 
 Say you wanted to convert the following simple program to MIPS:
 
-[source,c]
+[source,c,linenums]
 ----
 #include <stdio.h>
 
@@ -62,7 +64,7 @@ the same, not that everything is done in exactly the same way.  In this instance
 that means realizing that your literal strings and the name array become globals in
 MIPS.
 
-[source,mips]
+[source,mips,linenums]
 ----
 .data
 age:         .word 0  # can be initialized to anything
@@ -105,7 +107,7 @@ all the values, comma separated.  This actually gives you another way to declare
 or a character array, though I can't really think of a reason you'd want to.  You could
 declare a `.byte` array and list all the characters individually.  See below for examples.
 
-[source,c]
+[source,c,linenums]
 ----
 int a[20];
 double b[20];
@@ -115,7 +117,7 @@ char d[3] = { 'a', 'b', 'c' }
 
 becomes
 
-[source,mips]
+[source,mips,linenums]
 ----
 .data
 a:        .space 80

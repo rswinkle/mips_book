@@ -1,3 +1,4 @@
+:source-highlighter: pygments
 
 :mars_slow: footnote:[Starting up the MARS GUI (an old Java app) is often annoyingly slow]
 :mars_versions: footnote:[Some schools/professors have their own versions with extra features and other improvements over the old version available on the MARS website]
@@ -72,9 +73,10 @@ sugar and features like graphics, memory mapped I/O, etc.
 
 SPIM and QtSpim are in the Debian/Ubuntu repos so you can install them with the following
 
-....
+[source,bash]
+----
 $ sudo apt install qtspim spim
-....
+----
 
 You can probably find them in the repos for other distros too and install them similarly.
 
@@ -91,7 +93,7 @@ Let's start with the classic hello world program, first in C, then in MIPS, and 
 over all the pieces in overview.  You can copy paste these into your editor of choice
 (mine being neovim), or just use the files in the associated repo to follow along.
 
-[source,c]
+[source,c,linenums]
 ----
 #include <stdio.h>
 
@@ -110,15 +112,16 @@ program, which is a function that returns an int.  We call printf to display the
 You can compile and run it in a linux/unix terminal with as show below.  You
 can substitute clang or another compiler for gcc if you want.
 
-....
+[source,bash]
+----
 $ gcc -o hello hello.c
 $ ./hello
 Hello World!
-....
+----
 
 Now, the same program in MIPS:
 
-[source,mips]
+[source,mips,linenums]
 ----
 .data
 hello:   .asciiz "Hello World!\n"
@@ -151,7 +154,8 @@ Now that we have our hello world MIPS program, how do we run it?  Well the easie
 and quickest{mars_slow} way is of course to do it on the command line, which can be done like
 this for spim:
 
-....
+[source,bash]
+----
 $ spim -file hello.s
 SPIM Version 8.0 of January 8, 2010
 Copyright 1990-2010, James R. Larus.
@@ -159,17 +163,18 @@ All Rights Reserved.
 See the file README for a full copyright notice.
 Loaded: /usr/lib/spim/exceptions.s
 Hello World!
-....
+----
 
 or this for MARS:
 
-....
+[source,bash]
+----
 $ java -jar ~/Mars4_5.jar hello.s
 MARS 4.5  Copyright 2003-2014 Pete Sanderson and Kenneth Vollmar
 
 Hello World!
 
-....
+----
 
 The name of your MARS jar file may be different{mars_versions},
 but just use the correct name and path.  For me I just keep the jar file in my home
@@ -186,9 +191,11 @@ then load your source file.  MARS requires you to hit "assemble" then "run", whe
 QtSpim, you just hit "run".
 
 QtSpim does let you start and load the file in one step from the command line
-....
+
+[source,bash]
+----
 $ qtspim hello.s
-....
+----
 
 but there is no way to simply run it with out starting the GUI, which makes sense
 since the whole point is to be a GUI wrapper around spim.
