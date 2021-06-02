@@ -1,0 +1,12 @@
+
+asciidoctor source highlighters
+
+hightlight.js is builtin (doesn't support linenums?)
+
+I've installed these other 3:
+pygments   currently using this, it does support linenums
+coderay
+rouge
+
+
+I should try them all and see the differences and what each supports
