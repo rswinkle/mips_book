@@ -1,3 +1,4 @@
+:source-highlighter: pygments
 
 = Chapter 4: Loops
 
@@ -10,7 +11,8 @@ may have never occurred to others.  Any loop structure can be converted to any o
 and vice versa.  Even a do-while can be written as a for or while loop.  Let's look
 at some equivalencies.
 
-....
+[source,c,linenums]
+----
 	for (int i=0; i<a; i++) {
 		do_something;
 	}
@@ -29,7 +31,7 @@ at some equivalencies.
 		} while (i < a);
 	}
 	// you could also have an if (i >= a) goto loop_done; to jump over do-while
-....
+----
 
 I think in general, when writing assembly, it can help to think more in terms of while or
 do-while rather than for because the former more resemble what the assembly looks like
@@ -39,7 +41,8 @@ for to while in our head as an intermediary step before going to assembly.
 
 Speaking of "jump-form", lets apply it to the loop above:
 
-....
+[source,c,linenums]
+----
 	int i=0;
 	if (i >= a)
 		goto done_loop;
@@ -50,7 +53,7 @@ loop:
 		goto loop;
 
 done_loop:
-....
+----
 
 You can see how that starts to look more like assembly.  Another thing to note is that
 unlike with if statements where we test for the opposite to jump over the block of code,
@@ -58,7 +61,8 @@ when you're doing the test for a loop at the bottom, like a do-while loop, it is
 from C, because you are jumping to continue the loop.  If you put the test at the top it
 becomes inverted, and you put an unconditional jump at the bottom:
 
-....
+[source,c,linenums]
+----
 	int i=0;
 loop:
 	if (i >= a)
@@ -68,13 +72,14 @@ loop:
 	goto loop:
 
 done_loop:
-....
+----
 
 In general it's better to test at the bottom, both because it's closer to C with the matching
 condition, and because, when you know the loop is going to execute at least once, it requires
 only one jump + label, rather than 2 because you can forgo the the initial if check:
 
-....
+[source,c,linenums]
+----
 	for (int i=0; i<10; i++)
 		do_something;
 
@@ -86,21 +91,23 @@ loop:
 	i++
 	if (i < a)
 		goto loop;
-....
+----
 
 Ok, now that we've got the theory and structure out of the way, let's try doing a simple
 one in MIPS.
 
-....
+[source,c,linenums]
+----
 	int sum = 0;
 	for (int i=0; i<100; i++) {
 		sum += i;
 	}
-....
+----
 
 That's about as basic as it gets, add up 1 to 99.
 
-....
+[source,mips,linenums]
+----
 	li    $t0, 0   # sum = 0
 	li    $t1, 1   # i = 1  we can start at 1 because obviously adding 0 is pointless
 	li    $t2, 100
@@ -108,7 +115,7 @@ loop:
 	addi  $t0, $t0, $t1    # sum += i
 	addi  $t1, $t1, 1      # i++
 	blt   $t1, $t2, loop   # while (i < 100)
-....
+----
 
 Ok I don't think there's much point in doing any more without getting to what loops
 are most often used for, looping through data structures, most commonly arrays.
@@ -126,16 +133,18 @@ various ways, and dealing with multi-dimentional arrays.
 
 Let's pretend there's an array `int numbers[10];` filled with 10 random numbers.
 
-....
+[source,c,linenums]
+----
 	int total = 0;
 	for (int i=0; i<10; i++) {
 		total += numbers[i];
 	}
-....
+----
 
 There are several ways to do this.  The first is the most literal translation.
 
-....
+[source,mips,linenums]
+----
 	li    $t0, 0     # total = 0
 	li    $t1, 0     # i = 0
 	la    $t2, numbers   # t2 = numbers
@@ -148,7 +157,7 @@ sum_loop:
 
 	addi  $t1, $t1, 1    # i++
 	blt   $t1, $t3, sum_loop   # while (i < 10)
-....
+----
 
 So we initialize the relevant variables before hand (numbers and 10 could be set
 every iteration but that's less efficient).  Now what's with the i*4?  We already
@@ -189,7 +198,8 @@ Rather than calculate the element address every iteration, why not just keep a p
 to the current element and iterate through the array with it?  In C what we're doing
 is this:
 
-....
+[source,c,linenums]
+----
 	int* p = &numbers[0];
 	int i = 0, total = 0;
 	do {
@@ -197,14 +207,15 @@ is this:
 		i++;
 		p++;
 	} while (i < 10);
-....
+----
 
 In other words, we set p to point at the first element and then increment it every
 step to keep it pointing at numbers[i].  Again, all mathematical operations on pointers
 in C deal in increments of the byte syze of the type, so `p++` is really adding 1*sizeof(int).
 
 
-....
+[source,mips,linenums]
+----
 	li    $t0, 0     # total = 0
 	li    $t1, 0     # i = 0
 	la    $t2, numbers   # p = numbers
@@ -216,7 +227,7 @@ sum_loop:
 	addi  $t1, $t1, 1    # i++
 	addi  $t2, $t2, 4    # p++  ie p += sizeof(int)
 	blt   $t1, $t3, sum_loop   # while (i < 10)
-....
+----
 	
 Now, that may not look much better, we only saved 1 instuction total, and if we were
 looping through a string (aka an array of characters, sizeof(char) == 1) we wouldn't
@@ -229,7 +240,8 @@ But there is one more variant that you can use that can save a few more instruct
 Instead of using i and i<10 to control the loop, use p and the address just past the
 end of the array.  In C it would be this:
 
-....
+[source,c,linenums]
+----
 	int* p = &numbers[0];
 	int* end = &numbers[10];
 	int total = 0;
@@ -237,12 +249,13 @@ end of the array.  In C it would be this:
 		total += *p;
 		p++;
 	} while (p < end);
-....
+----
 
 You could also use != instead of <.  This is similar to using the .end() method on many C++
 data structures when using iterators.
 
-....
+[source,mips,linenums]
+----
 	li    $t0, 0     # total = 0
 	la    $t2, numbers   # p = numbers
 	addi  $t3, $t2, 40   # end = &numbers[10] = numbers + 10*sizeof(int)
@@ -252,7 +265,7 @@ sum_loop:
 
 	addi  $t2, $t2, 4    # p++  ie p += sizeof(int)
 	blt   $t2, $t3, sum_loop   # while (p < end)
-....
+----
 
 So we dropped from 10 to 7 and even more if we had had to do mul or mult originally.
 And this was just for a 1D array.  Imagine if you had 2 or 3 indices you had to use
@@ -267,11 +280,12 @@ meaning that all the elements from the first row are followed by all the element
 of the second row and so on.  What this means is that a 2D array is equivalent
 to a 1D array with rows*cols elements in the same order:
 
-....
+[source,c,linenums]
+----
 	// The memory of these two arrays are identical
 	int array2d[2][4] = { { 1, 2, 3, 4 }, { 5, 6, 7, 8 } };
 	int array1d[8] = { 1, 2, 3, 4, 5, 6, 7, 8 };
-....
+----
 
 See the code example 2d_arrays.c for more details.
 
@@ -282,7 +296,8 @@ before applies.
 
 Let's do an example.
 
-....
+[source,c,linenums]
+----
 	for (int i=0; i<rows; i++) {
 		for (int j=0; j<cols; ++j) {
 			array[i][j] = i + j;
@@ -297,11 +312,12 @@ Let's do an example.
 		c = i % cols;
 		array[i] = r + c;
 	}
-....
+----
 
 So assuming rows and cols are in a0 and a1 (and nonzero), it'd look like this:
 
-....
+[source,mips,linenums]
+----
 	la    $t0, array    # p = &array[0]
 	li    $t1, 0        # i = 0
 	mult  $a0, $a1      # a0 = rows, a1 = cols
@@ -317,7 +333,7 @@ loop:
 	addi  $t1, $t1, 1      # i++
 	addi  $t0, $t0, 4      # p++ (keep pointer in sync with i, aka p = &array[i])
 	blt   $t1, $t2, loop   # while (i < rows*cols)
-....
+----
 
 You might ask if it's it worth it to convert it to a single loop when you still
 need the original i and j as if you were doing nested loops.  Generally, it is
@@ -330,7 +346,8 @@ get them back if you needed them.
 For comparison here's the nested translation (while still taking advantage of
 the 1D arrangement of memory and pointer iterators):
 
-....
+[source,mips,linenums]
+----
 	la    $t0, array    # p = &array[0]
 	li    $t1, 0        # i = 0
 looprows:
@@ -345,13 +362,14 @@ loopcols:
 
 	addi  $t1, $t1, 1          # i++
 	blt   $t1, $a0, looprows   # while (i < rows)
-....
+----
 
 It's a bit shorter but again, how much are those extra labels and branching worth?
 For me, this one's a toss up.  On the other hand either of the last 2 versions are
 better than the literal translation imo:
 
-....
+[source,mips,linenums]
+----
 	la    $t0, array    # p = &array[0]
 	li    $t1, 0        # i = 0
 looprows:
@@ -375,7 +393,7 @@ loopcols:
 
 	addi  $t1, $t1, 1          # i++
 	blt   $t1, $a0, looprows   # while (i < rows)
-....
+----
 
 That chunk in the middle calculating the offset of every element?  Not only is
 it far slower than just iterating the pointer through the array, but you can
