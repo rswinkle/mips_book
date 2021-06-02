@@ -1,4 +1,130 @@
+:one_return: footnote:[I do not agree with an ironclad "one return" policy in higher level
+languages.  Sometime returning early results in cleaner code, sometimes not.  Similarly,
+`goto` is not evil and there are rare cases where using it creates the best code.]
 
 = Functions and the MIPS Calling Convention
+
+While I'm sure everyone here probably knows what functions are, and we'll cover
+them in assembly shortly, you might be wondering what a "Calling Convention" is.
+In short, it is an agreement between the caller and callee about how to treat
+certain registers.  We'll get to the why and how later.
+
+
+== Functions
+
+In assembly, a function is just a label with a return instruction associated with it;
+because this is far more ambiguous than a function in a higher level language, it
+is good practice to only have a single return instruction associated with a
+function.  A comment above the label is also helpful.  Together those help you
+quickly see the start and end of the function.
+
+....
+void func1() {}
+....
+
+would be
+
+....
+# void myfunc()
+myfunc:
+	# body goes here
+	jr     $ra
+....
+
+As you can see my policy is to put a single line comment of the C prototype above
+label.
+
+But how do you call a function in assembly?  You use the opcode `jal func_label`.
+Let's change the hello world program from chapter 0 to call a function:
+
+
+[source,mips]
+----
+.data
+hello:   .asciiz "Hello World!\n"
+
+.text
+main:
+	jal  hello_world
+
+	li   $v0, 10     # exit syscall
+	syscall
+
+
+# void hello_world()
+hello_world:
+	li   $v0, 4      # print string system call
+	la   $a0, hello  # load address of string to print into a0
+	syscall
+
+	jr  $ra
+
+----
+
+The op `jal` stands for "jump and link".  What it actually does is save the
+address of the next instruction to `$ra` and then do an unconditional jump
+to the function label.  So you could achieve the same results with the
+following:
+
+....
+	jal    func
+
+	# is equivalent to
+
+	la     $ra, next_instr
+	j      func
+next_instr:
+....
+
+That would get tiring and ugly fast though, having to come up with unique labels
+for the next instruction every time.  You also might be confused about why the
+greensheet says jal saves PC+8 in `$ra` instead of PC+4.  The reason for that
+is that MIPS technically has delayed branching, i.e. a single instruction after
+every branch instruction is executed.  So jal adds 8 instead of 4 to account
+for that extra instruction delay.  However, every simulator we've mentioned
+does non-delayed branching by default so you can ignore it.
+
+// TODO I'll cover using delayed branching in the chapter covering stupid prof
+// requirements like not using pseudoinstructions etc.
+
+### The Convention
+
+We've gone as far as we can without starting to talk about registers and their
+purposes in functions.  The quickest way to summarize is to look at the table
+on the greensheet which is reproduced below:
+
+
+.MIPS Registers and Uses
+[cols="1,1,2,1"]
+|===
+| Name | Number | Use | Preserved Across a Call
+
+| $zero | 0 | Constant 0 | N.A.
+
+| $at | 1 | Assembler Temporary | No
+
+| $v0-$v1 | 2-3 | Function Results and Expression Evaluation | No
+
+| $a0-$a3 | 4-7 | Arguments | No
+
+| $t0-$t7 | 8-15 | Temporaries | No
+
+| $s0-$s7 | 16-23 | Saved Temporaries | Yes
+
+| $t8-$t9 | 24-25 | Temporaries | No
+
+| $k0-$k1 | 26-27 | Reserved for OS Kernel | No
+
+| $gp | 28 | Global Pointer | Yes
+
+| $sp | 29 | Stack Pointer | Yes
+
+| $fp | 30 | Frame Pointer | Yes
+
+| $ra | 31 | Return Address | No
+
+|===
+
+You can ignore `$at, $k0-$k1 $gp` and most of the time `$fp` too.
 
 
