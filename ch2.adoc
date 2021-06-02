@@ -1,3 +1,5 @@
+:source-highlighter: pygments
+
 :mars_syscalls: footnote:[https://courses.missouristate.edu/KenVollmar/mars/Help/SyscallHelp.html]
 
 = Chapter 2: System Calls
@@ -12,9 +14,10 @@ allocating memory, and exiting.  That covers all the 17 syscalls supported by sp
 but MARS supports many more, for things from playing MIDI sounds, to getting a random
 number, to creating GUI dialogs.{mars_syscalls}
 
-NOTE: Except for the MARS specific chapters/sections, I'll be sticking to SPIM compatible
-code throughout this book, meaning we only use the first 17 syscalls, and don't get
-to use some of the syntactic sugar available in MARS.
+NOTE: Except for the MARS or SPIM specific chapters/sections, I'll be sticking to code
+compatible with both throughout this book, meaning we only use the first 17 syscalls,
+and don't get to use some of the syntactic sugar available in MARS, or any SPIM
+specific features either.
 
 .SPIM supported syscalls
 .MIPS data types
@@ -75,18 +78,19 @@ So, what does that table mean?  How do these actually work?
 The process is, put the number for the syscall you want in $v0, fill in the appropriate
 arguments, if any, and then do the syscall:
 
-....
+[source,mips,linenums]
+----
 	li    $v0, 1  # 1 is print integer
 	li    $a0, 42  # takes 1 arg in a0, the number to print
 	syscall        # actually execute syscall
-....
+----
 
 You can think of the above as `print_integer(42);`.  Let's look at an actual
 program that uses a few more syscalls next.
 
 === Examples
 
-[source,c]
+[source,c,linenums]
 ----
 #include <stdio.h>
 
@@ -115,7 +119,7 @@ int main()
 I'm using `fgets()` instead of `scanf("%s", name)` because fgets works the same as the
 read string syscall (8).
 
-[source,mips]
+[source,mips,linenums]
 ----
 .data
 
