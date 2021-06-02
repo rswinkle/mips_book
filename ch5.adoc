@@ -1,12 +1,12 @@
-:one_return: footnote:[I do not agree with an ironclad "one return" policy in higher level
-languages.  Sometime returning early results in cleaner code, sometimes not.  Similarly,
-`goto` is not evil and there are rare cases where using it creates the best code.]
+:source-highlighter: pygments
 
-= Functions and the MIPS Calling Convention
+:one_return: footnote:[I do not agree with an ironclad "one return" policy in higher level languages.  Sometime returning early results in cleaner code, sometimes not.  Similarly, `goto` is not evil and there are rare cases where using it creates the best code.]
+
+= Chapter 5: Functions and the MIPS Calling Convention
 
 While I'm sure everyone here probably knows what functions are, and we'll cover
 them in assembly shortly, you might be wondering what a "Calling Convention" is.
-In short, it is an agreement between the caller and callee about how to treat
+In short, it is an agreement between the caller and callee about how to treat/use
 certain registers.  We'll get to the why and how later.
 
 
@@ -15,21 +15,21 @@ certain registers.  We'll get to the why and how later.
 In assembly, a function is just a label with a return instruction associated with it;
 because this is far more ambiguous than a function in a higher level language, it
 is good practice to only have a single return instruction associated with a
-function.  A comment above the label is also helpful.  Together those help you
+function.{one_return}  A comment above the label is also helpful.  Together those help you
 quickly see the start and end of the function.
 
-....
+----
 void func1() {}
-....
+----
 
 would be
 
-....
-# void myfunc()
-myfunc:
+----
+# void func1()
+func1:
 	# body goes here
 	jr     $ra
-....
+----
 
 As you can see my policy is to put a single line comment of the C prototype above
 label.
@@ -38,7 +38,7 @@ But how do you call a function in assembly?  You use the opcode `jal func_label`
 Let's change the hello world program from chapter 0 to call a function:
 
 
-[source,mips]
+[source,mips,linenums]
 ----
 .data
 hello:   .asciiz "Hello World!\n"
@@ -66,7 +66,7 @@ address of the next instruction to `$ra` and then do an unconditional jump
 to the function label.  So you could achieve the same results with the
 following:
 
-....
+----
 	jal    func
 
 	# is equivalent to
@@ -74,7 +74,7 @@ following:
 	la     $ra, next_instr
 	j      func
 next_instr:
-....
+----
 
 That would get tiring and ugly fast though, having to come up with unique labels
 for the next instruction every time.  You also might be confused about why the
@@ -125,6 +125,126 @@ on the greensheet which is reproduced below:
 
 |===
 
-You can ignore `$at, $k0-$k1 $gp` and most of the time `$fp` too.
+To summarize, you have 16 registers that can be used anytime for temporary
+values, though some have special uses to (the v, a and t registers).
+You have 8 s registers that have to be saved on the stack if you use
+them, plus $ra as well.  The `$zero` register is obviously a special case.
 
+The `$sp` register is technically preserved but not in the same way.  Basically
+what you allocate (subtract) you have to deallocate (add) before returning
+from a function.
+
+You can ignore `$at, $k0-$k1, $gp` and most of the time `$fp` too.
+
+#### Basic example
+
+Let's start with something simple that doesn't use the stack.
+
+----
+int hello_name_number(char* name, int number)
+{
+	printf("Hello %s!\n", name);
+	return number*10;
+}
+----
+
+According to the convention that becomes:
+
+----
+.data
+hello_space:  .asciiz "Hello "
+exclaim_nl:   .asciiz "!\n"
+
+.text
+#int hello_name_number(char* name, int number)
+hello_name_number:
+	move    $t0, $a0   # save name in t0 since we need a0 for the syscall
+
+	li      $v0, 4        # print string
+	la      $a0, hello_space
+	syscall
+
+	move      $a0, $t0    # print name (v0 is still 4)
+	syscall
+
+	la        $a0, exclaim_nl
+	syscall
+
+
+	addi    $v0, $a1, 10  # return number+10
+	jr      $ra
+----
+
+Some things to note, syscalls are not function calls, so we can "save" `$a0` in
+a t register and know that it'll still be there when the syscall is done.  In the
+same way, we know that `$v0` is still the same so we don't have to keep setting
+it to 4 for print string.  Lastly, to return a value, we just make sure that value
+is in `$v0` before returning.
+
+#### Using the Stack
+
+Ok first let's establish the rules on when you _have_ to use the stack (You can
+always use it for arbitrary local variables, like a local array for example but
+generally don't if you don't have a good reason).
+
+. You call another function, ie you're a non-leaf function.
++
+This means you have to save `$ra` on the stack at the very least, otherwise when you
+do your `jr $ra` you'd jump back into yourself (right after the last jal instruction).
+This does not apply to main because you don't/shouldn't return from main, you should
+call the exit (or exit2) syscall (10 or 17).
+
+. You need to save values across a function call (automatically includes reason 1).
++
+This is fairly common for non-trivial functions. Obvious examples are calling a
+function in a loop or loops (you'd have to preserve the iterator(s), and
+many recursive functions.
+
+. You run out of temporary registers and overflow into the s registers.
++
+This is very rare.  The most common reason this "happens" is people forget they have
+10 t registers instead of 8 like s registers and even if they remember that they
+forget they can also use the a and v registers for temporaries.  16 is more than
+enough to handle pretty much any function because you rarely need 17 discrete values
+at the same time.
+
+Ok let's look at an example for the first two.  Any example for the last rule
+would be prohibitively large/complicated.
+
+
+[source,c,linenums]
+----
+int non_leaf()
+{
+	func1();
+	return 42
+}
+----
+
+This just calls the empty function discussed at the top of this chapter.
+
+[source,mips,linenums]
+----
+#int non_leaf()
+non_leaf:
+	addi    $sp, $sp, -4  # space to save 1 register, $ra
+	sw      $ra, 0($sp)
+
+	jal     func1
+
+	li      $v0, 42       # return 42
+
+	lw      $ra, 0($sp)   # restore original $ra
+	addi    $sp, $sp, 4   # pop the stack
+	jr      $ra
+----
+
+The bit of code at the top and bottom of the function are called the prologue
+and the epilogue for obvious reasons.  You can see how we allocate 4 bytes on
+the stack by subtracting 4 (I add a negative rather than subtract, both
+because I can copy-paste the line with a single character change for the
+epilogue).  Then we store the current `$ra` in that space at the new top of the
+stack.  Then before we exit we have to load it back and pop the stack.
+
+If we didn't save and restore `$ra` we would jump to line 7
 
