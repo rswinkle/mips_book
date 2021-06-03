@@ -1,6 +1,7 @@
 :source-highlighter: pygments
 
 :one_return: footnote:[I do not agree with an ironclad "one return" policy in higher level languages.  Sometime returning early results in cleaner code, sometimes not.  Similarly, `goto` is not evil and there are rare cases where using it creates the best code.]
+:zero_reg: footnote:[Obviously the zero register is not really a variable.  I never understood how people could say "const variable" with a straight face, it's literally an oxymoron.]
 
 = Chapter 5: Functions and the MIPS Calling Convention
 
@@ -82,17 +83,45 @@ That would get tiring and ugly fast though, having to come up with unique labels
 for the next instruction every time.  You also might be confused about why the
 greensheet says jal saves PC+8 in `$ra` instead of PC+4.  The reason for that
 is that MIPS technically has delayed branching, i.e. a single instruction after
-every branch instruction is executed.  So jal adds 8 instead of 4 to account
-for that extra instruction delay.  However, every simulator we've mentioned
-does non-delayed branching by default so you can ignore it.
+every branch instruction is executed before the jump actually happens.  So jal
+adds 8 instead of 4 to account for that extra instruction delay.  However,
+every simulator we've mentioned does non-delayed branching by default so you
+can ignore it.
 
 // TODO I'll cover using delayed branching in the chapter covering stupid prof
 // requirements like not using pseudoinstructions etc.
 
-### The Convention
+== The Convention
 
 We've gone as far as we can without starting to talk about registers and their
-purposes in functions.  The quickest way to summarize is to look at the table
+purposes in functions.  You can think about registers as variables{zero_reg} that
+are part of the CPU.  In this case, since we're dealing with a 32-bit MIPS
+architecture, they are 4 byte/word variables.  Since they're part of the CPU,
+they exist for the life of the program and the whole program shares the same
+registers.
+
+But how does that work?  If all parts of the program use the same
+32 registers, how does one function not stomp all over what another was doing
+when they use them?  In fact, how do functions communicate at all?  How do they
+pass arguments or return results?  All these questions are solved by deciding
+on a "Calling Convention".  It's different for different architectures and even
+different operating systems on the same architecture but that's beyond the scope
+of this book.
+
+What matters, is that the calling convention works by setting rules (and guidelines)
+for register use, and when/how to use the stack.
+
+If you're unfamiliar with the
+runtime stack, it's exactly what it sounds like.  It's a First-In-Last-Out (FILO)
+data structure that you can use to store smaller values in a program.  It grows
+in a negative direction, so to allocate 12 bytes, you would subtract 12 from the
+stack pointer (in MIPS that's `$sp`).
+
+MIPS specifically, designates certain registers to be used for passing arguments
+(at least the first 4), others for return values, and others as misc temporary
+saved respectively.  The rest are special use registers like `$ra`.
+
+The quickest way to summarize is to look at the table
 on the greensheet which is reproduced below:
 
 
@@ -128,17 +157,20 @@ on the greensheet which is reproduced below:
 |===
 
 To summarize, you have 16 registers that can be used anytime for temporary
-values, though some have special uses to (the v, a and t registers).
+values, though some have special uses too (the v, a and t registers).
 You have 8 s registers that have to be saved on the stack if you use
-them, plus $ra as well.  The `$zero` register is obviously a special case.
+them, plus `$ra` as well.  The `$zero` register is obviously a special case.
 
 The `$sp` register is technically preserved but not in the same way.  Basically
 what you allocate (subtract) you have to deallocate (add) before returning
-from a function.
+from a function, thus preserving the original value.
 
-You can ignore `$at, $k0-$k1, $gp` and most of the time `$fp` too.
+You can ignore `$at, $k0-$k1, $gp` and most of the time `$fp` too.  In 5 years
+of tutoring I've helped students with MIPS from at least 2 dozen different colleges
+and I think a professor I've only seen a professor force his students to use `$fp`
+or pass more than 4 arguments twice.
 
-#### Basic example
+=== Basic example
 
 Let's start with something simple that doesn't use the stack.
 
@@ -183,7 +215,7 @@ same way, we know that `$v0` is still the same so we don't have to keep setting
 it to 4 for print string.  Lastly, to return a value, we just make sure that value
 is in `$v0` before returning.
 
-#### Using the Stack
+=== Using the Stack
 
 Ok first let's establish the rules on when you _have_ to use the stack (You can
 always use it for arbitrary local variables, like a local array for example but
@@ -329,8 +361,9 @@ several factors, like how long/complex the loop is, how many times it executes, 
 of course personal preference.
 
 
-Let's do one more, a classic recursive function, the fibonacci sequence.
+=== Recursive Functions
 
+Let's do a classic recursive function, the fibonacci sequence.
 
 [source,c,linenums]
 ----
@@ -396,7 +429,14 @@ where functions start and end.  Regardless, if you're curious, you can see that
 version, along with every other function in this chapter in the included program
 calling.s.
 
+// TODO A recursive function that doesn't require saving anything but $ra
 
+== Conclusion
+
+While grasping the basics of a calling convention is not too difficult, it takes
+practice to get used to it and there are many things that we haven't covered
+in this chapter, like how to pass more than 4 arguments or use `$fp` or handle
+floating point arguments or return values.
 
 
 
