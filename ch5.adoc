@@ -329,5 +329,74 @@ several factors, like how long/complex the loop is, how many times it executes, 
 of course personal preference.
 
 
+Let's do one more, a classic recursive function, the fibonacci sequence.
+
+
+[source,c,linenums]
+----
+int fib(int n)
+{
+	if (n <= 1)
+		return n;
+
+	return fib(n-2) + fib(n-1);
+}
+
+----
+
+You can see how at the very least, we'll have to save `$ra` and n because we
+need the original even after the first recursive fib call.  It's not as
+obvious but we'll also have to save the return value of the first call so
+we'll still have it to do the addition after the second.  You might think
+this would require using two s regs, but does it?  Let's see...
+
+[source,mips,linenums]
+----
+#int fib(int n)
+fib:
+	addi    $sp, $sp, -8
+	sw      $ra, 0($sp)
+	sw      $s0, 4($sp)
+
+	move    $v0, $a0        # prepare to return n
+	li      $t0, 1
+	ble     $a0, $t0, exit_fib  # if (n <= 2) goto exit_fib (ie return n)
+
+	move    $s0, $a0        # save n
+
+	addi    $a0, $a0, -2
+	jal     fib             # fib(n-2)
+
+	addi    $a0, $s0, -1    # prep arg first so we can use s0 to save v0
+	move    $s0, $v0        # save return of fib(n-2) in s0
+	jal     fib             # fib(n-1)
+
+	add     $v0, $v0, $s0   #  v0 = fib(n-1) + fib(n-2)
+
+exit_fib:
+	lw      $ra, 0($sp)
+	lw      $s0, 4($sp)
+	addi    $sp, $sp, 8
+	jr      $ra
+----
+
+Notice how we don't have to save n any sooner than necessary, ie right before
+we have to use a0 to setup the first recursive call.  Also the ordering of
+lines 16 and 17 is important.  We needed the original n to calculate n-1 but
+once that's in `$a0` ready for the call, because we won't need n again afterward
+we can now use `$s0` to preserve the return value of the first call.
+
+Some of you, if you were paying attention, might point out that you could save
+a few instructions of performance if you moved the base case testing before the
+prologue as long as you put the exit label after the epilogue.  This is true,
+but I'd recommend against it unless you were really trying to eke out every last
+microsecond.  It's just nicer/cleaner to keep the prologue and epilogue as the
+first and last thing; they're one more thing to catch your eye and help delineate
+where functions start and end.  Regardless, if you're curious, you can see that
+version, along with every other function in this chapter in the included program
+calling.s.
+
+
+
 
 
