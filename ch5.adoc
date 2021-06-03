@@ -248,5 +248,86 @@ because I can copy-paste the line with a single character change for the
 epilogue).  Then we store the current `$ra` in that space at the new top of the
 stack.  Then before we exit we have to load it back and pop the stack.
 
-If we didn't save and restore `$ra` we would jump to line 7
+If we didn't save and restore `$ra` we would jump to line 7 when we do our
+`jr $ra` and then we'd be in an infinite loop.
+
+Next we have the second case, where we need to preserve regular local values
+across a function call.
+
+[source,c,linenums]
+----
+void print_letters(char letter, int count)
+{
+	for (int i=0; i<count; i++) {
+		putchar(letter);
+	}
+	putchar('\n');
+}
+
+int save_vals()
+{
+	for (int i=0; i<10; i++) {
+		print_letters('A'+i, i+1);
+	}
+	return 8;
+}
+----
+
+That becomes this in mips:
+
+[source,mips,linenums]
+----
+#void print_letters(char letter, int count)
+print_letters:
+	ble     $a1, $0, exit_pl
+	li      $v0, 11            # print character
+pl_loop:
+	syscall
+	addi    $a1, $a1, -1       # count--
+	bgt     $a1, $0, pl_loop   # while (count > 0)
+
+	li      $a0, 10            # '\n'
+	syscall
+	
+exit_pl:
+	jr      $ra
+
+
+#int save_vals()
+save_vals:
+	addi    $sp, $sp, -12
+	sw      $ra, 0($sp)
+	sw      $s0, 4($sp)
+	sw      $s1, 8($sp)
+
+	li      $s0, 0  # i = 0
+	li      $s1, 10
+sv_loop:
+	addi    $a0, $s0, 65   # i + 'A'
+	addi    $a1, $s0, 1    # i + 1
+	jal     print_letters
+
+	addi    $s0, $s0, 1        # i++
+	blt     $s0, $s1, sv_loop  # while (i < 10)
+
+	lw      $ra, 0($sp)
+	lw      $s0, 4($sp)
+	lw      $s1, 8($sp)
+	addi    $sp, $sp, 12
+	jr      $ra
+----
+
+Notice that for print_letters, we not only convert the loop to a do-while, but
+we also use the parameter count as the iterator to count down to 0.  It saves
+us an instruction initializing an i.
+
+Secondly, for save_vals, we save not only `$ra` because we call another function,
+but also two s registers to save i and our stopping point.  The second is not
+actually necessary.  Because it's a constant, we could just load 10 into a register
+right before the check every iteration of the loop.  Which is better depends on
+several factors, like how long/complex the loop is, how many times it executes, and
+of course personal preference.
+
+
+
 
