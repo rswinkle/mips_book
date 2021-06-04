@@ -4,6 +4,78 @@
 
 = Chapter 6: Floating Point Types
 
+Up to this point we haven't really mentioned floating point values or instructions
+at all, except how to declare them in the `.data` section and the syscalls for
+reading and printing them.  There are two reasons we've left them alone till now.
+First, they use a whole separate set of registers and opcodes.  Secondly, and
+partly because of the first reason, most MIPS college courses do not ever require
+you to know or use floating point values.  Since this book is targeted at college
+students, if you know you won't need to know this feel free to skip this chapter.
+
+=== Floating Point Registers
+
+While the greensheet contains a nice table for the normal registers it is completely
+lacking for the floating point registers.  Fortunately here is a similar table:
+
+.MIPS Floating Point Registers and Uses
+[cols="1,1,3,1"]
+|===
+| Name | Number | Use | Preserved Across a Call
+
+| $zero | 0 | Constant 0 | N.A.
+
+| $at | 1 | Assembler Temporary (used to expand pseudo-ops) | No
+
+| $v0-$v1 | 2-3 | Function Results and Expression Evaluation | No
+
+| $a0-$a3 | 4-7 | Arguments | No
+
+| $t0-$t7 | 8-15 | Temporaries | No
+
+| $s0-$s7 | 16-23 | Saved Temporaries | Yes
+
+| $t8-$t9 | 24-25 | Temporaries | No
+
+| $k0-$k1 | 26-27 | Reserved for OS Kernel | No
+
+| $gp | 28 | Global Pointer | Yes
+
+| $sp | 29 | Stack Pointer | Yes
+
+| $fp (or $s8) | 30 | Frame Pointer if necessary or can be another saved reg | Yes
+
+| $ra | 31 | Return Address | No
+
+|===
+
+
+
+.MIPS floating point instructions (and pseudoinstructions)
+[cols="3,1,2,2"]
+|===
+| Name | Opcode | Format | Operation
+
+| Branch On Equal | beq | beq rs, rt, label | if (rs == rt) goto label
+
+| Branch On Not Equal | bne | bne rs, rt, label | if (rs != rt) goto label
+
+| Branch Less Than | blt | blt rs, rt, label | if (rs < rt) goto label
+
+| Branch Greater Than | bgt | bgt rs, rt, label | if (rs > rt) goto label
+
+| Branch Less Than Or Equal | ble | ble rs, rt, label | if (rs <= rt) goto label
+
+| Branch Greater Than Or Equal | bge | bge rs, rt, label | if (rs >= rt) goto label
+
+| Set Less Than | slt | slt rd, rs, rt | rd = (rs < rt) ? 1 : 0
+
+| Set Less Than Immediate | slti | slt rd, rs, imm | rd = (rs < imm) ? 1 : 0
+
+| Set Less Than Immediate Unsigned | sltiu | slt rd, rs, imm | rd = (rs < imm) ? 1 : 0
+
+| Set Less Than Unsigned | sltu | sltu rd, rs, imm | rd = (rs < imm) ? 1 : 0
+
+|===
 
 
 
