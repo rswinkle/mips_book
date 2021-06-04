@@ -1,0 +1,105 @@
+:source-highlighter: pygments
+
+= Chapter 7: Tips and Tricks
+
+This chapter is a grab bag of things you can do to improve your MIPS
+programs and make your life easier.
+
+== Improving Readability
+
+There are lots of things you can do to make your programs more readable.
+
+=== Formatting
+
+You may have noticed I have a general format I like to follow when writing
+MIPS (or any) assembly.  The guidelines I use are the following
+
+. 1 indent for all code excluding labels/macros/constants.
++
+I use hard tabs set to a width of 4 but it reall doesn't matter as long as
+it's just 1 indent according to your preferences.
+
+. Use *spaces* to align the first operand of all instructions (syscall obviously
++
+doesn't have any) out far enough.  Given my 4 space tabs, this usually means column
+11-13 for me.  The reason to use spaces is to prevent the circumstances that gave
+hard tabs a bad name.  When you use hard tabs for alignment, rather than indentation,
+and then someone else opens your code with their tab set to a different width,
+suddenly everything looks like crap.  Tabs for indentation, spaces for alignment.
+Or as is increasingly common (thanks Python), spaces for everything but I refuse
+to do that to the poor planet.{green_tabs}
+
+. A comma and a single space between operands.  The simulators don't actually
++
+require the comma but since other assembly languages/assemblers do, you might
+as well get used to it.  Besides I think it's easier to read with the comma,
+though that might just be me comparing it to passing arguments to a function.
+
+. Comment every line or group of closely related lines with the purpose,
++
+often just the equivalent C code.  You can relax this a little as you get
+more experience.
+
+. Put the `.data` section at the top, similar to declaring globals in C.
++
+There are exceptions for this.  When dealing with a larger program with lots
+of strings, it can be convienent to have multiple `.data` sections with the
+strings you're using declared close to where you use them.  The downside is
+you have to keep swapping back and forth between `.text` and `.data`.
+
+=== Constants
+
+One of the easiest things you can do to make your programs more readable
+is use defined constants in your programs.  Both MARS and SPIM have ways
+of defining constants similar to how C defines macro constants; ie they
+aren't "constant variables" that take up space in memory, it's as if a
+search+replace was done on them right before assembling the program.
+
+Let's look at our Hello World program using constants for SPM and MARS
+
+SPIM:
+
+[source,mips,linenums]
+----
+sys_print_str = 4
+sys_exit = 10
+
+.data
+hello:   .asciiz "Hello World!\n"
+
+.text
+main:
+	li      $v0, sys_print_str
+	la      $a0, hello  # load address of string to print into a0
+	syscall
+
+	li      $v0, sys_exit
+	syscall
+----
+
+MARS:
+
+[source,mips,linenums]
+----
+.eqv sys_print_str 4
+.eqv sys_exit 10
+
+.data
+hello:   .asciiz "Hello World!\n"
+
+.text
+main:
+	li      $v0, sys_print_str
+	la      $a0, hello  # load address of string to print into a0
+	syscall
+
+	li      $v0, sys_exit
+	syscall
+----
+
+=== Macros
+
+// TODO MARS macros does spim have macros?
+
+
+
