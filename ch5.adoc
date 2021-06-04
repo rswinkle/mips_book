@@ -2,6 +2,7 @@
 
 :one_return: footnote:[I do not agree with an ironclad "one return" policy in higher level languages.  Sometime returning early results in cleaner code, sometimes not.  Similarly, `goto` is not evil and there are rare cases where using it creates the best code.]
 :zero_reg: footnote:[Obviously the zero register is not really a variable.  I never understood how people could say "const variable" with a straight face, it's literally an oxymoron.]
+:fp_is_s8: footnote:[It's an https://www.cs.uaf.edu/2000/fall/cs301/notes/notes/node66.html[old link], but not as old as SPIM so maybe using it for a frame pointer was added later]
 
 = Chapter 5: Functions and the MIPS Calling Convention
 
@@ -105,11 +106,18 @@ But how does that work?  If all parts of the program use the same
 when they use them?  In fact, how do functions communicate at all?  How do they
 pass arguments or return results?  All these questions are solved by deciding
 on a "Calling Convention".  It's different for different architectures and even
-different operating systems on the same architecture but that's beyond the scope
-of this book.
+different operating systems on the same architecture.  This is because different
+architectures have different numbers of registers, and some registers like `$ra`
+have hardcoded uses.  The op `jal` modifies `$ra` and `$0` is a constant 0 and
+there's no way to change either of those facts.  That still leaves a lot of
+flexibility about designing a calling convention.  While they mostly match,
+you'll find several variations of MIPS calling conventions online.  They
+usually differ in how they setup a stack frame.  The convention covered
+in this chapter is consistent with, and sufficient for almost every college
+course I've ever heard of.
 
-What matters, is that the calling convention works by setting rules (and guidelines)
-for register use, and when/how to use the stack.
+Regardless, what matters, is that the calling convention works by setting rules
+(and guidelines) for register use, and when/how to use the stack.
 
 If you're unfamiliar with the
 runtime stack, it's exactly what it sounds like.  It's a First-In-Last-Out (FILO)
@@ -122,17 +130,17 @@ MIPS specifically, designates certain registers to be used for passing arguments
 saved respectively.  The rest are special use registers like `$ra`.
 
 The quickest way to summarize is to look at the table
-on the greensheet which is reproduced below:
+on the greensheet which is reproduced (with some modifications) below:
 
 
 .MIPS Registers and Uses
-[cols="1,1,2,1"]
+[cols="1,1,3,1"]
 |===
 | Name | Number | Use | Preserved Across a Call
 
 | $zero | 0 | Constant 0 | N.A.
 
-| $at | 1 | Assembler Temporary | No
+| $at | 1 | Assembler Temporary (used to expand pseudo-ops) | No
 
 | $v0-$v1 | 2-3 | Function Results and Expression Evaluation | No
 
@@ -150,7 +158,7 @@ on the greensheet which is reproduced below:
 
 | $sp | 29 | Stack Pointer | Yes
 
-| $fp | 30 | Frame Pointer | Yes
+| $fp (or $s8) | 30 | Frame Pointer if necessary or can be another saved reg | Yes
 
 | $ra | 31 | Return Address | No
 
@@ -168,7 +176,9 @@ from a function, thus preserving the original value.
 You can ignore `$at, $k0-$k1, $gp` and most of the time `$fp` too.  In 5 years
 of tutoring I've helped students with MIPS from at least 2 dozen different colleges
 and I think a professor I've only seen a professor force his students to use `$fp`
-or pass more than 4 arguments twice.
+or pass more than 4 arguments twice.  I've actually seen{fp_is_s8} register 30 referred to
+as `$s8` rather than, or in addition to, `$fp` which shows you how rarely it's
+actually used as a frame pointer.
 
 === Basic example
 
