@@ -40,12 +40,60 @@ though that might just be me comparing it to passing arguments to a function.
 often just the equivalent C code.  You can relax this a little as you get
 more experience.
 
+. Use a blank line to separate logically grouped lines of code.  While you
++
+can smash everything together vertically, I definitely wouldn't recommend it,
+even less than I would in a higher level language.
+
 . Put the `.data` section at the top, similar to declaring globals in C.
 +
 There are exceptions for this.  When dealing with a larger program with lots
 of strings, it can be convienent to have multiple `.data` sections with the
 strings you're using declared close to where you use them.  The downside is
 you have to keep swapping back and forth between `.text` and `.data`.
+
+=== Misc. General Tips
+
+. Try to use registers starting from 0 and working your way up.  It helps
++
+you keep track of where things are (esp. combined with the comments). This
+obviously can fall apart when you discover you forgot something or need to
+modify the code later and it's often not worth changing all the registers
+you're already using just so you have that nice sequence.  When that happens
+I'll sometimes just pick the other end of sequence (ie `$t9` or `$s7`) since
+if it's out of order I might as well make it obvious.
+
+. Minimize your jumps, labels, and especially your level of nested loops.
++
+This was already covered in the chapters on branching and loops but it bears
+repeating.
+
+. In your prologue save `$ra` first (at the top of the stack) if necessary
++
+and all s regs you used (starting at `$s0`) in order going down.  Then copy
+paste the whole thing to the bottom, move the first line to the bottom and
+change the number to positive and change all the `sw` to `lw`.
+
+....
+func:
+	addi    $sp, $sp, -20
+	sw      $ra, 0($sp)
+	sw      $s0, 4($sp)
+	sw      $s1, 8($sp)
+	sw      $s2, 12($sp)
+	sw      $s3, 16($sp)
+
+	# body of func here that calls another function or functions
+	# and needs to preserve 4 values across at least one of those calls
+
+	lw      $ra, 0($sp)
+	lw      $s0, 4($sp)
+	lw      $s1, 8($sp)
+	lw      $s2, 12($sp)
+	lw      $s3, 16($sp)
+	addi    $sp, $sp, 20
+....
+
 
 === Constants
 
