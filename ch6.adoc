@@ -22,10 +22,10 @@ uses $f0 and $f1 because it takes 64 bits/8 bytes.
 
 As far as the calling conventions for floating point registers, it is actually hard
 to find anything definitive even for the basics.  Obviously you could make up your own
-but the tiny code snippet in Patterson and Hennessy was at least consistent with
-this old website so I'll go with that.  I have seen at least one course page where
-the prof wanted _all_ float registers preserved which seems excessive and ridiculous
-but prof's are gonna prof.
+but the float/double syscalls, and the tiny code snippet in Patterson and Hennessy were
+at least consistent with this old website so I'll go with that.  I have seen at least
+one course page where the prof wanted _all_ float registers preserved which seems
+excessive and ridiculous but prof's are gonna prof.
 
 .MIPS Floating Point Registers and Uses
 [cols="1,2,2"]
@@ -49,6 +49,8 @@ they're included where the even they're paired with is.  So, for example you act
 have 4 registers for float arguments `$f12` through `$f15` but only 2 for doubles
 `$f12` and `f14`.  Similarly you have 12 saved registers for floats but 6 for doubles.
 
+Most of the next table is actually on the Greensheet but not all of it and I thought
+it worth reproducing here.
 
 .MIPS floating point instructions (and pseudoinstructions)
 [cols="3,1,2,2"]
@@ -57,11 +59,25 @@ have 4 registers for float arguments `$f12` through `$f15` but only 2 for double
 
 | Load Word to Coprocessor 1 | lwc1 (or l.s) | lwc1 ft, n(rs)  | F[ft] = M[R[rs]+n]
 
-| Store Word from Coprocessor 1 | swc1 (or s.s) | lwc1 ft, n(rs)  | M[R[rs]+n] = F[ft]
+| Store Word from Coprocessor 1 | swc1 (or s.s) | swc1 ft, n(rs)  | M[R[rs]+n] = F[ft]
 
 | Load Double to Coprocessor 1 | ldc1 (or l.d) | ldc1 ft, n(rs)  | F[ft] = M[R[rs]+n]; F[ft+1] = M[R[rs]+n+4]
 
 | Store Double from Coprocessor 1 | sdc1 (or s.d) | sdc1 ft, n(rs)  | M[R[rs]+n] = F[ft]; M[R[rs]+n+4] = F[ft+1]
+
+| Convert Word To Single Precision | cvt.s.w | cvt.s.w fd, fs | F[fd] = (float)F[fs]
+
+| Convert Single Precision To Word | cvt.w.s | cvt.w.s fd, fs | F[fd] = (int)F[fs]
+
+| Convert Word To Double Precision | cvt.d.w | cvt.d.w fd, fs | F[fd] = (double)F[fs]
+
+| Convert Double Precision To Word | cvt.w.d | cvt.w.d fd, fs | F[fd] = (int)F[fs]
+
+| Branch on FP True | bc1t | bc1t label | if (FPcond) goto label;
+
+| Branch on FP False | bc1f | bc1f label | if (!FPcond) goto label;
+
+| FP Compare | c._y_._x_ | c._y_._x_ fs, ft | FPcond = (F[fs] op F[ft]) ? 1 : 0
 
 | Absolute Value | abs._x_ | abs.x fs, ft | F[fs] = (F[ft] > 0) ? F[ft] : -F[ft]
 
@@ -75,13 +91,16 @@ have 4 registers for float arguments `$f12` through `$f15` but only 2 for double
 
 | Negation | neg._x_ | neg.x fs, ft | F[fs] = -F[ft]
 
+| Move | mov._x_ | mov.x fd, fs | F[fd] = F[fs]
 
 |===
 
 With all of the opcodes that end in ._x_, the x is either s for single
 precision or d for double precision.
 
-
+The _y_ in the Compare instructions are one of eq, ne, lt, le, gt, ge.  Since
+only (eq, lt, and le are on the greensheet it's safe to assume the other 3 are
+pseudoinstructions).  Naturally op would be the matching ==, !=, <, <=, >, or >=.
 
 
 
