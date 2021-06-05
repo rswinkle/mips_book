@@ -106,7 +106,7 @@ calc_pi_double:
 	mtc1    $0, $f0     # move 0 to $f0-f1 (0 integer == 0.0 float)
 	mtc1    $0, $f1
 
-	# li.s not available by default in MARS?
+	# li.s/li.d not available by default in MARS?
 	#li.s    $f0, 0.0
 	#li.s    $f2, 4.0
 

@@ -15,39 +15,39 @@ students, if you know you won't need to know this feel free to skip this chapter
 === Floating Point Registers
 
 While the greensheet contains a nice table for the normal registers it is completely
-lacking for the floating point registers.  Fortunately here is a similar table:
+lacking for the floating point registers.  There are 32 32-bit floating point registers.
+You can use them all for floats but they're are paired even-odd for doubles.  In other
+words you can only use even numbers for doubles, because storing a double at $f0 actually
+uses $f0 and $f1 because it takes 64 bits/8 bytes.
+
+As far as the calling conventions for floating point registers, it is actually hard
+to find anything definitive even for the basics.  Obviously you could make up your own
+but the tiny code snippet in Patterson and Hennessy was at least consistent with
+this old website so I'll go with that.  I have seen at least one course page where
+the prof wanted _all_ float registers preserved which seems excessive and ridiculous
+but prof's are gonna prof.
 
 .MIPS Floating Point Registers and Uses
-[cols="1,1,3,1"]
+[cols="1,2,2"]
 |===
-| Name | Number | Use | Preserved Across a Call
+| Name | Use | Preserved Across a Call
 
-| $zero | 0 | Constant 0 | N.A.
+| $f0-$f2 | Function Results | No
 
-| $at | 1 | Assembler Temporary (used to expand pseudo-ops) | No
+| $f4-$f10 | Temporaries | No
 
-| $v0-$v1 | 2-3 | Function Results and Expression Evaluation | No
+| $f12-f14 | Arguments | No
 
-| $a0-$a3 | 4-7 | Arguments | No
+| $f16-f18 | Temporaries | No
 
-| $t0-$t7 | 8-15 | Temporaries | No
-
-| $s0-$s7 | 16-23 | Saved Temporaries | Yes
-
-| $t8-$t9 | 24-25 | Temporaries | No
-
-| $k0-$k1 | 26-27 | Reserved for OS Kernel | No
-
-| $gp | 28 | Global Pointer | Yes
-
-| $sp | 29 | Stack Pointer | Yes
-
-| $fp (or $s8) | 30 | Frame Pointer if necessary or can be another saved reg | Yes
-
-| $ra | 31 | Return Address | No
+| $f20-f30 | Saved Temporaries | Yes
 
 |===
 
+This table is based on doubles so it may look like it's skipping odd registers but
+they're included where the even they're paired with is.  So, for example you actually
+have 4 registers for float arguments `$f12` through `$f15` but only 2 for doubles
+`$f12` and `f14`.  Similarly you have 12 saved registers for floats but 6 for doubles.
 
 
 .MIPS floating point instructions (and pseudoinstructions)
@@ -55,28 +55,31 @@ lacking for the floating point registers.  Fortunately here is a similar table:
 |===
 | Name | Opcode | Format | Operation
 
-| Branch On Equal | beq | beq rs, rt, label | if (rs == rt) goto label
+| Load Word to Coprocessor 1 | lwc1 (or l.s) | lwc1 ft, n(rs)  | F[ft] = M[R[rs]+n]
 
-| Branch On Not Equal | bne | bne rs, rt, label | if (rs != rt) goto label
+| Store Word from Coprocessor 1 | swc1 (or s.s) | lwc1 ft, n(rs)  | M[R[rs]+n] = F[ft]
 
-| Branch Less Than | blt | blt rs, rt, label | if (rs < rt) goto label
+| Load Double to Coprocessor 1 | ldc1 (or l.d) | ldc1 ft, n(rs)  | F[ft] = M[R[rs]+n]; F[ft+1] = M[R[rs]+n+4]
 
-| Branch Greater Than | bgt | bgt rs, rt, label | if (rs > rt) goto label
+| Store Double from Coprocessor 1 | sdc1 (or s.d) | sdc1 ft, n(rs)  | M[R[rs]+n] = F[ft]; M[R[rs]+n+4] = F[ft+1]
 
-| Branch Less Than Or Equal | ble | ble rs, rt, label | if (rs <= rt) goto label
+| Absolute Value | abs._x_ | abs.x fs, ft | F[fs] = (F[ft] > 0) ? F[ft] : -F[ft]
 
-| Branch Greater Than Or Equal | bge | bge rs, rt, label | if (rs >= rt) goto label
+| Add | add._x_ | add.x fd, fs, ft | F[fd] = F[fs] + F[ft]
 
-| Set Less Than | slt | slt rd, rs, rt | rd = (rs < rt) ? 1 : 0
+| Subtract | sub._x_ | sub.x fd, fs, ft | F[fd] = F[fs] - F[ft]
 
-| Set Less Than Immediate | slti | slt rd, rs, imm | rd = (rs < imm) ? 1 : 0
+| Multiply | mul._x_ | mul.x fd, fs, ft | F[fd] = F[fs] * F[ft]
 
-| Set Less Than Immediate Unsigned | sltiu | slt rd, rs, imm | rd = (rs < imm) ? 1 : 0
+| Divide | div._x_ | div.x fd, fs, ft | F[fd] = F[fs] / F[ft]
 
-| Set Less Than Unsigned | sltu | sltu rd, rs, imm | rd = (rs < imm) ? 1 : 0
+| Negation | neg._x_ | neg.x fs, ft | F[fs] = -F[ft]
+
 
 |===
 
+With all of the opcodes that end in ._x_, the x is either s for single
+precision or d for double precision.
 
 
 
