@@ -12,7 +12,7 @@ partly because of the first reason, most MIPS college courses do not ever requir
 you to know or use floating point values.  Since this book is targeted at college
 students, if you know you won't need to know this feel free to skip this chapter.
 
-=== Floating Point Registers
+=== Floating Point Registers and Instructions
 
 While the greensheet contains a nice table for the normal registers it is completely
 lacking for the floating point registers.  There are 32 32-bit floating point registers.
@@ -65,6 +65,10 @@ it worth reproducing here.
 
 | Store Double from Coprocessor 1 | sdc1 (or s.d) | sdc1 ft, n(rs)  | M[R[rs]+n] = F[ft]; M[R[rs]+n+4] = F[ft+1]
 
+| Move From Coprocessor 1 | mfc1 | mfc1 rd, fs | R[rd] = F[fs]
+
+| Move To Coprocessor 1 | mtc1 | mtc1 rd, fs | F[fs] = R[rd] 
+
 | Convert Word To Single Precision | cvt.s.w | cvt.s.w fd, fs | F[fd] = (float)F[fs]
 
 | Convert Single Precision To Word | cvt.w.s | cvt.w.s fd, fs | F[fd] = (int)F[fs]
@@ -102,6 +106,84 @@ The _y_ in the Compare instructions are one of eq, ne, lt, le, gt, ge.  Since
 only (eq, lt, and le are on the greensheet it's safe to assume the other 3 are
 pseudoinstructions).  Naturally op would be the matching ==, !=, <, <=, >, or >=.
 
+
+=== Practice
+
+We're going to briefly go oer some of the more different aspects of dealing
+with floating point numbers but since most of it is the same with just a different
+set of registers and calling convention, we won't be rehashing most concepts.
+
+==== Getting Floating Point Literals
+
+The first think to know when dealing with floats is how to actually get float
+(or double) literals into registers where you can actually operate on them.
+
+There are 2 ways.  The first, and simpler way is to just declare them as globals
+and then use the `lwc1` or `ldw1` instructions:
+
+
+[source,mips,linenums]
+----
+.data
+a:     .float 3.14159
+b:     .double 1.61
+
+.text
+main:
+
+	la      $t0, a
+	lwc1    $f0, 0($t0)   # get a into $f0
+
+	la      $t0, b
+	ldc1    $f2, 0($t0)   # get b into $f2-3
+
+	# other code here
+----
+
+The second way is to use the regular registers and convert the values.  Of course
+this means unless you want a whole value, you'd have to actually do it twice
+and divide.  It looks like this.
+
+[source,mips,linenums]
+----
+	mtc1    $0, $f0     # move 0 to $f0 (0 integer == 0.0 float)
+
+	# get 4 to 4.0 in $f2
+	li       $t0, 4
+	mtc1     $t0, $f2
+	cvt.s.w  $f2, $f2   # convert 4 to 4.0
+----
+
+As you can see, other than 0 which is a special case, it requires at least 3
+instructions, more than the 2 (or 1 if you load directly from the address) of
+the first method.
+
+// TODO SPIM li.s li.d?
+
+==== Branching
+
+Branching based on floating point values is slightly different than normal.  Instead
+of being able to test and jump in a single convenient instruction, you hav to test
+first and then jump in a second instruction if the test was true or not.  This is the
+same way x86 does it.  The test sets a special control/flag register (or a certain
+bit or bits in the register) and then all jumps are based on its state.
+
+Using it looks like this
+
+[source,mips,linenums]
+----
+	c.lt.s  $f0, $f2   # fpcond = f0 < f2
+	bc1t    was_less   # if (f0 < f2) goto was_less
+
+	# do something for f0 >= f2
+
+	j       blah
+was_less:
+	
+	# do something for f0 < f2
+
+blah:
+----
 
 
 
