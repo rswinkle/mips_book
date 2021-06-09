@@ -147,6 +147,64 @@ main:
 
 === Macros
 
+MARS supports function style macros that can shorten your code and improve
+readability in some cases (though I feel it can also make it worse or be a wash).
+
+The syntax looks like this:
+
+[source,mips,linenums]
+----
+.macro macroname
+instr1  a, b, c
+instr2, b, d
+# etc.
+.end_macro
+
+# or with parameters
+.macro macroname(%arg1)
+instr1    a, %arg1
+instr2    c, d, e
+# etc.
+.end_macro
+----
+
+Some common examples are using them to print strings:
+
+[source,mips,linenums]
+----
+.macro print_str_label(%x)
+li     $v0, 4
+la     $a0, %x
+syscall
+.end_macro
+
+.macro print_str(%str)
+.data
+str: .asciiz %str
+.text
+li     $v0, 4
+la     $a0, str
+syscall
+.end_macro
+
+.data
+
+str1:   .asciiz "Hello 1\n"
+
+.text
+# in use:
+	print_str_label(str1)
+
+	print_str("Hello World\n")
+
+	...
+----
+
+You can see an example program in macros.s
+
+Unfortunately, as far as I can tell SPIM does not support function style macros
+despite what MARS's documentation implies about using a $ instead of a % for arguments.
+
 // TODO MARS macros does spim have macros?
 
 
