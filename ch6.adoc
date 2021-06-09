@@ -185,7 +185,54 @@ was_less:
 blah:
 ----
 
+==== Functions
+
+Lastly, lets do a simple example of writing a function that takes a float and
+returns a float.  I'm not going to bother doing one for doubles because it'd
+be effectively the same, or doing one that requires the stack, because the only
+difference from normal is a new set of registers and knowing which ones to save
+or not from the table above.
+
+So, how about a function to convert a fahrenheit temperature to celsius:
+
+[source,mips,linenums]
+----
+.data
+
+# 5/9 = 0.5 with 5 repeating
+fahrenheit2celsius: .float 0.5555555
+
+.text
+# float convert_F2C(float degrees_f)
+convert_F2C:
+	la      $t0, fahrenheit2celsius
+	lwc1    $f0, 0($t0)    # get conversion factor
+
+	# C = (F - 32) * 5/9
+	li      $t0, 32        
+	mtc1    $t0, $f1       # move int 32 to f1
+	cvt.s.w $f1, $f1      # convert to 32.0
+
+
+	sub.s   $f12, $f12, $f1  # f12 = degrees - 32
+
+	mul.s   $f0, $f0, $f12  # f0 = 0.555555 * f12
+
+	jr     $ra
+----
+
+You can see we follow the convention with the argument coming in f12 and the
+result being returned in f0.  In this function we use both methods for getting
+a value into float registers; one we load from memory and the other, being
+an integer, we move and convert.
 
 
 == Conclusion
+
+As I said before, it is rare for courses to even bother covering floating point
+instructions or assign any homework or projects that use it, but hopefully this
+brief overview, combined with the knowledge of previous ones is sufficient.
+
+There are also 2 example programs conversions.s and calc_pi.s for you to study.
+
 
