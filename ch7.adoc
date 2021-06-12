@@ -205,7 +205,6 @@ You can see an example program in macros.s
 Unfortunately, as far as I can tell SPIM does not support function style macros
 despite what MARS's documentation implies about using a $ instead of a % for arguments.
 
-// TODO MARS macros does spim have macros?
 
 
 
