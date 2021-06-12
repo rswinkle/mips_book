@@ -1,5 +1,8 @@
 :source-highlighter: pygments
 
+:label_addresses: footnote:[https://gcc.gnu.org/onlinedocs/gcc/Labels-as-Values.html]
+
+
 = Chapter 7: Tips and Tricks
 
 This chapter is a grab bag of things you can do to improve your MIPS
@@ -205,6 +208,86 @@ You can see an example program in macros.s
 Unfortunately, as far as I can tell SPIM does not support function style macros
 despite what MARS's documentation implies about using a $ instead of a % for arguments.
 
+=== Switch-Case Statements
 
+It is relatively common in programming to have to compare a integral type variable
+(ie basically any built in type but float and double) against a bunch of different
+constants and do something different based on what it matches or if it matches none.
+
+This could be done with a long if-else-if chain, but the longer the chain the more
+likely the programmer is to choose a switch-case statement instead.
+
+Here's a pretty short/simple example in C:
+
+[source,c,linenums]
+----
+	printf("Enter your grade (capital): ");
+	int grade = getchar();
+	switch (grade) {
+	case 'A': puts("Excellent job!"); break;
+	case 'B': puts("Good job!"); break;
+	case 'C': puts("At least you passed?"); break;
+	case 'D': puts("Probably should have dropped it..."); break;
+	case 'F': puts("Did you even know you were signed up for the class?"); break;
+	default: puts("You entered and invalid grade!");
+	}
+----
+
+You could translate this to its eqivalent if-else chain and handle it just like we
+cover in the chapter on branching.  However, imagine if this switch statment had
+a dozen cases, two dozen etc.  The MIPS code for that quickly becomes long and ugly.
+
+So what if we implemented the switch in MIPS the same way it is semantically in C?
+The same way compilers often (but not necessarily) use?  Well before we do that,
+what is a switch actually doing?  It is _jumping_ to a specific case label based
+on the value in the specified variable.  It then starts executing, falling through
+any other labels, till it hits a `break` which will jump to the end of the switch
+block.  If the value does have its own case label, it will jump to the default
+label.
+
+Compilers handle it by creating what's called a jump table, basically an array
+of label addresses and using the variable to calculate an index in the table
+to use to jump to.
+
+The C eqivalent of that would look like this:
+
+
+[source,c,linenums]
+----
+include::code/switch.c[]
+----
+
+The `&&` and `goto *var` syntax are actually not standard C/C++ but are GNU
+extensions that are supported in gcc (naturally) and clang, possibly others.{label_addresses}
+
+Notice how the size of the jump table is the value of the highest valued label
+minus the lowest + 1.  That's why we subtract the lowest value to shift the range
+to start at 0 for the indexing.  Secondly, any values without labels within that
+range are filled with the default label address.  Lastly there has to be an initial
+check for values outside the range to jump to default otherwise you could get an
+error from an invalid access outside of the array's bounds.
+
+The same program/code in MIPS would look like this:
+
+[source,mips,linenums]
+----
+include::code/switch.s[]
+----
+
+It's easy to forget that `jr` does not actually stand for "jump return" even though
+it's almost always used for that purpose.  Instead it stands for "jump register"
+and we can use it to do the eqivalent of the computed goto statement in C.
+
+While this example probably wasn't worth making switch style, because the overhead
+and extra code of making the table and preparing to jump balanced out or even
+outweighed the savings of a branch instruction for every case, as the number
+of options increases, the favor tilts toward using a jump table like this as
+long as the range of isn't too sparse.  If the range of values is is the 100's
+or 1000's but you only have cases for a dozen or so, then obviously that isn't worth
+it to create a table that large just to fill it almost entirely with the default label.
+
+Just to reiterate, remember it is not about the magnitude of the actual values
+you're looking for, just the difference between the highest and lowest because
+high - low + 1 is the size of your table.
 
 
