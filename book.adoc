@@ -1,0 +1,19 @@
+:source-highlighter: pygments
+
+= MIPS Assembly Programmming
+Robert Winkler <rob121618@gmail.com>
+v0.7, 2021-06-12
+:toc:
+:homepage: http://www.robertwinkler.com/ 
+
+//include::contents.adoc[]
+include::ch0.adoc[]
+include::ch1.adoc[]
+include::ch2.adoc[]
+include::ch3.adoc[]
+include::ch4.adoc[]
+include::ch5.adoc[]
+include::ch6.adoc[]
+include::ch7.adoc[]
+include::refs.adoc[]
+

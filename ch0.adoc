@@ -4,14 +4,11 @@
 :mars_versions: footnote:[Some schools/professors have their own versions with extra features and other improvements over the old version available on the MARS website]
 :mars_commandline: footnote:[https://courses.missouristate.edu/KenVollmar/mars/Help/MarsHelpCommand.html]
 
-
-
-
 = Chapter 0: Hello World
 
 In which we lay the groundwork for the rest of the book...
 
-=== Prereqs
+== Prereqs
 While someone with no programming experience could probably learn MIPS from this
 book, it is definitely preferable to have at least some experience in a higher
 level imperative programming language. I say imperative, because programming
@@ -46,7 +43,7 @@ country since 2016, and I should save it for a proper essay/rant sometime.
 Long story short, I use C code and C syntax to help explain and teach MIPS.  I'll
 try to provide enough explanation regardless of past experience as best I can.
 
-=== System Setup
+== System Setup
 As I tell all of my tutoring students, if you're majoring in CS or anything related
 I highly recommend you use Linux. It's just easier in every way to do dev work
 on Linux vs Windows or Mac.  Many assignments require it, which often necessitates
@@ -87,7 +84,7 @@ download them, and MARS at these addresses
 * https://sourceforge.net/projects/spimsimulator/files/[QtSpim]
 
 
-=== Hello World
+== Hello World
 
 Let's start with the classic hello world program, first in C, then in MIPS, and go
 over all the pieces in overview.  You can copy paste these into your editor of choice
@@ -148,7 +145,7 @@ do on the next line. Finally, we call the system call using the syscall instruct
 Finally we call the exit system call which takes no arguments and exits the program.
 Again we'll cover system calls in a later chapter, this is just an intro/overiew.
 
-=== Building and Running
+== Building and Running
 
 Now that we have our hello world MIPS program, how do we run it?  Well the easiest
 and quickest{mars_slow} way is of course to do it on the command line, which can be done like
@@ -200,7 +197,7 @@ $ qtspim hello.s
 but there is no way to simply run it with out starting the GUI, which makes sense
 since the whole point is to be a GUI wrapper around spim.
 
-=== Conclusion
+== Conclusion
 
 Well, there you have it, you've written and run your first MIPS program.  Another
 few chapters and you'll have no trouble with almost anything you'd want to do

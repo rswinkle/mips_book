@@ -7,6 +7,9 @@ html: ${DOCS}
 	asciidoctor ${DOCS}
 	mv *.html build/article
 
+pdf: ${DOCS}
+	asciidoctor-pdf -d book book.adoc
+
 book:
 	asciidoctor -d book ${DOCS}
 	mv *.html build/book

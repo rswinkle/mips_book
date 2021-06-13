@@ -88,7 +88,7 @@ arguments, if any, and then do the syscall:
 You can think of the above as `print_integer(42);`.  Let's look at an actual
 program that uses a few more syscalls next.
 
-=== Examples
+== Examples
 
 [source,c,linenums]
 ----

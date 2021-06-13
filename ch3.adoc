@@ -68,12 +68,12 @@ registers in more detail in the chapter on functions and the calling conventions
 One final thing is that labels have the same naming requirements as C variables and functions.
 They must start with a letter or underscore and the rest can be letters, underscores, digits.
 
-=== Practice
+== Practice
 
 The rest of this chapter will be going over many examples, looking at snippets
 of code in C and translating them to MIPS.
 
-==== Basics
+=== Basics
 
 Let's start with the most basic if statement.  The code in and after
 the if statement is arbitrary.
@@ -222,7 +222,7 @@ code are using/modifying the same variable), you can use a temporary variable;
 i.e. copy the value into a spare register.  You still save yourself an unecessary
 jump and label.
 
-==== Compound Conditions
+=== Compound Conditions
 
 These first 2 examples have been based on simple conditions, but what if you
 have compound conditions?  How does that work with branch operations that only
@@ -475,7 +475,7 @@ done_if:
 
 		
 
-==== If-Else Chain
+=== If-Else Chain
 
 Ok, let's look at a larger example.  Let's say you're trying to determine
 a student's letter grade based on their score.  We're going to need a chain
@@ -555,7 +555,7 @@ You can arrange chains like this in either direction, it doesn't have to match
 the order of the C code.  As long as it works the same, do whatever makes the 
 code simpler and more sensible to you.
 
-==== Conclusion
+=== Conclusion
 
 Branching and logic and learning to translate from higher level code to assembly
 is something that just takes a lot of practice but eventually it'll become
