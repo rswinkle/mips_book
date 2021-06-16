@@ -1,6 +1,6 @@
 :source-highlighter: pygments
 
-= Chapter 4: Loops
+== Chapter 4: Loops
 
 [quote, Unknown, Often misattributed to Albert Einstein]
 "Insanity is doing the same thing over and over again and expecting different results."
@@ -121,7 +121,7 @@ Ok I don't think there's much point in doing any more without getting to what lo
 are most often used for, looping through data structures, most commonly arrays.
 
 
-== Looping Through Arrays
+=== Looping Through Arrays
 
 Looping and arrays go together for obvious reasons.  An array a sequence of
 variables of the same type, almost always related in some way.  Naturally you
@@ -129,7 +129,7 @@ want to operate on them all together in various ways; sorting, searching,
 accumulating, etc.  So in this section we'll cover looping through arrays in
 various ways, and dealing with multi-dimentional arrays.
 
-=== 1D Arrays
+==== 1D Arrays
 
 Let's pretend there's an array `int numbers[10];` filled with 10 random numbers.
 
@@ -272,7 +272,7 @@ And this was just for a 1D array.  Imagine if you had 2 or 3 indices you had to 
 to calculate the correct offset.  That's in the next section.
 
 
-=== 2D Arrays
+==== 2D Arrays
 
 The first thing to understand is what's really happening when you declare a 2D
 array in C.  The contents of a 2D array are tightly packed, in row-major order,
@@ -400,7 +400,7 @@ it far slower than just iterating the pointer through the array, but you can
 imagine how much worse it would be for a 3D array with 3 nested loops.
 
 
-== Conclusion
+=== Conclusion
 
 Hopefully after those examples you have a more solid understanding of looping in
 MIPS and how to transform various loops and array accesses into the form

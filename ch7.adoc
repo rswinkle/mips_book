@@ -3,14 +3,10 @@
 :label_addresses: footnote:[https://gcc.gnu.org/onlinedocs/gcc/Labels-as-Values.html]
 
 
-= Chapter 7: Tips and Tricks
+== Chapter 7: Tips and Tricks
 
 This chapter is a grab bag of things you can do to improve your MIPS
 programs and make your life easier.
-
-== Improving Readability
-
-There are lots of things you can do to make your programs more readable.
 
 === Formatting
 
@@ -290,4 +286,138 @@ Just to reiterate, remember it is not about the magnitude of the actual values
 you're looking for, just the difference between the highest and lowest because
 high - low + 1 is the size of your table.
 
+=== Command Line Arguments
+
+Command line arguments, also known as program arguments, or command line parameters
+are strings that are passed to the program on startup.  In high level languages like
+C, they are accessed through the parameters to the main function (naturally):
+
+
+[source,c,linenums]
+----
+#include <stdio.h>
+
+int main(int argc, char** argv)
+{
+	printf("There are %d command line arguments:\n", argc);
+
+	for (int i=0; i<argc; i++) {
+		printf("%s\n", argv[i]);
+	}
+
+	return 0;
+}
+----
+
+As you can see, argc contains the number of parameters and argv is an array of
+C strings that are those arguments.  If you run this program you'll get something
+like this:
+
+
+[source,bash]
+----
+$ ./args 3 random arguments
+There are 4 command line arguments:
+./args
+3
+random
+arguments
+----
+
+Notice that the first argument is the what you actually typed to invoke the program,
+so you always have at least one argument.
+
+MIPS works the same way.  The number of arguments is in `a0` and an array of strings
+is in `a1` when main starts.  So the same program in MIPS looks like this;
+
+
+[source,mips,linenums]
+----
+.data
+
+there_are:  .asciiz "There are "
+arguments:  .asciiz " command line arguments:\n"
+
+.text
+
+main:
+	move    $t0, $a0  # save argc
+
+	li      $v0, 4
+	la      $a0, there_are
+	syscall
+
+	move    $a0, $t0
+	li      $v0, 1   # print int
+	syscall
+
+	li      $v0, 4
+	la      $a0, arguments
+	syscall
+
+	li      $t1, 0   # i = 0
+	j       arg_loop_test
+
+arg_loop:
+	li      $v0, 4
+	lw      $a0, 0($a1)
+	syscall
+
+	li      $v0, 11
+	li      $a0, 10    # '\n'
+	syscall
+
+	addi    $t1, $t1, 1   # i++
+	addi    $a1, $a1, 4    # argv++ ie a1 = &argv[i]
+arg_loop_test:
+	blt     $t1, $t0, arg_loop  # while (i < argc)
+
+	li      $v0, 10
+	syscall
+----
+
+This program works exactly like the C program when using SPIM:
+
+[source]
+----
+$ spim -file args.s 3 random arguments
+SPIM Version 8.0 of January 8, 2010
+Copyright 1990-2010, James R. Larus.
+All Rights Reserved.
+See the file README for a full copyright notice.
+Loaded: /usr/lib/spim/exceptions.s
+There are 4 command line arguments:
+args.s
+3
+random
+arguments
+----
+
+Obviously the commands for SPIM itself are not included but the file name (args.s)
+takes the place as the "executable".
+
+Unfortunately, MARS works differently, probably because it's more GUI focused.  It
+does not pass the program/file name as the first argument, so you can actually get
+0 arguments:
+
+[source]
+----
+$ java -jar ~/Mars4_5.jar args.s pa 3 random arguments
+MARS 4.5  Copyright 2003-2014 Pete Sanderson and Kenneth Vollmar
+
+There are 3 command line arguments:
+3
+random
+arguments
+----
+
+You can see that you have to put "pa" (for "program arguments") to indicate that
+the following strings are arguments.  In the GUI, there is an option in
+"Settings" called "Program arguments provided to MIPS progam" which if selected will
+add a text box above the Text Segment for you to enter in the arguments to be
+passed.
+
+image::images/enable_mars_args.png[]
+
+image::images/mars_args.png[]
 

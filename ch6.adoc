@@ -2,7 +2,7 @@
 
 :zero_reg: footnote:[Obviously the zero register is not really a variable.  I never understood how people could say "const variable" with a straight face, it's literally an oxymoron.]
 
-= Chapter 6: Floating Point Types
+== Chapter 6: Floating Point Types
 
 Up to this point we haven't really mentioned floating point values or instructions
 at all, except how to declare them in the `.data` section and the syscalls for
@@ -12,7 +12,7 @@ partly because of the first reason, most MIPS college courses do not ever requir
 you to know or use floating point values.  Since this book is targeted at college
 students, if you know you won't need to know this feel free to skip this chapter.
 
-== Floating Point Registers and Instructions
+=== Floating Point Registers and Instructions
 
 While the greensheet contains a nice table for the normal registers it is completely
 lacking for the floating point registers.  There are 32 32-bit floating point registers.
@@ -107,9 +107,9 @@ only (eq, lt, and le are on the greensheet it's safe to assume the other 3 are
 pseudoinstructions).  Naturally op would be the matching ==, !=, <, <=, >, or >=.
 
 
-== Practice
+=== Practice
 
-We're going to briefly go oer some of the more different aspects of dealing
+We're going to briefly go over some of the more different aspects of dealing
 with floating point numbers but since most of it is the same with just a different
 set of registers and calling convention, we won't be rehashing most concepts.
 
@@ -227,7 +227,7 @@ a value into float registers; one we load from memory and the other, being
 an integer, we move and convert.
 
 
-== Conclusion
+=== Conclusion
 
 As I said before, it is rare for courses to even bother covering floating point
 instructions or assign any homework or projects that use it, but hopefully this

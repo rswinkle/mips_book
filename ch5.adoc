@@ -4,7 +4,7 @@
 :zero_reg: footnote:[Obviously the zero register is not really a variable.  I never understood how people could say "const variable" with a straight face, it's literally an oxymoron.]
 :fp_is_s8: footnote:[It's an https://www.cs.uaf.edu/2000/fall/cs301/notes/notes/node66.html[old link], but not as old as SPIM so maybe using it for a frame pointer was added later]
 
-= Chapter 5: Functions and the MIPS Calling Convention
+== Chapter 5: Functions and the MIPS Calling Convention
 
 While I'm sure everyone here probably knows what functions are, and we'll cover
 them in assembly shortly, you might be wondering what a "Calling Convention" is.
@@ -12,7 +12,7 @@ In short, it is an agreement between the caller and callee about how to treat/us
 certain registers.  We'll get to the why and how later.
 
 
-== Functions
+=== Functions
 
 In assembly, a function is just a label with a return instruction associated with it;
 because this is far more ambiguous than a function in a higher level language, it
@@ -92,7 +92,7 @@ can ignore it.
 // TODO I'll cover using delayed branching in the chapter covering stupid prof
 // requirements like not using pseudoinstructions etc.
 
-== The Convention
+=== The Convention
 
 We've gone as far as we can without starting to talk about registers and their
 purposes in functions.  You can think about registers as variables{zero_reg} that
@@ -180,7 +180,7 @@ or pass more than 4 arguments twice.  I've actually seen{fp_is_s8} register 30 r
 as `$s8` rather than, or in addition to, `$fp` which shows you how rarely it's
 actually used as a frame pointer.
 
-=== Basic example
+==== Basic example
 
 Let's start with something simple that doesn't use the stack.
 
@@ -225,7 +225,7 @@ same way, we know that `$v0` is still the same so we don't have to keep setting
 it to 4 for print string.  Lastly, to return a value, we just make sure that value
 is in `$v0` before returning.
 
-=== Using the Stack
+==== Using the Stack
 
 Ok first let's establish the rules on when you _have_ to use the stack (You can
 always use it for arbitrary local variables, like a local array for example but
@@ -371,7 +371,7 @@ several factors, like how long/complex the loop is, how many times it executes, 
 of course personal preference.
 
 
-=== Recursive Functions
+==== Recursive Functions
 
 Let's do a classic recursive function, the fibonacci sequence.
 
@@ -441,7 +441,7 @@ calling.s.
 
 // TODO A recursive function that doesn't require saving anything but $ra
 
-== Conclusion
+=== Conclusion
 
 While grasping the basics of a calling convention is not too difficult, it takes
 practice to get used to it and there are many things that we haven't covered

@@ -3,8 +3,8 @@
 = MIPS Assembly Programmming
 Robert Winkler <rob121618@gmail.com>
 v0.7, 2021-06-12
-:toc:
 :homepage: http://www.robertwinkler.com/ 
+:toc:
 
 //include::contents.adoc[]
 include::ch0.adoc[]

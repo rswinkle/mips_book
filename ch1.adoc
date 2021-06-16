@@ -1,6 +1,6 @@
 :source-highlighter: pygments
 
-= Chapter 1: Data
+== Chapter 1: Data
 
 In MIPS, you can declare global variables in the `.data` section.
 
@@ -89,7 +89,7 @@ built-in printf function in MIPS, you have to handle printing variables yourself
 with the appropriate system calls.
 
 
-== Arrays
+=== Arrays
 
 Declaring arrays is just an extension of declaring single variables.  Obviously
 strings are special cases, that can be handled with `.ascii` or `.asciiz` for literals,

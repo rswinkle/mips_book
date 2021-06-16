@@ -2,7 +2,7 @@
 
 :mars_syscalls: footnote:[https://courses.missouristate.edu/KenVollmar/mars/Help/SyscallHelp.html]
 
-= Chapter 2: System Calls
+== Chapter 2: System Calls
 
 We mentioned system calls (aka syscalls from now on) in chapter 0 when we were
 going over our "Hello World" program, but what exactly are they?
@@ -88,7 +88,7 @@ arguments, if any, and then do the syscall:
 You can think of the above as `print_integer(42);`.  Let's look at an actual
 program that uses a few more syscalls next.
 
-== Examples
+=== Examples
 
 [source,c,linenums]
 ----
