@@ -1,0 +1,17 @@
+== Info
+
+(C) Robert Winkler 2021
+
+Licensed under https://creativecommons.org/licenses/by-nc-sa/3.0/[Creative Commons].
+
+This book is available online in both
++
+http://www.robertwinkler.com/projects/mips_book/mips_book.html[HTML] and
++
+http://www.robertwinkler.com/projects/mips_book/mips_book.pdf[PDF] form.
+
+The repo for the book, where you can get the code referenced report errors
+is here (TODO)
+
+
+

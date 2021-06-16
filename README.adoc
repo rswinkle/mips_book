@@ -1,17 +1,26 @@
-= Untitled MIPS book
+= MIPS Assembly Programming
 
-This is where I'll write the book and hopefully my unorganized hodgepodge
-method of writing will culminate in an organized cohesive book.
+This repo is the workspace of a book on MIPS assembly programming written
+in asciidoc.  The book is fairly complete and completely useable already,
+though there's plenty of polish, some editing, and maybe a dozen pages
+of additional content that could be added.
 
-I already am torn between writing a ground up book, (ie start with data types, move
-to branches, loops, functions, calling conventions stack etc.).
 
-Or more jump in, start with a full "Hello world" program and overview all the features
-and then move on to more and more complicated programs explaining things as necessary.
+== Download
+Get the source from https://github.com/rswinkle/mips_book[Github].
 
-This is I think more popular, it's more how I tutor (I'm usually in a rush to help them)
-but then I'd also want more appendices/reference chapters at the end maybe.
 
-Lastly, I could forgo both techniques and literally just create a "cookbook", where it's got dozens of programs and snippets in C and the MIPS equivalent.
+The pre-built book is available in the root directory as both an all-in-one
+html page and a pdf:
+
+https://raw.githubusercontent.com/rswinkle/mips_book/master/mips_book.html[HTML Page]
+
+https://raw.githubusercontent.com/rswinkle/mips_book/master/mips_book.pdf[PDF]
+
+
+== License
+
+The book is under a https://creativecommons.org/licenses/by-nc-sa/3.0/[Creative Commons License].
+
 
 

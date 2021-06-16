@@ -2,11 +2,11 @@
 
 = MIPS Assembly Programmming
 Robert Winkler <rob121618@gmail.com>
-v0.7, 2021-06-12
-:homepage: http://www.robertwinkler.com/ 
+v0.7, 2021-06-15: First Draft
 :toc:
 
 //include::contents.adoc[]
+include::info.adoc[]
 include::ch0.adoc[]
 include::ch1.adoc[]
 include::ch2.adoc[]
