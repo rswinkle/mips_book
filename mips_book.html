@@ -443,8 +443,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Robert Winkler</span><br>
 <span id="email" class="email"><a href="mailto:rob121618@gmail.com">rob121618@gmail.com</a></span><br>
-<span id="revnumber">version 0.7.1,</span>
-<span id="revdate">2021-06-16</span>
+<span id="revnumber">version 0.7.2,</span>
+<span id="revdate">2021-06-17</span>
 <br><span id="revremark">Beta</span>
 </div>
 <div id="toc" class="toc">
@@ -758,7 +758,7 @@ indicating the start of our main function.</p>
 It takes one argument, the address of the string to print, in the $a0 register which we
 do on the next line. Finally, we call the system call using the syscall instruction.
 Finally we call the exit system call which takes no arguments and exits the program.
-Again we&#8217;ll cover system calls in a later chapter, this is just an intro/overiew.</p>
+Again we&#8217;ll cover system calls in a later chapter, this is just an intro/overview.</p>
 </div>
 </div>
 <div class="sect2">
@@ -879,7 +879,7 @@ in the following table:</p>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">.word</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">4</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">int, all pointer types</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">.float</p></td>
@@ -1069,7 +1069,7 @@ specific features either.
 </table>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 2. MIPS data types</caption>
+<caption class="title">Table 2. SPIM supported syscalls</caption>
 <colgroup>
 <col style="width: 18.75%;">
 <col style="width: 6.25%;">
@@ -1197,8 +1197,8 @@ $a2 = number of characters to write</p></td>
 </tbody>
 </table>
 <div class="paragraph">
-<p>As you can see you it&#8217;s just the basics.  You can read or write the different types,
-cdo file I/O using calls identical to POSIX functions (open, read, write, close;
+<p>As you can see, it&#8217;s just the basics.  You can read or write the different types,
+do file I/O using calls identical to POSIX functions (open, read, write, close;
 see man pages), allocate memory, and exit.  Even so, they&#8217;re sufficient to build
 anything you want.</p>
 </div>
@@ -1213,7 +1213,7 @@ arguments, if any, and then do the syscall:</p>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="mips"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
 <span class="normal">2</span>
-<span class="normal">3</span></pre></div></td><td class="code"><pre><span></span>	li    $v0, 1  # 1 is print integer
+<span class="normal">3</span></pre></div></td><td class="code"><pre><span></span>	li    $v0, 1   # 1 is print integer
 	li    $a0, 42  # takes 1 arg in a0, the number to print
 	syscall        # actually execute syscall
 </pre></td></tr></table></code></pre>
@@ -1447,9 +1447,9 @@ if-else statements.  In other words, almost every program requires branching, a 
 to do code a instead of code b, or to do code a only if certain conditions are met.</p>
 </div>
 <div class="paragraph">
-<p>You already know how do do this in higher level languages, the aforementioned if
+<p>You already know how to do this in higher level languages, the aforementioned if
 statement.  In assembly it&#8217;s more complicated.  Your only tool is the ability
-to jump to a label on other line based on the result of various comparisons.  The
+to jump to a label on another line based on the result of various comparisons.  The
 relevant instructions are listed in the following table:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
@@ -1564,8 +1564,9 @@ are just shortcuts to compare a register against 0, ie the 0 register.</p>
 registers in more detail in the chapter on functions and the calling conventions.</p>
 </div>
 <div class="paragraph">
-<p>One final thing is that labels have the same naming requirements as C variables and functions.
-They must start with a letter or underscore and the rest can be letters, underscores, digits.</p>
+<p>One final thing is that labels have the same naming requirements as C variables and
+functions.  They must start with a letter or underscore and the rest can be letters,
+underscores, and digits.</p>
 </div>
 <div class="sect2">
 <h3 id="_practice">Practice</h3>
@@ -1638,14 +1639,14 @@ it helps with readability to comment every line or group of lines that way.</p>
 <div class="paragraph">
 <p>The second thing to notice is how we handled the multiplication.  This has
 nothing to do with branching but is something we&#8217;ll touch on multiple times
-throughout the book.  Your job when being a human compiler is to match the
-<em>behavior</em>, you are under no obligation to match the structure or operations
-of the higher level code exactly (unless your professors stupidly forces you to).</p>
+throughout the book.  Your job when acting as a human compiler is to match the
+<em>behavior</em>. You are under no obligation to match the structure or operations
+of the higher level code exactly (unless your professor stupidly forces you to).</p>
 </div>
 <div class="paragraph">
 <p>Given that, it is in your best interest to change and rearrange things in
 order to simplify the assembly as much as possible to make your life easier.
-Generally speaking this also tends to result in more performant code, since
+Generally speaking, this also tends to result in more performant code, since
 using fewer instructions and fewer branches (the most common outcomes) saves
 execution time.</p>
 </div>
@@ -1794,7 +1795,7 @@ test a single condition?  As you might expect, you have to break things down
 to match the logic using the operations you have.</p>
 </div>
 <div class="paragraph">
-<p>Let&#8217;s look at <code>and</code> first.  Variables a, b, and c are in t0, t1, and t2.</p>
+<p>Let&#8217;s look at <strong>and</strong> first.  Variables a, b, and c are in t0, t1, and t2.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1829,12 +1830,12 @@ for the opposite when we switch to assembly, so we need the equivalent of</p>
 <div class="paragraph">
 <p>Well, that didn&#8217;t help us much, we still don&#8217;t know how to handle that compound
 condition.  In fact we&#8217;ve just made it more complicated.  If only there were
-a way to convert it to or instead of and.  Why would we want that?  Because,
-while both and&#8217;s and or&#8217;s in C allow for short circuit evaluation (where
+a way to convert it to <strong>or</strong> instead of <strong>and</strong>.  Why would we want that?  Because,
+while both <strong>and</strong> and <strong>or</strong> in C allow for short circuit evaluation (where
 the result of the whole expression is known early and the rest of expression
-is not evaluated), with or, it short circuits on success while and short
-circuits on failure.  What does that mean?  It means that with or, the whole
-expression is true the second a single true term is found, while with and
+is not evaluated), with <strong>or</strong>, it short circuits on success while <strong>and</strong> short
+circuits on failure.  What does that mean?  It means that with <strong>or</strong>, the whole
+expression is true the second a single true term is found, while with <strong>and</strong>
 the whole expression is false the second a single false term is found.</p>
 </div>
 <div class="paragraph">
@@ -1975,12 +1976,12 @@ the whole expression is false the second a single false term is found.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>You&#8217;re exactly right.  That final translation of and is exactly like or.</p>
+<p>You&#8217;re exactly right.  That final translation of <strong>and</strong> is exactly like <strong>or</strong>.</p>
 </div>
 <div class="paragraph">
 <p>It takes advantage of De Morgan&#8217;s laws.<sup class="footnote">[<a id="_footnoteref_6" class="footnote" href="#_footnotedef_6" title="View footnote.">6</a>]</sup>  For those
 of you who haven&#8217;t taken a Digital Logic course (or have forgotten), De
-Morgan&#8217;s laws are 2 equivalencies, a way to an or to an and and vice versa.</p>
+Morgan&#8217;s laws are 2 equivalencies, a way to change an <strong>or</strong> to an <strong>and</strong>, and vice versa.</p>
 </div>
 <div class="paragraph">
 <p>They are (in C notation):</p>
@@ -2044,10 +2045,10 @@ no_add20:
 </div>
 </div>
 <div class="paragraph">
-<p>See how that works?  Or&#8217;s do not need to remember state.  Just the fact that
-you reached a line in a multi-term or expression means the previous checks
+<p>See how that works?  <strong>Or</strong>'s do not need to remember state.  Just the fact that
+you reached a line in a multi-term <strong>or</strong> expression means the previous checks
 were false, otherwise you&#8217;d have jumped.  If you tried to emulate the same
-thing with an and, as you saw in the larger snippet above, you&#8217;d need a
+thing with an <strong>and</strong>, as you saw in the larger snippet above, you&#8217;d need a
 bunch of extra labels and jumps for each term.</p>
 </div>
 <div class="paragraph">
@@ -2145,7 +2146,7 @@ failure for the entire expression.  Here&#8217;s how it would look otherwise:</p
 <p>That is harder to read and has both an extra print and an extra jump.</p>
 </div>
 <div class="paragraph">
-<p>So let&#8217;s convert the better version to MIPS (a,b,c = t0, t1, t2):</p>
+<p>So let&#8217;s convert the better version to MIPS (a,b,c = <code>$t0</code>, <code>$t1</code>, <code>$t2</code>):</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2232,7 +2233,7 @@ set somewhere before.</p>
 </div>
 <div class="paragraph">
 <p>With chains like these, you following everything we&#8217;ve learned before, it
-comes out looking like this (assuming score is t0 and letter_grade is t1):</p>
+comes out looking like this (assuming score is <code>$t0</code> and letter_grade is <code>$t1</code>):</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -4985,8 +4986,8 @@ passed.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 0.7.1<br>
-Last updated 2021-06-16 17:39:52 -0700
+Version 0.7.2<br>
+Last updated 2021-06-17 09:22:23 -0700
 </div>
 </div>
 <style>

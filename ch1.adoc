@@ -24,7 +24,7 @@ in the following table:
 
 | .half | 2 | short
 
-| .word | 4 | int
+| .word | 4 | int, all pointer types
 
 | .float | 4 | float
 

@@ -10,9 +10,9 @@ Almost every non-trivial program requires some logic, even if it's just a few if
 if-else statements.  In other words, almost every program requires branching, a way
 to do code a instead of code b, or to do code a only if certain conditions are met.
 
-You already know how do do this in higher level languages, the aforementioned if
+You already know how to do this in higher level languages, the aforementioned if
 statement.  In assembly it's more complicated.  Your only tool is the ability
-to jump to a label on other line based on the result of various comparisons.  The
+to jump to a label on another line based on the result of various comparisons.  The
 relevant instructions are listed in the following table:
 
 
@@ -65,8 +65,9 @@ would be equivalent to:
 Note `$0` is the same as `zero` and is just the hard coded 0 register.  I'll cover
 registers in more detail in the chapter on functions and the calling conventions.
 
-One final thing is that labels have the same naming requirements as C variables and functions.
-They must start with a letter or underscore and the rest can be letters, underscores, digits.
+One final thing is that labels have the same naming requirements as C variables and
+functions.  They must start with a letter or underscore and the rest can be letters,
+underscores, and digits.
 
 === Practice
 
@@ -120,13 +121,13 @@ it helps with readability to comment every line or group of lines that way.
 
 The second thing to notice is how we handled the multiplication.  This has
 nothing to do with branching but is something we'll touch on multiple times
-throughout the book.  Your job when being a human compiler is to match the
-_behavior_, you are under no obligation to match the structure or operations
-of the higher level code exactly (unless your professors stupidly forces you to).
+throughout the book.  Your job when acting as a human compiler is to match the
+_behavior_. You are under no obligation to match the structure or operations
+of the higher level code exactly (unless your professor stupidly forces you to).
 
 Given that, it is in your best interest to change and rearrange things in
 order to simplify the assembly as much as possible to make your life easier.
-Generally speaking this also tends to result in more performant code, since
+Generally speaking, this also tends to result in more performant code, since
 using fewer instructions and fewer branches (the most common outcomes) saves
 execution time.
 
@@ -229,7 +230,7 @@ have compound conditions?  How does that work with branch operations that only
 test a single condition?  As you might expect, you have to break things down
 to match the logic using the operations you have.
 
-Let's look at `and` first.  Variables a, b, and c are in t0, t1, and t2.
+Let's look at *and* first.  Variables a, b, and c are in t0, t1, and t2.
 
 [source,c,linenums]
 ----
@@ -253,12 +254,12 @@ no_add20:
 
 Well, that didn't help us much, we still don't know how to handle that compound
 condition.  In fact we've just made it more complicated.  If only there were
-a way to convert it to or instead of and.  Why would we want that?  Because,
-while both and's and or's in C allow for short circuit evaluation (where
+a way to convert it to *or* instead of *and*.  Why would we want that?  Because,
+while both *and* and *or* in C allow for short circuit evaluation (where
 the result of the whole expression is known early and the rest of expression
-is not evaluated), with or, it short circuits on success while and short
-circuits on failure.  What does that mean?  It means that with or, the whole
-expression is true the second a single true term is found, while with and
+is not evaluated), with *or*, it short circuits on success while *and* short
+circuits on failure.  What does that mean?  It means that with *or*, the whole
+expression is true the second a single true term is found, while with *and*
 the whole expression is false the second a single false term is found.
 
 Let's look at the following code to demonstrate:
@@ -333,11 +334,11 @@ dont_do_something:
 
 ----
 
-You're exactly right.  That final translation of and is exactly like or.
+You're exactly right.  That final translation of *and* is exactly like *or*.
 
 It takes advantage of De Morgan's laws.{de_morgans}  For those
 of you who haven't taken a Digital Logic course (or have forgotten), De
-Morgan's laws are 2 equivalencies, a way to an or to an and and vice versa.
+Morgan's laws are 2 equivalencies, a way to change an *or* to an *and*, and vice versa.
 
 They are (in C notation):
 
@@ -382,10 +383,10 @@ no_add20:
 	andi   $t1, $t1, 0xFF          # b &= 0xFF
 ----
 
-See how that works?  Or's do not need to remember state.  Just the fact that
-you reached a line in a multi-term or expression means the previous checks
+See how that works?  **Or**'s do not need to remember state.  Just the fact that
+you reached a line in a multi-term *or* expression means the previous checks
 were false, otherwise you'd have jumped.  If you tried to emulate the same
-thing with an and, as you saw in the larger snippet above, you'd need a
+thing with an *and*, as you saw in the larger snippet above, you'd need a
 bunch of extra labels and jumps for each term.
 
 // TODO add example of mixed compond expression if (A || B && C)
@@ -449,7 +450,7 @@ done_if:
 
 That is harder to read and has both an extra print and an extra jump.
 
-So let's convert the better version to MIPS (a,b,c = t0, t1, t2):
+So let's convert the better version to MIPS (a,b,c = `$t0`, `$t1`, `$t2`):
 
 [source,mips,linenums]
 ----
@@ -502,7 +503,7 @@ set somewhere before.
 ----
 
 With chains like these, you following everything we've learned before, it
-comes out looking like this (assuming score is t0 and letter_grade is t1):
+comes out looking like this (assuming score is `$t0` and letter_grade is `$t1`):
 
 [source,mips,linenums]
 ----
