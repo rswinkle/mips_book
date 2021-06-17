@@ -11,16 +11,19 @@ Get the source from https://github.com/rswinkle/mips_book[Github].
 
 
 The pre-built book is available in the root directory as both an all-in-one
-html page and a pdf:
+html page and a pdf and they're also available on my website:
 
-https://raw.githubusercontent.com/rswinkle/mips_book/master/mips_book.html[HTML Page]
+http://www.robertwinkler.com/projects/mips_book/mips_book.html[HTML Page]
 
-https://raw.githubusercontent.com/rswinkle/mips_book/master/mips_book.pdf[PDF]
+http://www.robertwinkler.com/projects/mips_book/mips_book.pdf[PDF]
 
 
 == License
 
-The book is under a https://creativecommons.org/licenses/by-nc-sa/3.0/[Creative Commons License].
+The book (all adoc files and final generated pdf/html) is under a
+https://creativecommons.org/licenses/by-nc-sa/3.0/[Creative Commons License].
+
+The separate code files in the code subdirectory are under the MIT license.
 
 
 
