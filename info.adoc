@@ -1,6 +1,6 @@
 == Info
 
-(C) 2021 http://robertwinkler.com[Robert Winkler]
+Copyright (C) 2021 http://robertwinkler.com[Robert Winkler]
 
 Licensed under https://creativecommons.org/licenses/by-nc-sa/3.0/[Creative Commons].
 
