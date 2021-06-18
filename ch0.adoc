@@ -9,41 +9,44 @@
 In which we lay the groundwork for the rest of the book...
 
 === Prereqs
+
 While someone with no programming experience could probably learn MIPS from this
 book, it is definitely preferable to have at least some experience in a higher
 level imperative programming language. I say imperative, because programming
-in assembly is the antithesis of functional programming, everything is about
+in assembly is the antithesis of functional programming; everything is about
 state, with each line changing the state of the CPU and sometimes memory. Given
 that, experience in functional languages like Lisp, Scheme etc. are less helpful
-than experience in C/C++, Java, Python, Javascript etc.
+than experience in C/C{plus}{plus}, Java, Python, Javascript etc.
 
-Of all of the latter, C is the best, with C++ being a close second because at least
-all of C exists in C++. There are many reasons C is the best prior experience when
+Of all of the latter, C is the best, with C{plus}{plus} being a close second because at least
+all of C exists in C{plus}{plus}. There are many reasons C is the best prior experience when
 learning assembly (any assembly, not just MIPS), including the following:
 
-* Pointers, concepts and symmetry of "address of" and "dereference" operators
+* pointers, concepts and symmetry of "address of" and "dereference" operators
 * pointer/array syntax equivalence
-* Stack allocation as the default
+* stack allocation as the default
 * manual memory management, no garbage collector
-* Global data
-* Rough equivalence in structure of a C program and an assembly program (vs. say Java)
-* Pass by value
+* global data
+* rough equivalence in structure of a C program and an assembly program (vs. say Java)
+* pass by value
 
-There's some overlap between those and there's probably more but you can see than
+There's some overlap between those and there're probably more but you can see that
 most other languages that are commonly taught as first languages are missing most if
 not all of those things.
 
-Even C++, which technically has all of them, being a superset of C, is usually taught in
-a way that mostly ignores all of those things.  They teach C++ as if it's Java,
-never teaching the fundamentals. In any case this is getting into
-my problems with CS pedagogy of the last 20 years based on my experience as a CS
-major myself ('12) and as a programming tutor helping college students across the
-country since 2016, and I should save it for a proper essay/rant sometime.
+Even C{plus}{plus}, which technically has all of them, being a superset of C,
+is usually taught in a way that mostly ignores all of those things.  They teach
+C{plus}{plus} as if it's Java, never teaching the fundamentals. In any case this
+is getting into my problems with CS pedagogy of the last 20 years based on my
+experience as a CS major myself ('12) and as a programming tutor helping college
+students across the country since 2016, and I should save it for a proper
+essay/rant sometime.
 
 Long story short, I use C code and C syntax to help explain and teach MIPS.  I'll
 try to provide enough explanation regardless of past experience as best I can.
 
 === System Setup
+
 As I tell all of my tutoring students, if you're majoring in CS or anything related
 I highly recommend you use Linux. It's just easier in every way to do dev work
 on Linux vs Windows or Mac.  Many assignments require it, which often necessitates
@@ -57,7 +60,7 @@ or Fedora etc. terminal based system on Windows without having to setup a real
 virtual machine (or dealing with the slowdown that would cause). I've even heard
 that they'll get support for Linux GUI programs soon.
 
-Mac on the other hand is technically a Unix based system and you can use their
+MacOS on the other hand, is technically a Unix based system and you can use their
 terminal and install virtually any program from there using Macports or Homebrew
 or similar.
 
