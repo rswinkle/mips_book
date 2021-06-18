@@ -417,7 +417,9 @@ the following strings are arguments.  In the GUI, there is an option in
 add a text box above the Text Segment for you to enter in the arguments to be
 passed.
 
+.Enable program arguments in MARS GUI
 image::images/enable_mars_args.png[]
 
+.Example using program arguments in MARS GUI
 image::images/mars_args.png[]
 
