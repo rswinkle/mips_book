@@ -1,4 +1,4 @@
-= References and Useful Links
+== References and Useful Links
 
 * https://inst.eecs.berkeley.edu/~cs61c/resources/MIPS_Green_Sheet.pdf[Greensheet]
 * https://courses.missouristate.edu/KenVollmar/mars/Help/SyscallHelp.html[MARS syscall list]

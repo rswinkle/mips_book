@@ -5,14 +5,11 @@
 Licensed under https://creativecommons.org/licenses/by-nc-sa/3.0/[Creative Commons].
 
 This book is available online in both
-+
 http://www.robertwinkler.com/projects/mips_book/mips_book.html[HTML] and
-+
 http://www.robertwinkler.com/projects/mips_book/mips_book.pdf[PDF] form.
 
 The repo for the book, where you can get the code referenced and report
 any errors (submit an issue or even a pull request) is
-+
 https://github.com/rswinkle/mips_book[here].
 
 
