@@ -518,7 +518,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="_info">Info</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>&#169; 2021 <a href="http://robertwinkler.com">Robert Winkler</a></p>
+<p>Copyright &#169; 2021 <a href="http://robertwinkler.com">Robert Winkler</a></p>
 </div>
 <div class="paragraph">
 <p>Licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons</a>.</p>
@@ -583,8 +583,8 @@ learning assembly (any assembly, not just MIPS), including the following:</p>
 </ul>
 </div>
 <div class="paragraph">
-<p>There&#8217;s some overlap between those and there&#8217;re probably more but you can see that
-most other languages that are commonly taught as first languages are missing most if
+<p>There is some overlap between those and there are probably more, but you can see that
+most other languages that are commonly taught as first languages are missing most, if
 not all of those things.</p>
 </div>
 <div class="paragraph">
@@ -605,12 +605,12 @@ try to provide enough explanation regardless of past experience as best I can.</
 <h3 id="_system_setup">System Setup</h3>
 <div class="paragraph">
 <p>As I tell all of my tutoring students, if you&#8217;re majoring in CS or anything related
-I highly recommend you use Linux. It&#8217;s just easier in every way to do dev work
+I highly recommend you use Linux. It&#8217;s easier in every way to do dev work
 on Linux vs Windows or Mac.  Many assignments require it, which often necessitates
 using a virtual machine (which is painful, especially on laptops) and/or ssh-ing
 into a school Linux server, which is also less than ideal.  In general, you&#8217;ll have
 to learn how to use the unix terminal eventually and will probably use it to some
-extent in your career so it also just makes sense to get used to it asap.</p>
+extent in your career so it also makes sense to get used to it asap.</p>
 </div>
 <div class="paragraph">
 <p>That being said, Windows does now have WSL so you can get the full Ubuntu or Debian
@@ -671,7 +671,7 @@ download them, and MARS at these addresses</p>
 <div class="paragraph">
 <p>Let&#8217;s start with the classic hello world program, first in C, then in MIPS, and go
 over all the pieces in overview.  You can copy paste these into your editor of choice
-(mine being neovim), or just use the files in the associated repo to follow along.</p>
+(mine being neovim), or use the files in the associated repo to follow along.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -692,13 +692,14 @@ over all the pieces in overview.  You can copy paste these into your editor of c
 </div>
 </div>
 <div class="paragraph">
-<p>It&#8217;s pretty self explanatory.  You have to include stdio.h so you can use the function printf
-(though in the real world I&#8217;d use puts here), the function main is the start of any C/C++
-program, which is a function that returns an int.  We call printf to display the string
-"Hello World!\n" to the user and then return 0 to exit.  0 indicates success, no error btw.</p>
+<p>It is pretty self explanatory.  You have to include stdio.h so you can use the
+function printf (though in the real world I&#8217;d use puts here), the function main
+is the start of any C/C&#43;&#43; program, which is a function that returns
+an int.  We call printf to display the string "Hello World!\n" to the user and
+then return 0 to exit.  Returning 0 indicates success and there were no errors.</p>
 </div>
 <div class="paragraph">
-<p>You can compile and run it in a linux/unix terminal with as show below.  You
+<p>You can compile and run it in a linux/unix terminal as shown below.  You
 can substitute clang or another compiler for gcc if you want.</p>
 </div>
 <div class="listingblock">
@@ -728,7 +729,7 @@ hello:   .asciiz &quot;Hello World!\n&quot;
 
 .text
 main:
-	li   $v0, 4      # print string system call
+	li   $v0, 4      # load immediate, v0 = 4 (4 is print string system call)
 	la   $a0, hello  # load address of string to print into a0
 	syscall
 
@@ -742,15 +743,22 @@ main:
 literals as in this case.  We&#8217;ll cover them in more detail later.</p>
 </div>
 <div class="paragraph">
-<p>The <code>.text</code> section is where any code goes.  Here we declare a single label main
+<p>The <code>.text</code> section is where any code goes.  Here we declare a single label <code>main:</code>,
 indicating the start of our main function.</p>
 </div>
 <div class="paragraph">
-<p>We then put the number 4 in the $v0 register to select the print string system call.
-It takes one argument, the address of the string to print, in the $a0 register which we
-do on the next line. Finally, we call the system call using the syscall instruction.
-Finally we call the exit system call which takes no arguments and exits the program.
-Again we&#8217;ll cover system calls in a later chapter, this is just an intro/overview.</p>
+<p>We then put the number 4 in the <code>$v0</code> register to select the print string system
+call.  The print string system call takes one argument, the address of the string
+to print, in the <code>$a0</code> register.  We do that on the next line. On line 8, we call
+the system call using the syscall instruction.</p>
+</div>
+<div class="paragraph">
+<p>Finally we call the exit system call which takes no arguments and exits the program.</p>
+</div>
+<div class="paragraph">
+<p>Again, we&#8217;ll cover system calls in a later chapter.  This is just an intro/overview
+so don&#8217;t worry if some things aren&#8217;t completly clear.  This chapter is about getting
+you up and running, not really about teaching anything yet.</p>
 </div>
 </div>
 <div class="sect2">
@@ -783,9 +791,9 @@ Hello World!</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The name of your MARS jar file may be different<sup class="footnote">[<a id="_footnoteref_2" class="footnote" href="#_footnotedef_2" title="View footnote.">2</a>]</sup>,
-but just use the correct name and path.  For me I just keep the jar file in my home
-directory so I can use tilde to access it no matter where I am.  You can also just
+<p>The name of your MARS jar file may be different<sup class="footnote">[<a id="_footnoteref_2" class="footnote" href="#_footnotedef_2" title="View footnote.">2</a>]</sup>, so be sure to
+use the correct name and path.  For myself, I keep the jar file in my home
+directory so I can use tilde to access it no matter where I am.  You can also
 copy it into your working directory (ie wherever you have your source code) so you
 don&#8217;t have to specify a path at all.  There are lots of useful command line options
 that you can use<sup class="footnote">[<a id="_footnoteref_3" class="footnote" href="#_footnotedef_3" title="View footnote.">3</a>]</sup>, some of which we&#8217;ll touch on later.</p>
@@ -795,9 +803,9 @@ that you can use<sup class="footnote">[<a id="_footnoteref_3" class="footnote" h
 I&#8217;ve never done it and it&#8217;s probably not worth it.</p>
 </div>
 <div class="paragraph">
-<p>Alternatively, you can just start up MARS or QtSpim like a normal GUI application and
-then load your source file.  MARS requires you to hit "assemble" then "run", whereas
-QtSpim, you just hit "run".</p>
+<p>Alternatively, you can start up MARS or QtSpim like a normal GUI application and
+then load your source file.  MARS requires you to hit "assemble" and then "run".
+Whereas with QtSpim you only have to hit "run".</p>
 </div>
 <div class="paragraph">
 <p>QtSpim does let you start and load the file in one step from the command line</p>
@@ -815,9 +823,9 @@ since the whole point is to be a GUI wrapper around spim.</p>
 <div class="sect2">
 <h3 id="_conclusion">Conclusion</h3>
 <div class="paragraph">
-<p>Well, there you have it, you&#8217;ve written and run your first MIPS program.  Another
-few chapters and you&#8217;ll have no trouble with almost anything you&#8217;d want to do
-in in MIPS for a class or just for fun with these simulators.</p>
+<p>Well, there you have it, you have written and run your first MIPS program.  Another
+few chapters and you will have no trouble with almost anything you would want
+to do in MIPS, whether for a class, or on your own for fun.</p>
 </div>
 </div>
 </div>

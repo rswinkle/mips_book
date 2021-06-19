@@ -30,8 +30,8 @@ learning assembly (any assembly, not just MIPS), including the following:
 * rough equivalence in structure of a C program and an assembly program (vs. say Java)
 * pass by value
 
-There's some overlap between those and there're probably more but you can see that
-most other languages that are commonly taught as first languages are missing most if
+There is some overlap between those and there are probably more, but you can see that
+most other languages that are commonly taught as first languages are missing most, if
 not all of those things.
 
 Even C{plus}{plus}, which technically has all of them, being a superset of C,
@@ -48,12 +48,12 @@ try to provide enough explanation regardless of past experience as best I can.
 === System Setup
 
 As I tell all of my tutoring students, if you're majoring in CS or anything related
-I highly recommend you use Linux. It's just easier in every way to do dev work
+I highly recommend you use Linux. It's easier in every way to do dev work
 on Linux vs Windows or Mac.  Many assignments require it, which often necessitates
 using a virtual machine (which is painful, especially on laptops) and/or ssh-ing
 into a school Linux server, which is also less than ideal.  In general, you'll have
 to learn how to use the unix terminal eventually and will probably use it to some
-extent in your career so it also just makes sense to get used to it asap.
+extent in your career so it also makes sense to get used to it asap.
 
 That being said, Windows does now have WSL so you can get the full Ubuntu or Debian
 or Fedora etc. terminal based system on Windows without having to setup a real
@@ -91,7 +91,7 @@ download them, and MARS at these addresses
 
 Let's start with the classic hello world program, first in C, then in MIPS, and go
 over all the pieces in overview.  You can copy paste these into your editor of choice
-(mine being neovim), or just use the files in the associated repo to follow along.
+(mine being neovim), or use the files in the associated repo to follow along.
 
 [source,c,linenums]
 ----
@@ -104,12 +104,13 @@ int main()
 }
 ----
 
-It's pretty self explanatory.  You have to include stdio.h so you can use the function printf
-(though in the real world I'd use puts here), the function main is the start of any C/C++
-program, which is a function that returns an int.  We call printf to display the string
-"Hello World!\n" to the user and then return 0 to exit.  0 indicates success, no error btw.
+It is pretty self explanatory.  You have to include stdio.h so you can use the
+function printf (though in the real world I'd use puts here), the function main
+is the start of any C/C{plus}{plus} program, which is a function that returns
+an int.  We call printf to display the string "Hello World!\n" to the user and
+then return 0 to exit.  Returning 0 indicates success and there were no errors.
 
-You can compile and run it in a linux/unix terminal with as show below.  You
+You can compile and run it in a linux/unix terminal as shown below.  You
 can substitute clang or another compiler for gcc if you want.
 
 [source,bash]
@@ -128,7 +129,7 @@ hello:   .asciiz "Hello World!\n"
 
 .text
 main:
-	li   $v0, 4      # print string system call
+	li   $v0, 4      # load immediate, v0 = 4 (4 is print string system call)
 	la   $a0, hello  # load address of string to print into a0
 	syscall
 
@@ -139,14 +140,19 @@ main:
 The `.data` section is where you declare global variables, which includes string
 literals as in this case.  We'll cover them in more detail later.
 
-The `.text` section is where any code goes.  Here we declare a single label main
+The `.text` section is where any code goes.  Here we declare a single label `main:`,
 indicating the start of our main function.
 
-We then put the number 4 in the $v0 register to select the print string system call.
-It takes one argument, the address of the string to print, in the $a0 register which we
-do on the next line. Finally, we call the system call using the syscall instruction.
+We then put the number 4 in the `$v0` register to select the print string system
+call.  The print string system call takes one argument, the address of the string
+to print, in the `$a0` register.  We do that on the next line. On line 8, we call
+the system call using the syscall instruction.
+
 Finally we call the exit system call which takes no arguments and exits the program.
-Again we'll cover system calls in a later chapter, this is just an intro/overview.
+
+Again, we'll cover system calls in a later chapter.  This is just an intro/overview
+so don't worry if some things aren't completly clear.  This chapter is about getting
+you up and running, not really about teaching anything yet.
 
 === Building and Running
 
@@ -176,9 +182,9 @@ Hello World!
 
 ----
 
-The name of your MARS jar file may be different{mars_versions},
-but just use the correct name and path.  For me I just keep the jar file in my home
-directory so I can use tilde to access it no matter where I am.  You can also just
+The name of your MARS jar file may be different{mars_versions}, so be sure to
+use the correct name and path.  For myself, I keep the jar file in my home
+directory so I can use tilde to access it no matter where I am.  You can also
 copy it into your working directory (ie wherever you have your source code) so you
 don't have to specify a path at all.  There are lots of useful command line options
 that you can use{mars_commandline}, some of which we'll touch on later.
@@ -186,9 +192,9 @@ that you can use{mars_commandline}, some of which we'll touch on later.
 Running the jar directly on the command line works even in the DOS command line though
 I've never done it and it's probably not worth it.
 
-Alternatively, you can just start up MARS or QtSpim like a normal GUI application and
-then load your source file.  MARS requires you to hit "assemble" then "run", whereas
-QtSpim, you just hit "run".
+Alternatively, you can start up MARS or QtSpim like a normal GUI application and
+then load your source file.  MARS requires you to hit "assemble" and then "run".
+Whereas with QtSpim you only have to hit "run".
 
 QtSpim does let you start and load the file in one step from the command line
 
@@ -202,8 +208,8 @@ since the whole point is to be a GUI wrapper around spim.
 
 === Conclusion
 
-Well, there you have it, you've written and run your first MIPS program.  Another
-few chapters and you'll have no trouble with almost anything you'd want to do
-in in MIPS for a class or just for fun with these simulators.
+Well, there you have it, you have written and run your first MIPS program.  Another
+few chapters and you will have no trouble with almost anything you would want
+to do in MIPS, whether for a class, or on your own for fun.
 
 
