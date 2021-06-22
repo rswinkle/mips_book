@@ -423,3 +423,59 @@ image::images/enable_mars_args.png[]
 .Example using program arguments in MARS GUI
 image::images/mars_args.png[]
 
+=== Delayed Branches and Delayed Loads
+
+MIPS originally had a 1 instruction delay between when a branch or load was executed,
+and when it actually jumped or completed the load.  By default, SPIM has both of
+these turned off but you can turn them on with the arguments `-delayed_branches`
+and `-delayed_loads` respectively or use the `-bare` which turns on both, as
+well as disabling pseudoinstructions (ie it simulates the "bare" machine without
+any of the niceties).  MARS is the same as SPIM in that it defaults to the more
+user friendly mode, but you can turn on delayed branches is the settings (but
+not delayed loads, that isn't supported as far as I can tell).  From the command
+line you can turn it on with the `db` argument.
+
+Now, why would you ever want to do any of this?  The only reason I can think of,
+and the only one that I've ever run into, is if your professor requires it for
+some unknown reason.  To handle delayed branches, all you have to do is add a
+`nop` instruction after every branch or jump instruction (including `jal` and `jr`).
+The solution is identical for delayed loads, put a `nop` after every load instruction.
+
+You could put other instructions there, intsructions that you have above the jumps
+or loads that don't have to occur before.  If you were doing a real project on
+real hardware and were trying to minimize program size and maximize speed, you
+would definitely do this (if that hardware had delayed branches/loads).  However,
+it's a bad idea for two reasons.  First, it takes longer to figure out which
+instructions you can move and why, and it makes your program harder to read since
+you naturally don't expect a later instruction to occur before the previous one.
+Second, and more importantly, it means your program will no longer work if you
+turn delayed branches/loads off again.  Using `nop` means the change is quick,
+easy, and you can still run it in the simulator's default mode if needed.
+
+=== No Pseudoinstructions Allowed
+
+Far more common than requiring delayed loads is forbidding pseudoinstructions,
+either all of them, or some subset of them.  This forces us to do what actually
+happens when you use those instructions manually.
+
+
+.Pseudoinstruction Equivalents
+[cols="1,1,3"]
+|===
+| Pseudoinstruction | Example Use | equivalence
+
+| Load Immediate | li   $t0, 42 | ori   $t0, $0, 42   # also addi  $t0, $0, 42
+
+| Move           | move $t0, $t1 | or   $t0, $0, $t1  # also add   $t0, $0, $t1
+
+| Load Address   | la   $t0, label | lui  $t0, 0x1000  # or 0x1001+
+ori  $t0, $0, offset   # offset is byte offset from start of .data to label
+
+// TODO
+|===
+
+
+
+
+
+
