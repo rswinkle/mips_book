@@ -443,8 +443,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Robert Winkler</span><br>
 <span id="email" class="email"><a href="mailto:rob121618@gmail.com">rob121618@gmail.com</a></span><br>
-<span id="revnumber">version 0.7.4,</span>
-<span id="revdate">2021-06-18</span>
+<span id="revnumber">version 0.8.4,</span>
+<span id="revdate">2021-06-23</span>
 <br><span id="revremark">Beta</span>
 </div>
 <div id="toc" class="toc">
@@ -455,6 +455,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_prereqs">Prereqs</a></li>
 <li><a href="#_system_setup">System Setup</a></li>
+<li><a href="#_handy_resources">Handy Resources</a></li>
 <li><a href="#_hello_world">Hello World</a></li>
 <li><a href="#_building_and_running">Building and Running</a></li>
 <li><a href="#_conclusion">Conclusion</a></li>
@@ -507,6 +508,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_macros">Macros</a></li>
 <li><a href="#_switch_case_statements">Switch-Case Statements</a></li>
 <li><a href="#_command_line_arguments">Command Line Arguments</a></li>
+<li><a href="#_delayed_branches_and_delayed_loads">Delayed Branches and Delayed Loads</a></li>
+<li><a href="#_no_pseudoinstructions_allowed">No Pseudoinstructions Allowed</a></li>
 </ul>
 </li>
 <li><a href="#_references_and_useful_links">References and Useful Links</a></li>
@@ -664,6 +667,26 @@ download them, and MARS at these addresses</p>
 <p><a href="https://sourceforge.net/projects/spimsimulator/files/">QtSpim</a></p>
 </li>
 </ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_handy_resources">Handy Resources</h3>
+<div class="paragraph">
+<p>There are a few references that you should bookmark (or download) before you get started.
+The first is the
+<a href="https://raw.githubusercontent.com/rswinkle/mips_book/master/references/MIPS_Green_Sheet.pdf">MIPS Greensheet</a>.
+It&#8217;s likely you already have a physical copy of this as it&#8217;s actually the tearout from the Patterson
+and Hennessey textbook <a href="https://amzn.to/3zN71KP"><em>Computer Architecture and Design</em></a>
+that is commonly used in college courses.</p>
+</div>
+<div class="paragraph">
+<p>The second thing is the list of <a href="https://courses.missouristate.edu/KenVollmar/mars/Help/SyscallHelp.html">syscalls</a>
+from the MARS website.</p>
+</div>
+<div class="paragraph">
+<p>I recommend you download/bookmark both and keep them open while working because
+you&#8217;ll be referencing them often to remind yourself which instructions and syscalls
+you have available and how they work.</p>
 </div>
 </div>
 <div class="sect2">
@@ -4926,6 +4949,349 @@ passed.</p>
 <div class="title">Figure 2. Example using program arguments in MARS GUI</div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_delayed_branches_and_delayed_loads">Delayed Branches and Delayed Loads</h3>
+<div class="paragraph">
+<p>MIPS originally had a 1 instruction delay between when a branch or load was executed,
+and when it actually jumped or completed the load.  By default, SPIM has both of
+these turned off but you can turn them on with the arguments <code>-delayed_branches</code>
+and <code>-delayed_loads</code> respectively or use the <code>-bare</code> which turns on both, as
+well as disabling pseudoinstructions (ie it simulates the "bare" machine without
+any of the niceties).  MARS is the same as SPIM in that it defaults to the more
+user friendly mode, but you can turn on delayed branches is the settings (but
+not delayed loads, that isn&#8217;t supported as far as I can tell).  From the command
+line you can turn it on with the <code>db</code> argument.</p>
+</div>
+<div class="paragraph">
+<p>Now, why would you ever want to do any of this?  The only reason I can think of,
+and the only one that I&#8217;ve ever run into, is if your professor requires it for
+some unknown reason.  To handle delayed branches, all you have to do is add a
+<code>nop</code> (No Operation) instruction after every branch or jump instruction
+(including <code>jal</code> and <code>jr</code>).  The solution is identical for delayed loads, put a
+<code>nop</code> after every load instruction.</p>
+</div>
+<div class="paragraph">
+<p>You could put other instructions there, intsructions that you have above the jumps
+or loads that don&#8217;t have to occur before.  If you were doing a real project on
+real hardware and were trying to minimize program size and maximize speed, you
+would definitely do this (if that hardware had delayed branches/loads).  However,
+it&#8217;s a bad idea for two reasons.  First, it takes longer to figure out which
+instructions you can move and why, and it makes your program harder to read since
+you naturally don&#8217;t expect a later instruction to occur before the previous one.
+Second, and more importantly, it means your program will no longer work if you
+turn delayed branches/loads off again.  Using <code>nop</code> means the change is quick,
+easy, and you can still run it in the simulator&#8217;s default mode if needed.</p>
+</div>
+<div class="paragraph">
+<p>One final note, and it relates to the following section.  Even though <code>nop</code>
+is supposedly represented by all 0&#8217;s, and MARS supports it even with pseudoinstrutions
+disabled, SPIM does not support it in bare mode.  This means you have to use
+some other instruction that has no side effects, like <code>or  $0, $0, $0</code>, which
+will work as a <code>nop</code> under all conditions and simulators.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_no_pseudoinstructions_allowed">No Pseudoinstructions Allowed</h3>
+<div class="paragraph">
+<p>Far more common than requiring delayed loads is forbidding pseudoinstructions,
+either all of them, or some subset of them.  This forces us to do what actually
+happens when you use those instructions manually.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 7. Pseudoinstruction Equivalents</caption>
+<colgroup>
+<col style="width: 13.3333%;">
+<col style="width: 20%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Pseudoinstruction</th>
+<th class="tableblock halign-left valign-top">Example Use</th>
+<th class="tableblock halign-left valign-top">Equivalence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Load Immediate</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>li    $t0, 42</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="literalblock">
+<div class="content">
+<pre>ori   $t0, $0, 42   # also addi  $t0, $0, 42</pre>
+</div>
+</div>
+<hr></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Move</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>move  $t0, $t1</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="literalblock">
+<div class="content">
+<pre>or    $t0, $0, $t1  # also add   $t0, $0, $t1</pre>
+</div>
+</div>
+<hr></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No Operation</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>nop</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="literalblock">
+<div class="content">
+<pre>or    $0, $0, $0 # or anything with $0 as the destination</pre>
+</div>
+</div>
+<hr></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Load Address</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>la    $t0, label</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code><span></span>lui   $t0, 0x1000 # or 0x1001
+ori   $t0, $0, n  # n = bytes from start of .data to label</code></pre>
+</div>
+</div>
+<hr></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Branch Less Than</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>blt  $t0, $t1, label</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code><span></span>slt   $t2, $t0, $t1  # t2 = t0 &lt; t1
+bne   $t2, $0, label</code></pre>
+</div>
+</div>
+<hr></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Branch Greater Than</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>bgt  $t0, $t1, label</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code><span></span>slt   $t2, $t1, $t0  # flip order to get &gt;
+bne   $t2, $0, label</code></pre>
+</div>
+</div>
+<hr></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Branch Less Than or Equal</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ble  $t0, $t1, label</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code><span></span>addi   $t1, $t1, 1  # add 1 to t1 to change &lt;= to &lt;
+slt    $t2, $t0, $t1  # t2 = t0 &lt; t1
+bne    $t2, $0, label</code></pre>
+</div>
+</div>
+<hr></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Branch Greater Than or Equal</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>bge  $t0, $t1, label</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code><span></span>addi  $t0, $t0, 1  # add 1 to t0 change &gt;= to &gt;
+slt   $t2, $t1, $t0  # t2 = t1 &lt; t0 aka t0 &gt; t1
+bne   $t2, $0, label</code></pre>
+</div>
+</div>
+<hr></div></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>You can see how you use the non-pseudoinstructions to match the same behavior, and
+there&#8217;s often (usually) more than one way.  Of all of them, the <code>ble</code> and <code>bge</code> are
+the worst, because what was 1 instruction becomes 3, and you&#8217;ll sometimes need an
+extra register to hold the "plus 1" value if you still need original.</p>
+</div>
+<div class="paragraph">
+<p>Another thing I should comment on is the <code>la</code> equivalence.  The reason it is
+a pseudoinstruction in the first place is that an address is 32 bits.  That&#8217;s also
+the size of a whole instruction.  Obviously, there&#8217;s no way to represent a whole
+address and anything else at the same time.  The lower left corner of the
+greensheet has the actual formats of the 3 different types of instructions and
+even the jump format still needs 6 bits for the opcode.  This is why <code>lui</code> exists,
+in order to facilitate getting a full address into a register by doing it in two
+halves, 16 + 16.  The lower 16 can be added or or&#8217;d after the <code>lui</code>.</p>
+</div>
+<div class="paragraph">
+<p>That begs the question, what actually goes in the upper half?  Well, since
+we&#8217;re dealing with addresses in the <code>.data</code> section, the upper portion should
+match the upper part of address of the <code>.data</code> section, which in SPIM is
+<code>0x10000000</code> in bare mode.  In normal mode it is <code>0x10010000</code>, but you&#8217;d be
+able to use <code>la</code> in normal mode. However, in MARS, it is always <code>0x10010000</code>,
+so you won&#8217;t be able to have it work correctly in bare SPIM and MARS without
+changing that back and forth.</p>
+</div>
+<div class="paragraph">
+<p>But what about the lower part of the address?  This involves counting the bytes
+from the top of <code>.data</code> to the label you want.  If all you have is words, halfs,
+floats, doubles, or space (with a round number), that&#8217;s fairly easy, but the
+second you have strings between the start and the label you want, it&#8217;s a bit
+more painful.  This is why I recommend putting any string declarations at the
+bottom so at least any other globals will have nice even offsets.  Also, if
+you have a bunch of globals, it doesn&#8217;t hurt to count once and put the offsets
+in comments above each label so you don&#8217;t forget.  Of course, none of this matters
+if you&#8217;re allowed to just use <code>la</code> which is true the vast majority of the time.</p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s look at a small example.  We&#8217;ll convert the following code from
+args.s to bare mode:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="mips"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span></pre></div></td><td class="code"><pre><span></span>.data
+
+there_are:  .asciiz &quot;There are &quot;
+arguments:  .asciiz &quot; command line arguments:\n&quot;
+
+.text
+main:
+	move    $t0, $a0  # save argc
+
+	li      $v0, 4
+	la      $a0, there_are
+	syscall
+
+	# some code removed for brevity
+
+	li      $t1, 0   # i = 0
+	j       arg_loop_test
+
+arg_loop:
+	li      $v0, 4
+	lw      $a0, 0($a1)
+	syscall
+
+	li      $v0, 11
+	li      $a0, 10    # &#39;\n&#39;
+	syscall
+
+	addi    $t1, $t1, 1   # i++
+	addi    $a1, $a1, 4    # argv++ ie a1 = &amp;argv[i]
+arg_loop_test:
+	blt     $t1, $t0, arg_loop  # while (i &lt; argc)
+</pre></td></tr></table></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>So we need to change the move, the li&#8217;s, the la and the blt and add a nop
+after any branches or loads.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="mips"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span></pre></div></td><td class="code"><pre><span></span>.data
+
+there_are:  .asciiz &quot;There are &quot;
+arguments:  .asciiz &quot; command line arguments:\n&quot;
+
+.text
+
+main:
+	or      $t0, $0, $a0  # save argc
+
+	ori     $v0, $0, 4
+	lui     $a0, 0x1000    # there_are is at beginning of data so just lui, lower is 0
+	syscall
+
+	ori     $t1, $0, 0   # i = 0
+	j       arg_loop_test
+	or      $0, $0, $0
+
+arg_loop:
+	ori     $v0, $0, 4     # print string for argv[i]
+	lw      $a0, 0($a1)
+	or      $0, $0, $0     # nop
+	syscall
+
+	ori     $v0, $0, 11
+	ori     $a0, $0, 10    # &#39;\n&#39;
+	syscall
+
+	addi    $t1, $t1, 1    # i++
+	addi    $a1, $a1, 4    # argv++ ie a1 = &amp;argv[i]
+arg_loop_test:
+	bne     $t1, $t0, arg_loop  # while (i != argc)
+	or      $0, $0, $0
+</pre></td></tr></table></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>So, following the table, you can see the <code>move</code> became <code>or</code>, the <code>li</code>'s became
+<code>ori</code>, we added <code>nop</code> instructions in the form of <code>or</code> with <code>$0</code> as the destination,
+and lastly, the <code>blt</code> became <code>bne</code>.  That last is worth noting, because there&#8217;s no
+reason to do a complicated transformation if you don&#8217;t have to and <code>bne</code> accomplishes
+the same thing here.</p>
+</div>
+<div class="paragraph">
+<p>See the example program args_bare.s which is just args.s for a complete example.</p>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -4988,8 +5354,8 @@ passed.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 0.7.4<br>
-Last updated 2021-06-18 07:40:23 -0700
+Version 0.8.4<br>
+Last updated 2021-06-23 11:41:31 -0700
 </div>
 </div>
 <style>

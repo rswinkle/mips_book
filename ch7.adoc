@@ -467,48 +467,64 @@ happens when you use those instructions manually.
 
 
 .Pseudoinstruction Equivalents
-[cols="1,1,5a"]
+[cols="2,3m,10a"]
 |===
 | Pseudoinstruction | Example Use | Equivalence
 
-| Load Immediate | li    $t0, 42 | ori   $t0, $0, 42   # also addi  $t0, $0, 42
+| Load Immediate | li    $t0, 42 |
 
-| Move           | move  $t0, $t1 | or   $t0, $0, $t1  # also add   $t0, $0, $t1
+ ori   $t0, $0, 42   # also addi  $t0, $0, 42
 
-| No Operation   | nop | or   $0, $0, $0 # or anything with $0 as the destination
+'''
 
-| Load Address   | la    $t0, label` |
+| Move           | move  $t0, $t1 |
+
+ or    $t0, $0, $t1  # also add   $t0, $0, $t1
+
+'''
+
+| No Operation   | nop |
+
+ or    $0, $0, $0 # or anything with $0 as the destination
+
+'''
+
+| Load Address   | la    $t0, label |
 
 [source]
 ----
-lui   $t0, 0x1000  # or 0x1001
-ori   $t0, $0, offset   # offset is byte offset from start of .data to label
+lui   $t0, 0x1000 # or 0x1001
+ori   $t0, $0, n  # n = bytes from start of .data to label
 ----
+'''
 
 | Branch Less Than | blt  $t0, $t1, label |
 
 [source]
 ----
-slt    $t2, $t0, $t1  # t2 = t0 < t1
-bne    $t2, $0, label
+slt   $t2, $t0, $t1  # t2 = t0 < t1
+bne   $t2, $0, label
 ----
+'''
 
 | Branch Greater Than | bgt  $t0, $t1, label |
 
 [source]
 ----
-slt    $t2, $t1, $t0  # flip order to get >
-bne    $t2, $0, label
+slt   $t2, $t1, $t0  # flip order to get >
+bne   $t2, $0, label
 ----
+'''
 
 | Branch Less Than or Equal | ble  $t0, $t1, label |
 
 [source]
 ----
-addi  $t1, $t1, 1  # add 1 to t1 to change <= to <
-slt   $t2, $t0, $t1  # t2 = t0 < t1
-bne   $t2, $0, label
+addi   $t1, $t1, 1  # add 1 to t1 to change <= to <
+slt    $t2, $t0, $t1  # t2 = t0 < t1
+bne    $t2, $0, label
 ----
+'''
 
 | Branch Greater Than or Equal | bge  $t0, $t1, label |
 
@@ -518,12 +534,131 @@ addi  $t0, $t0, 1  # add 1 to t0 change >= to >
 slt   $t2, $t1, $t0  # t2 = t1 < t0 aka t0 > t1
 bne   $t2, $0, label
 ----
+'''
 
-// TODO
 |===
 
+// NOTE: need the line breaks (''') after each code block to force grey box to
+// not overflow table cell
+
+You can see how you use the non-pseudoinstructions to match the same behavior, and
+there's often (usually) more than one way.  Of all of them, the `ble` and `bge` are
+the worst, because what was 1 instruction becomes 3, and you'll sometimes need an
+extra register to hold the "plus 1" value if you still need original.
+
+Another thing I should comment on is the `la` equivalence.  The reason it is
+a pseudoinstruction in the first place is that an address is 32 bits.  That's also
+the size of a whole instruction.  Obviously, there's no way to represent a whole
+address and anything else at the same time.  The lower left corner of the
+greensheet has the actual formats of the 3 different types of instructions and
+even the jump format still needs 6 bits for the opcode.  This is why `lui` exists,
+in order to facilitate getting a full address into a register by doing it in two
+halves, 16 + 16.  The lower 16 can be added or or'd after the `lui`.
+
+That begs the question, what actually goes in the upper half?  Well, since
+we're dealing with addresses in the `.data` section, the upper portion should
+match the upper part of address of the `.data` section, which in SPIM is
+`0x10000000` in bare mode.  In normal mode it is `0x10010000`, but you'd be
+able to use `la` in normal mode. However, in MARS, it is always `0x10010000`,
+so you won't be able to have it work correctly in bare SPIM and MARS without
+changing that back and forth.
+
+But what about the lower part of the address?  This involves counting the bytes
+from the top of `.data` to the label you want.  If all you have is words, halfs,
+floats, doubles, or space (with a round number), that's fairly easy, but the
+second you have strings between the start and the label you want, it's a bit
+more painful.  This is why I recommend putting any string declarations at the
+bottom so at least any other globals will have nice even offsets.  Also, if
+you have a bunch of globals, it doesn't hurt to count once and put the offsets
+in comments above each label so you don't forget.  Of course, none of this matters
+if you're allowed to just use `la` which is true the vast majority of the time.
+
+Let's look at a small example.  We'll convert the following code from
+args.s to bare mode:
+
+[source,mips,linenums]
+----
+.data
+
+there_are:  .asciiz "There are "
+arguments:  .asciiz " command line arguments:\n"
+
+.text
+main:
+	move    $t0, $a0  # save argc
+
+	li      $v0, 4
+	la      $a0, there_are
+	syscall
+
+	# some code removed for brevity
+
+	li      $t1, 0   # i = 0
+	j       arg_loop_test
+
+arg_loop:
+	li      $v0, 4
+	lw      $a0, 0($a1)
+	syscall
+
+	li      $v0, 11
+	li      $a0, 10    # '\n'
+	syscall
+
+	addi    $t1, $t1, 1   # i++
+	addi    $a1, $a1, 4    # argv++ ie a1 = &argv[i]
+arg_loop_test:
+	blt     $t1, $t0, arg_loop  # while (i < argc)
+----
+
+So we need to change the move, the li's, the la and the blt and add a nop
+after any branches or loads.
+
+[source,mips,linenums]
+----
+.data
+
+there_are:  .asciiz "There are "
+arguments:  .asciiz " command line arguments:\n"
+
+.text
+
+main:
+	or      $t0, $0, $a0  # save argc
+
+	ori     $v0, $0, 4
+	lui     $a0, 0x1000    # there_are is at beginning of data so just lui, lower is 0
+	syscall
+
+	ori     $t1, $0, 0   # i = 0
+	j       arg_loop_test
+	or      $0, $0, $0
+
+arg_loop:
+	ori     $v0, $0, 4     # print string for argv[i]
+	lw      $a0, 0($a1)
+	or      $0, $0, $0     # nop
+	syscall
+
+	ori     $v0, $0, 11
+	ori     $a0, $0, 10    # '\n'
+	syscall
+
+	addi    $t1, $t1, 1    # i++
+	addi    $a1, $a1, 4    # argv++ ie a1 = &argv[i]
+arg_loop_test:
+	bne     $t1, $t0, arg_loop  # while (i != argc)
+	or      $0, $0, $0
+----
+
+So, following the table, you can see the `move` became `or`, the ``li``'s became
+`ori`, we added `nop` instructions in the form of `or` with `$0` as the destination,
+and lastly, the `blt` became `bne`.  That last is worth noting, because there's no
+reason to do a complicated transformation if you don't have to and `bne` accomplishes
+the same thing here.
 
 
+See the example program args_bare.s which is just args.s for a complete example.
 
 
 

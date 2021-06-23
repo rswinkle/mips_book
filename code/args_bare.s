@@ -39,16 +39,16 @@ main:
 	or      $0, $0, $0
 
 arg_loop:
-	ori     $v0, $0, 4
+	ori     $v0, $0, 4     # print string for argv[i]
 	lw      $a0, 0($a1)
-	or      $0, $0, $0
+	or      $0, $0, $0     # nop
 	syscall
 
 	ori     $v0, $0, 11
 	ori     $a0, $0, 10    # '\n'
 	syscall
 
-	addi    $t1, $t1, 1   # i++
+	addi    $t1, $t1, 1    # i++
 	addi    $a1, $a1, 4    # argv++ ie a1 = &argv[i]
 arg_loop_test:
 	bne     $t1, $t0, arg_loop  # while (i != argc)
