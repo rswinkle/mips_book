@@ -438,8 +438,9 @@ line you can turn it on with the `db` argument.
 Now, why would you ever want to do any of this?  The only reason I can think of,
 and the only one that I've ever run into, is if your professor requires it for
 some unknown reason.  To handle delayed branches, all you have to do is add a
-`nop` instruction after every branch or jump instruction (including `jal` and `jr`).
-The solution is identical for delayed loads, put a `nop` after every load instruction.
+`nop` (No Operation) instruction after every branch or jump instruction
+(including `jal` and `jr`).  The solution is identical for delayed loads, put a
+`nop` after every load instruction.
 
 You could put other instructions there, intsructions that you have above the jumps
 or loads that don't have to occur before.  If you were doing a real project on
@@ -452,6 +453,12 @@ Second, and more importantly, it means your program will no longer work if you
 turn delayed branches/loads off again.  Using `nop` means the change is quick,
 easy, and you can still run it in the simulator's default mode if needed.
 
+One final note, and it relates to the following section.  Even though `nop`
+is supposedly represented by all 0's, and MARS supports it even with pseudoinstrutions
+disabled, SPIM does not support it in bare mode.  This means you have to use
+some other instruction that has no side effects, like `or  $0, $0, $0`, which
+will work as a `nop` under all conditions and simulators.
+
 === No Pseudoinstructions Allowed
 
 Far more common than requiring delayed loads is forbidding pseudoinstructions,
@@ -460,16 +467,57 @@ happens when you use those instructions manually.
 
 
 .Pseudoinstruction Equivalents
-[cols="1,1,3"]
+[cols="1,1,5a"]
 |===
-| Pseudoinstruction | Example Use | equivalence
+| Pseudoinstruction | Example Use | Equivalence
 
-| Load Immediate | li   $t0, 42 | ori   $t0, $0, 42   # also addi  $t0, $0, 42
+| Load Immediate | li    $t0, 42 | ori   $t0, $0, 42   # also addi  $t0, $0, 42
 
-| Move           | move $t0, $t1 | or   $t0, $0, $t1  # also add   $t0, $0, $t1
+| Move           | move  $t0, $t1 | or   $t0, $0, $t1  # also add   $t0, $0, $t1
 
-| Load Address   | la   $t0, label | lui  $t0, 0x1000  # or 0x1001+
-ori  $t0, $0, offset   # offset is byte offset from start of .data to label
+| No Operation   | nop | or   $0, $0, $0 # or anything with $0 as the destination
+
+| Load Address   | la    $t0, label` |
+
+[source]
+----
+lui   $t0, 0x1000  # or 0x1001
+ori   $t0, $0, offset   # offset is byte offset from start of .data to label
+----
+
+| Branch Less Than | blt  $t0, $t1, label |
+
+[source]
+----
+slt    $t2, $t0, $t1  # t2 = t0 < t1
+bne    $t2, $0, label
+----
+
+| Branch Greater Than | bgt  $t0, $t1, label |
+
+[source]
+----
+slt    $t2, $t1, $t0  # flip order to get >
+bne    $t2, $0, label
+----
+
+| Branch Less Than or Equal | ble  $t0, $t1, label |
+
+[source]
+----
+addi  $t1, $t1, 1  # add 1 to t1 to change <= to <
+slt   $t2, $t0, $t1  # t2 = t0 < t1
+bne   $t2, $0, label
+----
+
+| Branch Greater Than or Equal | bge  $t0, $t1, label |
+
+[source]
+----
+addi  $t0, $t0, 1  # add 1 to t0 change >= to >
+slt   $t2, $t1, $t0  # t2 = t1 < t0 aka t0 > t1
+bne   $t2, $0, label
+----
 
 // TODO
 |===
