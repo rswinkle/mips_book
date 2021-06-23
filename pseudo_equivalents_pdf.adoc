@@ -1,64 +1,75 @@
 
 .Pseudoinstruction Equivalents
-[cols="2,3m,10a"]
+[cols="3,3a,4a"]
 |===
 | Pseudoinstruction | Example Use | Equivalence
 
-| Load Immediate | li    $t0, 42 |
+| Load Immediate |
 
- ori   $t0, $0, 42   # also addi  $t0, $0, 42
+ li    $t0, 42 |
 
-| Move           | move  $t0, $t1 |
+ ori   $t0, $0, 42
+ # or
+ addi  $t0, $0, 42
 
- or    $t0, $0, $t1  # also add   $t0, $0, $t1
+| Move           |
 
-| No Operation   | nop |
+ move  $t0, $t1 |
 
- or    $0, $0, $0 # or anything with $0 as the destination
+ or    $t0, $0, $t1
+ # or
+ add   $t0, $0, $t1
 
-| Load Address   | la    $t0, label |
+| No Operation   |
 
-[source]
-----
-lui   $t0, 0x1000 # or 0x1001
-ori   $t0, $0, n  # n = bytes from start of .data to label
-----
+ nop |
 
-| Branch Less Than | blt  $t0, $t1, label |
+ # anything with $0 as dest
+ # reg will work, I prefer
+ or    $0, $0, $0
 
-[source]
-----
-slt   $t2, $t0, $t1  # t2 = t0 < t1
-bne   $t2, $0, label
-----
+| Load Address   |
 
-| Branch Greater Than | bgt  $t0, $t1, label |
+ la    $t0, label |
 
-[source]
-----
-slt   $t2, $t1, $t0  # flip order to get >
-bne   $t2, $0, label
-----
+ # use 0x1001 for MARS
+ lui   $t0, 0x1000
+ ori   $t0, $0, byte_offset
 
-| Branch Less Than or Equal | ble  $t0, $t1, label |
+| Branch Less Than |
 
-[source]
-----
-addi   $t1, $t1, 1  # add 1 to t1 to change <= to <
-slt    $t2, $t0, $t1  # t2 = t0 < t1
-bne    $t2, $0, label
-----
+ blt  $t0, $t1, label |
 
-| Branch Greater Than or Equal | bge  $t0, $t1, label |
+ # t2 = t0 < t1
+ slt   $t2, $t0, $t1
+ bne   $t2, $0, label
 
-[source]
-----
-addi  $t0, $t0, 1  # add 1 to t0 change >= to >
-slt   $t2, $t1, $t0  # t2 = t1 < t0 aka t0 > t1
-bne   $t2, $0, label
-----
+| Branch Greater Than |
+
+ bgt  $t0, $t1, label |
+
+ # flip order to get >
+ slt   $t2, $t1, $t0
+ bne   $t2, $0, label
+
+| Branch Less Than or Equal |
+
+ ble  $t0, $t1, label |
+
+ # add 1 to change <= to <
+ addi   $t1, $t1, 1
+ slt    $t2, $t0, $t1
+ bne    $t2, $0, label
+
+| Branch Greater Than or Equal |
+
+ bge  $t0, $t1, label |
+
+ # add 1 to change >= to >
+ addi  $t0, $t0, 1
+ # t2 = t1 < t0 aka t0 > t1
+ slt   $t2, $t1, $t0
+ bne   $t2, $0, label
 
 |===
 
-// NOTE: need the line breaks (''') after each code block to force grey box to
-// not overflow table cell

@@ -5000,9 +5000,9 @@ happens when you use those instructions manually.</p>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 7. Pseudoinstruction Equivalents</caption>
 <colgroup>
-<col style="width: 13.3333%;">
-<col style="width: 20%;">
-<col style="width: 66.6667%;">
+<col style="width: 30%;">
+<col style="width: 30%;">
+<col style="width: 40%;">
 </colgroup>
 <thead>
 <tr>
@@ -5014,87 +5014,131 @@ happens when you use those instructions manually.</p>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Load Immediate</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>li    $t0, 42</code></p></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="literalblock">
 <div class="content">
-<pre>ori   $t0, $0, 42   # also addi  $t0, $0, 42</pre>
+<pre>li    $t0, 42</pre>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="literalblock">
+<div class="content">
+<pre>ori   $t0, $0, 42
+# or
+addi  $t0, $0, 42</pre>
 </div>
 </div>
 <hr></div></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Move</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>move  $t0, $t1</code></p></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="literalblock">
 <div class="content">
-<pre>or    $t0, $0, $t1  # also add   $t0, $0, $t1</pre>
+<pre>move  $t0, $t1</pre>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="literalblock">
+<div class="content">
+<pre>or    $t0, $0, $t1
+# or
+add   $t0, $0, $t1</pre>
 </div>
 </div>
 <hr></div></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">No Operation</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>nop</code></p></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="literalblock">
 <div class="content">
-<pre>or    $0, $0, $0 # or anything with $0 as the destination</pre>
+<pre>nop</pre>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="literalblock">
+<div class="content">
+<pre># anything with $0 as dest
+# reg will work, I prefer
+or    $0, $0, $0</pre>
 </div>
 </div>
 <hr></div></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Load Address</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>la    $t0, label</code></p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="listingblock">
+<td class="tableblock halign-left valign-top"><div class="content"><div class="literalblock">
 <div class="content">
-<pre class="pygments highlight"><code><span></span>lui   $t0, 0x1000 # or 0x1001
-ori   $t0, $0, n  # n = bytes from start of .data to label</code></pre>
+<pre>la    $t0, label</pre>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="literalblock">
+<div class="content">
+<pre># use 0x1001 for MARS
+lui   $t0, 0x1000
+ori   $t0, $0, byte_offset</pre>
 </div>
 </div>
 <hr></div></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Branch Less Than</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>blt  $t0, $t1, label</code></p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="listingblock">
+<td class="tableblock halign-left valign-top"><div class="content"><div class="literalblock">
 <div class="content">
-<pre class="pygments highlight"><code><span></span>slt   $t2, $t0, $t1  # t2 = t0 &lt; t1
-bne   $t2, $0, label</code></pre>
+<pre>blt  $t0, $t1, label</pre>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="literalblock">
+<div class="content">
+<pre># t2 = t0 &lt; t1
+slt   $t2, $t0, $t1
+bne   $t2, $0, label</pre>
 </div>
 </div>
 <hr></div></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Branch Greater Than</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>bgt  $t0, $t1, label</code></p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="listingblock">
+<td class="tableblock halign-left valign-top"><div class="content"><div class="literalblock">
 <div class="content">
-<pre class="pygments highlight"><code><span></span>slt   $t2, $t1, $t0  # flip order to get &gt;
-bne   $t2, $0, label</code></pre>
+<pre>bgt  $t0, $t1, label</pre>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="literalblock">
+<div class="content">
+<pre># flip order to get &gt;
+slt   $t2, $t1, $t0
+bne   $t2, $0, label</pre>
 </div>
 </div>
 <hr></div></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Branch Less Than or Equal</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ble  $t0, $t1, label</code></p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="listingblock">
+<td class="tableblock halign-left valign-top"><div class="content"><div class="literalblock">
 <div class="content">
-<pre class="pygments highlight"><code><span></span>addi   $t1, $t1, 1  # add 1 to t1 to change &lt;= to &lt;
-slt    $t2, $t0, $t1  # t2 = t0 &lt; t1
-bne    $t2, $0, label</code></pre>
+<pre>ble  $t0, $t1, label</pre>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="literalblock">
+<div class="content">
+<pre># add 1 to change &lt;= to &lt;
+addi   $t1, $t1, 1
+slt    $t2, $t0, $t1
+bne    $t2, $0, label</pre>
 </div>
 </div>
 <hr></div></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Branch Greater Than or Equal</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>bge  $t0, $t1, label</code></p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="listingblock">
+<td class="tableblock halign-left valign-top"><div class="content"><div class="literalblock">
 <div class="content">
-<pre class="pygments highlight"><code><span></span>addi  $t0, $t0, 1  # add 1 to t0 change &gt;= to &gt;
-slt   $t2, $t1, $t0  # t2 = t1 &lt; t0 aka t0 &gt; t1
-bne   $t2, $0, label</code></pre>
+<pre>bge  $t0, $t1, label</pre>
+</div>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="literalblock">
+<div class="content">
+<pre># add 1 to change &gt;= to &gt;
+addi  $t0, $t0, 1
+# t2 = t1 &lt; t0 aka t0 &gt; t1
+slt   $t2, $t1, $t0
+bne   $t2, $0, label</pre>
 </div>
 </div>
 <hr></div></td>

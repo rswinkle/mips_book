@@ -8,7 +8,7 @@ html: ${DOCS}
 	mv *.html build/
 
 pdfbook: ${DOCS}
-	asciidoctor-pdf -d book book.adoc -o mips_book.pdf
+	asciidoctor-pdf -a is_pdf -d book book.adoc -o mips_book.pdf
 
 htmlbook:
 	asciidoctor -d book book.adoc -o mips_book.html

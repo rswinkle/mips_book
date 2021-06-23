@@ -465,7 +465,14 @@ Far more common than requiring delayed loads is forbidding pseudoinstructions,
 either all of them, or some subset of them.  This forces us to do what actually
 happens when you use those instructions manually.
 
+ifndef::is_pdf[]
 include::pseudo_equivalents.adoc[]
+endif::[]
+
+ifdef::is_pdf[]
+include::pseudo_equivalents_pdf.adoc[]
+endif::[]
+
 
 You can see how you use the non-pseudoinstructions to match the same behavior, and
 there's often (usually) more than one way.  Of all of them, the `ble` and `bge` are
