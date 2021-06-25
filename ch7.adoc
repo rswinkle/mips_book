@@ -591,7 +591,11 @@ reason to do a complicated transformation if you don't have to and `bne` accompl
 the same thing here.
 
 
-See the example program args_bare.s which is just args.s for a complete example.
+See the example program
+https://raw.githubusercontent.com/rswinkle/mips_book/master/code/args_bare.s[args_bare.s]
+which is just
+https://raw.githubusercontent.com/rswinkle/mips_book/master/code/args.s[args.s]
+in bare mode for a complete example.
 
 
 

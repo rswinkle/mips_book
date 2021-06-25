@@ -35,9 +35,9 @@ at some equivalencies.
 
 I think in general, when writing assembly, it can help to think more in terms of while or
 do-while rather than for because the former more resemble what the assembly looks like
-in terms of what goes where.  So just like in the last chapter, we would think of the
-if-else statements in "jump-form" or "branch-form", we can do the same here, converting
-for to while in our head as an intermediary step before going to assembly.
+in terms of what goes where.  So just like in the last chapter, where we would think
+of the if-else statements in "jump-form" or "branch-form", we can do the same here,
+converting for to while in our head as an intermediary step before going to assembly.
 
 Speaking of "jump-form", lets apply it to the loop above:
 
@@ -123,11 +123,12 @@ are most often used for, looping through data structures, most commonly arrays.
 
 === Looping Through Arrays
 
-Looping and arrays go together for obvious reasons.  An array a sequence of
-variables of the same type, almost always related in some way.  Naturally you
+Looping and arrays go together for obvious reasons.  An array is a sequence of
+variables of the same type, almost always related in some way.  Naturally, you
 want to operate on them all together in various ways; sorting, searching,
-accumulating, etc.  So in this section we'll cover looping through arrays in
-various ways, and dealing with multi-dimentional arrays.
+accumulating, etc.  Given that the only way to do that is with loops, in this
+section we'll cover looping through arrays in various ways, and dealing with
+multi-dimentional arrays.
 
 ==== 1D Arrays
 
@@ -159,7 +160,7 @@ sum_loop:
 	blt   $t1, $t3, sum_loop   # while (i < 10)
 ----
 
-So we initialize the relevant variables before hand (numbers and 10 could be set
+We initialize the relevant variables beforehand (numbers and 10 could be set
 every iteration but that's less efficient).  Now what's with the i*4?  We already
 discussed using shifts to multiply and divide by powers of 2 in a previous chapter,
 but here we're doing something that higher level languages do automatically for you
@@ -167,15 +168,15 @@ every time you do an array access.  When you access the i'th element, under the 
 it is multiplying i by the size of the type of the array and adding that number of
 bytes to the base address and then loading the element located there.
 
-If you're unfamiliar with the C syntax in the comments, & means "address of", so t4
-is being set to the address of the i'th element.  Actually that C syntax is redundant
-because the the & counteracts the brackets.  In C adding a number to a pointer does
-pointer math (ie it multiplies by the size of the items as discussed above).  This
-means that these 2 expressions are equivalent:
+If you're unfamiliar with the C syntax in the comments, `&` means "address of", so
+`$t4` is being set to the address of the i'th element.  Actually that C syntax is
+redundant because the the & counteracts the brackets.  In C adding a number to a
+pointer does pointer math (ie it multiplies by the size of the items as discussed
+above).  This means that the following comparison is true:
 
 `&numbers[i] == numbers + i`
 
-also
+whichmeans that this is true too
 
 `&numbers[0] == numbers`
 
@@ -186,16 +187,17 @@ not realize that's an address at all, it could just be some mathematical express
 (though the array name would hopefully clue you in if it was picked well).
 
 Anyway, back to the MIPS code.  After we get the address of the element we want, we
-have to load it.  Since it's an array of words (aka 4 byte ints) we can use `lw`.
+have to actually read it from memory (ie load it).  Since it's an array of words
+(aka 4 byte ints) we can use load word, `lw`.
 
-Finally we add that value to total, increment i, and perform the loop check.
+Finally we add that value to `total`, increment `i`, and perform the loop check.
 
 Now, I said at the beginning that this was the most literal, direct translation
-(not counting the restructuring to a do-while form).  It is not however my preferred
-form because it's not the simplest or shortest.
+(not counting the restructuring to a do-while form).  However, it is not my preferred
+form because it's not the simplest nor the shortest.
 
 Rather than calculate the element address every iteration, why not just keep a pointer
-to the current element and iterate through the array with it?  In C what we're doing
+to the current element and iterate through the array with it?  In C what I'm suggesting
 is this:
 
 [source,c,linenums]
@@ -209,8 +211,8 @@ is this:
 	} while (i < 10);
 ----
 
-In other words, we set p to point at the first element and then increment it every
-step to keep it pointing at numbers[i].  Again, all mathematical operations on pointers
+In other words, we set `p` to point at the first element and then increment it every
+step to keep it pointing at `numbers[i]`.  Again, all mathematical operations on pointers
 in C deal in increments of the byte syze of the type, so `p++` is really adding 1*sizeof(int).
 
 
@@ -229,15 +231,15 @@ sum_loop:
 	blt   $t1, $t3, sum_loop   # while (i < 10)
 ----
 	
-Now, that may not look much better, we only saved 1 instuction total, and if we were
+Now, that may not look much better, we only saved 1 instuction, and if we were
 looping through a string (aka an array of characters, sizeof(char) == 1) we wouldn't
-have saved any.  However, imagine if we weren't using sll to do the multiply but
-mul.  That would take 3 instructions, not 1.  Even mul would take 2.  And we'd
-have to use one of those if we were iterating through an array of structures with
-a size that wasn't a power of 2.
+have saved any.  However, imagine if we weren't using `sll` to do the multiply but
+`mult`.  That would take 3 instructions, not 1.  Even `mul` would take 2.  Remember
+we _would_ have to use one of those if we were iterating through an array of
+structures with a size that wasn't a power of 2.
 
 But there is one more variant that you can use that can save a few more instructions.
-Instead of using i and i<10 to control the loop, use p and the address just past the
+Instead of using `i` and `i<10` to control the loop, use p and the address just past the
 end of the array.  In C it would be this:
 
 [source,c,linenums]
@@ -251,8 +253,8 @@ end of the array.  In C it would be this:
 	} while (p < end);
 ----
 
-You could also use != instead of <.  This is similar to using the .end() method on many C++
-data structures when using iterators.
+You could also use `!=` instead of `<`.  This is similar to using the `.end()` method
+on many C{plus}{plus} data structures when using iterators.  Now the MIPS version:
 
 [source,mips,linenums]
 ----
@@ -267,9 +269,10 @@ sum_loop:
 	blt   $t2, $t3, sum_loop   # while (p < end)
 ----
 
-So we dropped from 10 to 7 and even more if we had had to do mul or mult originally.
-And this was just for a 1D array.  Imagine if you had 2 or 3 indices you had to use
-to calculate the correct offset.  That's in the next section.
+So we dropped from 10 to 7 instructions and even more if we had had to do `mul`
+or `mult` originally.  And this was just for a 1D array.  Imagine if you had 2
+or 3 indices you had to use to calculate the correct offset.  That's in the
+next section.
 
 
 ==== 2D Arrays
@@ -287,10 +290,11 @@ to a 1D array with rows*cols elements in the same order:
 	int array1d[8] = { 1, 2, 3, 4, 5, 6, 7, 8 };
 ----
 
-See the code example 2d_arrays.c for more details.
+See the code example
+https://raw.githubusercontent.com/rswinkle/mips_book/master/code/2d_arrays.c[2d_arrays.c] for more details.
 
 What this means is that when we declare a 2D array, it's basically a 1D array with
-the size equal to the rows * columns.  Also when we loop through a 2D array, we can
+the size equal to the rows * columns.  Also, when we loop through a 2D array, we can
 often treat it like a 1D array with a single loop.  So everything that we learned
 before applies.
 
@@ -314,7 +318,8 @@ Let's do an example.
 	}
 ----
 
-So assuming rows and cols are in a0 and a1 (and nonzero), it'd look like this:
+So assuming `rows` and `cols` are in `$a0` and `$a1` (and nonzero), it would
+look like this:
 
 [source,mips,linenums]
 ----
@@ -336,7 +341,7 @@ loop:
 ----
 
 You might ask if it's it worth it to convert it to a single loop when you still
-need the original i and j as if you were doing nested loops.  Generally, it is
+need the original `i` and `j` as if you were doing nested loops.  Generally, it is
 much nicer to avoid nested loops in assembly if you can.  There are many cases
 when you get the best of both worlds though.  If you're doing a clear for example,
 setting the entire array to a single value, there's no need to calculate the row
@@ -365,8 +370,8 @@ loopcols:
 ----
 
 It's a bit shorter but again, how much are those extra labels and branching worth?
-For me, this one's a toss up.  On the other hand either of the last 2 versions are
-better than the literal translation imo:
+For me, this one's a toss up.  On the other hand, either of the last 2 versions are
+better than the literal translation below:
 
 [source,mips,linenums]
 ----
