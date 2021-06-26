@@ -7,24 +7,24 @@ syscall
 .end_macro
 
 .macro print_int_reg(%x)
-li    $v0, 1
-move  $a0, %x
-syscall
+	li    $v0, 1
+	move  $a0, %x
+	syscall
 .end_macro
 
 .macro print_str_label(%x)
-li     $v0, 4
-la     $a0, %x
-syscall
+	li     $v0, 4
+	la     $a0, %x
+	syscall
 .end_macro
 
 .macro print_str(%str)
 .data
 str: .asciiz %str
 .text
-li     $v0, 4
-la     $a0, str
-syscall
+	li     $v0, 4
+	la     $a0, str
+	syscall
 .end_macro
 
 

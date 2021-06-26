@@ -13,14 +13,14 @@ programs and make your life easier.
 You may have noticed I have a general format I like to follow when writing
 MIPS (or any) assembly.  The guidelines I use are the following
 
-. 1 indent for all code excluding labels/macros/constants.
+. *1 indent for all code excluding labels/macros/constants.*
 +
-I use hard tabs set to a width of 4 but it reall doesn't matter as long as
+I use hard tabs set to a width of 4 but it really doesn't matter as long as
 it's just 1 indent according to your preferences.
 
-. Use *spaces* to align the first operand of all instructions (syscall obviously
+. *Use _spaces_ to align the first operand of all instructions out far enough.*
 +
-doesn't have any) out far enough.  Given my 4 space tabs, this usually means column
+Given my 4 space tabs, this usually means column
 11-13 for me.  The reason to use spaces is to prevent the circumstances that gave
 hard tabs a bad name.  When you use hard tabs for alignment, rather than indentation,
 and then someone else opens your code with their tab set to a different width,
@@ -28,23 +28,24 @@ suddenly everything looks like crap.  Tabs for indentation, spaces for alignment
 Or as is increasingly common (thanks Python), spaces for everything but I refuse
 to do that to the poor planet.{green_tabs}
 
-. A comma and a single space between operands.  The simulators don't actually
+. *A comma and a single space between operands.*
 +
-require the comma but since other assembly languages/assemblers do, you might
-as well get used to it.  Besides I think it's easier to read with the comma,
-though that might just be me comparing it to passing arguments to a function.
+The simulators don't actually require the comma but since other assembly
+languages/assemblers do, you might as well get used to it.  Besides I think
+it's easier to read with the comma, though that might just be me comparing it
+to passing arguments to a function.
 
-. Comment every line or group of closely related lines with the purpose,
+. *Comment every line or group of closely related lines with the purpose.*
 +
-often just the equivalent C code.  You can relax this a little as you get
+This is often just the equivalent C code.  You can relax this a little as you get
 more experience.
 
-. Use a blank line to separate logically grouped lines of code.  While you
+. *Use a blank line to separate logically grouped lines of code.*
 +
-can smash everything together vertically, I definitely wouldn't recommend it,
-even less than I would in a higher level language.
+While you can smash everything together vertically, I definitely wouldn't recommend
+it, even less than I would in a higher level language.
 
-. Put the `.data` section at the top, similar to declaring globals in C.
+. *Put the `.data` section at the top, similar to declaring globals in C.*
 +
 There are exceptions for this.  When dealing with a larger program with lots
 of strings, it can be convienent to have multiple `.data` sections with the
@@ -53,24 +54,23 @@ you have to keep swapping back and forth between `.text` and `.data`.
 
 === Misc. General Tips
 
-. Try to use registers starting from 0 and working your way up.  It helps
+. *Try to use registers starting from 0 and working your way up.*
 +
-you keep track of where things are (esp. combined with the comments). This
-obviously can fall apart when you discover you forgot something or need to
+It helps you keep track of where things are (esp. combined with the comments).
+This obviously can fall apart when you discover you forgot something or need to
 modify the code later and it's often not worth changing all the registers
 you're already using just so you have that nice sequence.  When that happens
 I'll sometimes just pick the other end of sequence (ie `$t9` or `$s7`) since
 if it's out of order I might as well make it obvious.
 
-. Minimize your jumps, labels, and especially your level of nested loops.
+. *Minimize your jumps, labels, and especially your level of nested loops.*
 +
 This was already covered in the chapters on branching and loops but it bears
 repeating.
 
-. In your prologue save `$ra` first (at the top of the stack) if necessary
+. *In your prologue save `$ra` first, if necessary then all s regs used starting at `$s0`.*
 +
-and all s regs you used (starting at `$s0`) in order going down.  Then copy
-paste the whole thing to the bottom, move the first line to the bottom and
+Then copy paste the whole thing to the bottom, move the first line to the bottom and
 change the number to positive and change all the `sw` to `lw`.
 
 ....
@@ -97,7 +97,7 @@ func:
 === Constants
 
 One of the easiest things you can do to make your programs more readable
-is use defined constants in your programs.  Both MARS and SPIM have ways
+is to use defined constants in your programs.  Both MARS and SPIM have ways
 of defining constants similar to how C defines macro constants; ie they
 aren't "constant variables" that take up space in memory, it's as if a
 search+replace was done on them right before assembling the program.
@@ -154,15 +154,15 @@ The syntax looks like this:
 [source,mips,linenums]
 ----
 .macro macroname
-instr1  a, b, c
-instr2, b, d
+	instr1  a, b, c
+	instr2, b, d
 # etc.
 .end_macro
 
 # or with parameters
 .macro macroname(%arg1)
-instr1    a, %arg1
-instr2    c, d, e
+	instr1    a, %arg1
+	instr2    c, d, e
 # etc.
 .end_macro
 ----
@@ -172,18 +172,18 @@ Some common examples are using them to print strings:
 [source,mips,linenums]
 ----
 .macro print_str_label(%x)
-li     $v0, 4
-la     $a0, %x
-syscall
+	li     $v0, 4
+	la     $a0, %x
+	syscall
 .end_macro
 
 .macro print_str(%str)
 .data
 str: .asciiz %str
 .text
-li     $v0, 4
-la     $a0, str
-syscall
+	li     $v0, 4
+	la     $a0, str
+	syscall
 .end_macro
 
 .data
@@ -199,14 +199,15 @@ str1:   .asciiz "Hello 1\n"
 	...
 ----
 
-You can see an example program in macros.s
+You can see an example program in
+https://raw.githubusercontent.com/rswinkle/mips_book/master/code/macros.s[macros.s].
 
-Unfortunately, as far as I can tell SPIM does not support function style macros
+Unfortunately, as far as I can tell, SPIM does not support function style macros
 despite what MARS's documentation implies about using a $ instead of a % for arguments.
 
 === Switch-Case Statements
 
-It is relatively common in programming to have to compare a integral type variable
+It is relatively common in programming to have to compare an integral type variable
 (ie basically any built in type but float and double) against a bunch of different
 constants and do something different based on what it matches or if it matches none.
 
@@ -238,11 +239,11 @@ The same way compilers often (but not necessarily) use?  Well before we do that,
 what is a switch actually doing?  It is _jumping_ to a specific case label based
 on the value in the specified variable.  It then starts executing, falling through
 any other labels, till it hits a `break` which will jump to the end of the switch
-block.  If the value does have its own case label, it will jump to the default
+block.  If the value does not have its own case label, it will jump to the default
 label.
 
 Compilers handle it by creating what's called a jump table, basically an array
-of label addresses and using the variable to calculate an index in the table
+of label addresses, and using the variable to calculate an index in the table
 to use to jump to.
 
 The C eqivalent of that would look like this:
@@ -259,7 +260,7 @@ extensions that are supported in gcc (naturally) and clang, possibly others.{lab
 Notice how the size of the jump table is the value of the highest valued label
 minus the lowest + 1.  That's why we subtract the lowest value to shift the range
 to start at 0 for the indexing.  Secondly, any values without labels within that
-range are filled with the default label address.  Lastly there has to be an initial
+range are filled with the `default_label` address.  Lastly, there has to be an initial
 check for values outside the range to jump to default otherwise you could get an
 error from an invalid access outside of the array's bounds.
 
@@ -278,7 +279,7 @@ While this example probably wasn't worth making switch style, because the overhe
 and extra code of making the table and preparing to jump balanced out or even
 outweighed the savings of a branch instruction for every case, as the number
 of options increases, the favor tilts toward using a jump table like this as
-long as the range of isn't too sparse.  If the range of values is is the 100's
+long as the range of values isn't too sparse.  If the range of values is is the 100's
 or 1000's but you only have cases for a dozen or so, then obviously that isn't worth
 it to create a table that large just to fill it almost entirely with the default label.
 
@@ -309,10 +310,9 @@ int main(int argc, char** argv)
 }
 ----
 
-As you can see, argc contains the number of parameters and argv is an array of
+As you can see, `argc` contains the number of parameters and `argv` is an array of
 C strings that are those arguments.  If you run this program you'll get something
 like this:
-
 
 [source,bash]
 ----
@@ -327,8 +327,8 @@ arguments
 Notice that the first argument is the what you actually typed to invoke the program,
 so you always have at least one argument.
 
-MIPS works the same way.  The number of arguments is in `a0` and an array of strings
-is in `a1` when main starts.  So the same program in MIPS looks like this;
+MIPS works the same way.  The number of arguments is in `$a0` and an array of strings
+is in `$a1` when main starts.  So the same program in MIPS looks like this;
 
 
 [source,mips,linenums]
@@ -473,11 +473,10 @@ ifdef::is_pdf[]
 include::pseudo_equivalents_pdf.adoc[]
 endif::[]
 
-
 You can see how you use the non-pseudoinstructions to match the same behavior, and
 there's often (usually) more than one way.  Of all of them, the `ble` and `bge` are
 the worst, because what was 1 instruction becomes 3, and you'll sometimes need an
-extra register to hold the "plus 1" value if you still need original.
+extra register to hold the "plus 1" value if you still need the original.
 
 Another thing I should comment on is the `la` equivalence.  The reason it is
 a pseudoinstruction in the first place is that an address is 32 bits.  That's also
@@ -492,7 +491,7 @@ That begs the question, what actually goes in the upper half?  Well, since
 we're dealing with addresses in the `.data` section, the upper portion should
 match the upper part of address of the `.data` section, which in SPIM is
 `0x10000000` in bare mode.  In normal mode it is `0x10010000`, but you'd be
-able to use `la` in normal mode. However, in MARS, it is always `0x10010000`,
+able to use `la` in normal mode.  However, in MARS, it is always `0x10010000`,
 so you won't be able to have it work correctly in bare SPIM and MARS without
 changing that back and forth.
 
