@@ -7,6 +7,22 @@ pi_double: .double 3.14159265358979323846264338327950288
 
 .text
 main:
+	# li.s and li.d not supported in MARS but uncomment to show they work in SPIM
+	#li      $v0, 2
+	#li.s    $f12, 123.321
+	#syscall
+
+	#li      $v0, 11
+	#li      $a0, 10   # '\n'
+	#syscall
+
+	#li      $v0, 3
+	#li.d    $f12, 432.235
+	#syscall
+
+	#li      $v0, 11
+	#li      $a0, 10   # '\n'
+	#syscall
 
 	# print best representation of pi as float
 	li      $v0, 2
@@ -61,7 +77,7 @@ main:
 calc_pi_float:
 	mtc1    $0, $f0     # move 0 to $f0 (0 integer == 0.0 float)
 
-	# li.s not available by default in MARS?
+	# SPIM only alternative
 	#li.s    $f0, 0.0
 	#li.s    $f2, 4.0
 

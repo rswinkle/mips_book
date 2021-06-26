@@ -7,7 +7,7 @@
 Up to this point we haven't really mentioned floating point values or instructions
 at all, except how to declare them in the `.data` section and the syscalls for
 reading and printing them.  There are two reasons we've left them alone till now.
-First, they use a whole separate set of registers and opcodes.  Secondly, and
+First, they use a whole separate set of registers and instructions.  Secondly, and
 partly because of the first reason, most MIPS college courses do not ever require
 you to know or use floating point values.  Since this book is targeted at college
 students, if you know you won't need to know this feel free to skip this chapter.
@@ -16,13 +16,14 @@ students, if you know you won't need to know this feel free to skip this chapter
 
 While the greensheet contains a nice table for the normal registers it is completely
 lacking for the floating point registers.  There are 32 32-bit floating point registers.
-You can use them all for floats but they're are paired even-odd for doubles.  In other
-words you can only use even numbers for doubles, because storing a double at $f0 actually
+You can use them all for floats but they are paired even-odd for doubles.  In other
+words, you can only use even numbers for doubles, because storing a double at $f0 actually
 uses $f0 and $f1 because it takes 64 bits/8 bytes.
 
 As far as the calling conventions for floating point registers, it is actually hard
 to find anything definitive even for the basics.  Obviously you could make up your own
-but the float/double syscalls, and the tiny code snippet in Patterson and Hennessy were
+but the float/double syscalls, and the tiny code snippet in
+https://amzn.to/3zN71KP[Patterson and Hennessy] were
 at least consistent with this old website so I'll go with that.  I have seen at least
 one course page where the prof wanted _all_ float registers preserved which seems
 excessive and ridiculous but prof's are gonna prof.
@@ -53,7 +54,7 @@ Most of the next table is actually on the Greensheet but not all of it and I tho
 it worth reproducing here.
 
 .MIPS floating point instructions (and pseudoinstructions)
-[cols="3,1,2,2"]
+[cols="3,1,2m,2"]
 |===
 | Name | Opcode | Format | Operation
 
@@ -61,9 +62,17 @@ it worth reproducing here.
 
 | Store Word from Coprocessor 1 | swc1 (or s.s) | swc1 ft, n(rs)  | M[R[rs]+n] = F[ft]
 
-| Load Double to Coprocessor 1 | ldc1 (or l.d) | ldc1 ft, n(rs)  | F[ft] = M[R[rs]+n]; F[ft+1] = M[R[rs]+n+4]
+| Load Double to Coprocessor 1 | ldc1 (or l.d) | ldc1 ft, n(rs)  |
 
-| Store Double from Coprocessor 1 | sdc1 (or s.d) | sdc1 ft, n(rs)  | M[R[rs]+n] = F[ft]; M[R[rs]+n+4] = F[ft+1]
+F[ft] = M[R[rs]+n]
+
+F[ft+1] = M[R[rs]+n+4]
+
+| Store Double from Coprocessor 1 | sdc1 (or s.d) | sdc1 ft, n(rs)  |
+
+M[R[rs]+n] = F[ft]
+
+M[R[rs]+n+4] = F[ft+1]
 
 | Move From Coprocessor 1 | mfc1 | mfc1 rd, fs | R[rd] = F[fs]
 
@@ -103,22 +112,22 @@ With all of the opcodes that end in ._x_, the x is either s for single
 precision or d for double precision.
 
 The _y_ in the Compare instructions are one of eq, ne, lt, le, gt, ge.  Since
-only (eq, lt, and le are on the greensheet it's safe to assume the other 3 are
-pseudoinstructions).  Naturally op would be the matching ==, !=, <, <=, >, or >=.
+only eq, lt, and le are on the greensheet it's safe to assume the other 3 are
+pseudoinstructions.  Naturally _op_ would be the matching ==, !=, <, <=, >, or >=.
 
 
 === Practice
 
 We're going to briefly go over some of the more different aspects of dealing
-with floating point numbers but since most of it is the same with just a different
+with floating point numbers, but since most of it is the same with just a different
 set of registers and calling convention, we won't be rehashing most concepts.
 
 === Getting Floating Point Literals
 
-The first think to know when dealing with floats is how to actually get float
+The first thing to know when dealing with floats is how to actually get float
 (or double) literals into registers where you can actually operate on them.
 
-There are 2 ways.  The first, and simpler way is to just declare them as globals
+There are 2 ways.  The first, and simpler way, is to just declare them as globals
 and then use the `lwc1` or `ldw1` instructions:
 
 
@@ -141,8 +150,8 @@ main:
 ----
 
 The second way is to use the regular registers and convert the values.  Of course
-this means unless you want a whole value, you'd have to actually do it twice
-and divide.  It looks like this.
+this means unless you want a integer value, you'd have to actually do it twice
+and divide and even that would limit you to rational numbers.  It looks like this.
 
 [source,mips,linenums]
 ----
@@ -158,17 +167,19 @@ As you can see, other than 0 which is a special case, it requires at least 3
 instructions, more than the 2 (or 1 if you load directly from the address) of
 the first method.
 
-// TODO SPIM li.s li.d?
+NOTE: There is a 3rd way that is even easier, but it's only supported in SPIM.  The
+pseudoinstructions `li.s` and `li.d` work exactly like `li` except to load float
+and double literals into float/double registers.
 
 === Branching
 
 Branching based on floating point values is slightly different than normal.  Instead
-of being able to test and jump in a single convenient instruction, you hav to test
+of being able to test and jump in a single convenient instruction, you have to test
 first and then jump in a second instruction if the test was true or not.  This is the
 same way x86 does it.  The test sets a special control/flag register (or a certain
 bit or bits in the register) and then all jumps are based on its state.
 
-Using it looks like this
+Using it looks like this:
 
 [source,mips,linenums]
 ----
@@ -221,8 +232,8 @@ convert_F2C:
 	jr     $ra
 ----
 
-You can see we follow the convention with the argument coming in f12 and the
-result being returned in f0.  In this function we use both methods for getting
+You can see we follow the convention with the argument coming in `$f12` and the
+result being returned in `$f0`.  In this function we use both methods for getting
 a value into float registers; one we load from memory and the other, being
 an integer, we move and convert.
 
@@ -230,9 +241,13 @@ an integer, we move and convert.
 === Conclusion
 
 As I said before, it is rare for courses to even bother covering floating point
-instructions or assign any homework or projects that use it, but hopefully this
-brief overview, combined with the knowledge of previous ones is sufficient.
+instructions or assign any homework or projects that use them, but hopefully this
+brief overview, combined with the knowledge of previous chapters is sufficient.
 
-There are also 2 example programs conversions.s and calc_pi.s for you to study.
+There are also 2 example programs
+https://raw.githubusercontent.com/rswinkle/mips_book/master/code/conversions.s[conversions.s]
+and
+https://raw.githubusercontent.com/rswinkle/mips_book/master/code/calc_pi.s[calc_pi.s]
+for you to study.
 
 
