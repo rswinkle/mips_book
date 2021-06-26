@@ -443,8 +443,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Robert Winkler</span><br>
 <span id="email" class="email"><a href="mailto:rob121618@gmail.com">rob121618@gmail.com</a></span><br>
-<span id="revnumber">version 0.8.4,</span>
-<span id="revdate">2021-06-23</span>
+<span id="revnumber">version 0.8.5,</span>
+<span id="revdate">2021-06-25</span>
 <br><span id="revremark">Beta</span>
 </div>
 <div id="toc" class="toc">
@@ -2431,9 +2431,9 @@ at some equivalencies.</p>
 <div class="paragraph">
 <p>I think in general, when writing assembly, it can help to think more in terms of while or
 do-while rather than for because the former more resemble what the assembly looks like
-in terms of what goes where.  So just like in the last chapter, we would think of the
-if-else statements in "jump-form" or "branch-form", we can do the same here, converting
-for to while in our head as an intermediary step before going to assembly.</p>
+in terms of what goes where.  So just like in the last chapter, where we would think
+of the if-else statements in "jump-form" or "branch-form", we can do the same here,
+converting for to while in our head as an intermediary step before going to assembly.</p>
 </div>
 <div class="paragraph">
 <p>Speaking of "jump-form", lets apply it to the loop above:</p>
@@ -2566,11 +2566,12 @@ are most often used for, looping through data structures, most commonly arrays.<
 <div class="sect2">
 <h3 id="_looping_through_arrays">Looping Through Arrays</h3>
 <div class="paragraph">
-<p>Looping and arrays go together for obvious reasons.  An array a sequence of
-variables of the same type, almost always related in some way.  Naturally you
+<p>Looping and arrays go together for obvious reasons.  An array is a sequence of
+variables of the same type, almost always related in some way.  Naturally, you
 want to operate on them all together in various ways; sorting, searching,
-accumulating, etc.  So in this section we&#8217;ll cover looping through arrays in
-various ways, and dealing with multi-dimentional arrays.</p>
+accumulating, etc.  Given that the only way to do that is with loops, in this
+section we&#8217;ll cover looping through arrays in various ways, and dealing with
+multi-dimentional arrays.</p>
 </div>
 <div class="sect3">
 <h4 id="_1d_arrays">1D Arrays</h4>
@@ -2621,7 +2622,7 @@ sum_loop:
 </div>
 </div>
 <div class="paragraph">
-<p>So we initialize the relevant variables before hand (numbers and 10 could be set
+<p>We initialize the relevant variables beforehand (numbers and 10 could be set
 every iteration but that&#8217;s less efficient).  Now what&#8217;s with the i*4?  We already
 discussed using shifts to multiply and divide by powers of 2 in a previous chapter,
 but here we&#8217;re doing something that higher level languages do automatically for you
@@ -2630,17 +2631,17 @@ it is multiplying i by the size of the type of the array and adding that number 
 bytes to the base address and then loading the element located there.</p>
 </div>
 <div class="paragraph">
-<p>If you&#8217;re unfamiliar with the C syntax in the comments, &amp; means "address of", so t4
-is being set to the address of the i&#8217;th element.  Actually that C syntax is redundant
-because the the &amp; counteracts the brackets.  In C adding a number to a pointer does
-pointer math (ie it multiplies by the size of the items as discussed above).  This
-means that these 2 expressions are equivalent:</p>
+<p>If you&#8217;re unfamiliar with the C syntax in the comments, <code>&amp;</code> means "address of", so
+<code>$t4</code> is being set to the address of the i&#8217;th element.  Actually that C syntax is
+redundant because the the &amp; counteracts the brackets.  In C adding a number to a
+pointer does pointer math (ie it multiplies by the size of the items as discussed
+above).  This means that the following comparison is true:</p>
 </div>
 <div class="paragraph">
 <p><code>&amp;numbers[i] == numbers + i</code></p>
 </div>
 <div class="paragraph">
-<p>also</p>
+<p>whichmeans that this is true too</p>
 </div>
 <div class="paragraph">
 <p><code>&amp;numbers[0] == numbers</code></p>
@@ -2654,19 +2655,20 @@ not realize that&#8217;s an address at all, it could just be some mathematical e
 </div>
 <div class="paragraph">
 <p>Anyway, back to the MIPS code.  After we get the address of the element we want, we
-have to load it.  Since it&#8217;s an array of words (aka 4 byte ints) we can use <code>lw</code>.</p>
+have to actually read it from memory (ie load it).  Since it&#8217;s an array of words
+(aka 4 byte ints) we can use load word, <code>lw</code>.</p>
 </div>
 <div class="paragraph">
-<p>Finally we add that value to total, increment i, and perform the loop check.</p>
+<p>Finally we add that value to <code>total</code>, increment <code>i</code>, and perform the loop check.</p>
 </div>
 <div class="paragraph">
 <p>Now, I said at the beginning that this was the most literal, direct translation
-(not counting the restructuring to a do-while form).  It is not however my preferred
-form because it&#8217;s not the simplest or shortest.</p>
+(not counting the restructuring to a do-while form).  However, it is not my preferred
+form because it&#8217;s not the simplest nor the shortest.</p>
 </div>
 <div class="paragraph">
 <p>Rather than calculate the element address every iteration, why not just keep a pointer
-to the current element and iterate through the array with it?  In C what we&#8217;re doing
+to the current element and iterate through the array with it?  In C what I&#8217;m suggesting
 is this:</p>
 </div>
 <div class="listingblock">
@@ -2688,8 +2690,8 @@ is this:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>In other words, we set p to point at the first element and then increment it every
-step to keep it pointing at numbers[i].  Again, all mathematical operations on pointers
+<p>In other words, we set <code>p</code> to point at the first element and then increment it every
+step to keep it pointing at <code>numbers[i]</code>.  Again, all mathematical operations on pointers
 in C deal in increments of the byte syze of the type, so <code>p++</code> is really adding 1*sizeof(int).</p>
 </div>
 <div class="listingblock">
@@ -2719,16 +2721,16 @@ sum_loop:
 </div>
 </div>
 <div class="paragraph">
-<p>Now, that may not look much better, we only saved 1 instuction total, and if we were
+<p>Now, that may not look much better, we only saved 1 instuction, and if we were
 looping through a string (aka an array of characters, sizeof(char) == 1) we wouldn&#8217;t
-have saved any.  However, imagine if we weren&#8217;t using sll to do the multiply but
-mul.  That would take 3 instructions, not 1.  Even mul would take 2.  And we&#8217;d
-have to use one of those if we were iterating through an array of structures with
-a size that wasn&#8217;t a power of 2.</p>
+have saved any.  However, imagine if we weren&#8217;t using <code>sll</code> to do the multiply but
+<code>mult</code>.  That would take 3 instructions, not 1.  Even <code>mul</code> would take 2.  Remember
+we <em>would</em> have to use one of those if we were iterating through an array of
+structures with a size that wasn&#8217;t a power of 2.</p>
 </div>
 <div class="paragraph">
 <p>But there is one more variant that you can use that can save a few more instructions.
-Instead of using i and i&lt;10 to control the loop, use p and the address just past the
+Instead of using <code>i</code> and <code>i&lt;10</code> to control the loop, use p and the address just past the
 end of the array.  In C it would be this:</p>
 </div>
 <div class="listingblock">
@@ -2750,8 +2752,8 @@ end of the array.  In C it would be this:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>You could also use != instead of &lt;.  This is similar to using the .end() method on many C++
-data structures when using iterators.</p>
+<p>You could also use <code>!=</code> instead of <code>&lt;</code>.  This is similar to using the <code>.end()</code> method
+on many C&#43;&#43; data structures when using iterators.  Now the MIPS version:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2776,9 +2778,10 @@ sum_loop:
 </div>
 </div>
 <div class="paragraph">
-<p>So we dropped from 10 to 7 and even more if we had had to do mul or mult originally.
-And this was just for a 1D array.  Imagine if you had 2 or 3 indices you had to use
-to calculate the correct offset.  That&#8217;s in the next section.</p>
+<p>So we dropped from 10 to 7 instructions and even more if we had had to do <code>mul</code>
+or <code>mult</code> originally.  And this was just for a 1D array.  Imagine if you had 2
+or 3 indices you had to use to calculate the correct offset.  That&#8217;s in the
+next section.</p>
 </div>
 </div>
 <div class="sect3">
@@ -2801,11 +2804,12 @@ to a 1D array with rows*cols elements in the same order:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>See the code example 2d_arrays.c for more details.</p>
+<p>See the code example
+<a href="https://raw.githubusercontent.com/rswinkle/mips_book/master/code/2d_arrays.c">2d_arrays.c</a> for more details.</p>
 </div>
 <div class="paragraph">
 <p>What this means is that when we declare a 2D array, it&#8217;s basically a 1D array with
-the size equal to the rows * columns.  Also when we loop through a 2D array, we can
+the size equal to the rows * columns.  Also, when we loop through a 2D array, we can
 often treat it like a 1D array with a single loop.  So everything that we learned
 before applies.</p>
 </div>
@@ -2845,7 +2849,8 @@ before applies.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>So assuming rows and cols are in a0 and a1 (and nonzero), it&#8217;d look like this:</p>
+<p>So assuming <code>rows</code> and <code>cols</code> are in <code>$a0</code> and <code>$a1</code> (and nonzero), it would
+look like this:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2883,7 +2888,7 @@ loop:
 </div>
 <div class="paragraph">
 <p>You might ask if it&#8217;s it worth it to convert it to a single loop when you still
-need the original i and j as if you were doing nested loops.  Generally, it is
+need the original <code>i</code> and <code>j</code> as if you were doing nested loops.  Generally, it is
 much nicer to avoid nested loops in assembly if you can.  There are many cases
 when you get the best of both worlds though.  If you&#8217;re doing a clear for example,
 setting the entire array to a single value, there&#8217;s no need to calculate the row
@@ -2928,8 +2933,8 @@ loopcols:
 </div>
 <div class="paragraph">
 <p>It&#8217;s a bit shorter but again, how much are those extra labels and branching worth?
-For me, this one&#8217;s a toss up.  On the other hand either of the last 2 versions are
-better than the literal translation imo:</p>
+For me, this one&#8217;s a toss up.  On the other hand, either of the last 2 versions are
+better than the literal translation below:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3044,7 +3049,8 @@ func1:
 label.</p>
 </div>
 <div class="paragraph">
-<p>But how do you call a function in assembly?  You use the opcode <code>jal func_label</code>.
+<p>But how do you call a function in assembly?  You use the instruction Jump and Link:
+<code>jal func_label</code>.
 Let&#8217;s change the hello world program from chapter 0 to call a function:</p>
 </div>
 <div class="listingblock">
@@ -3088,10 +3094,9 @@ hello_world:
 </div>
 </div>
 <div class="paragraph">
-<p>The op <code>jal</code> stands for "jump and link".  What it actually does is save the
-address of the next instruction to <code>$ra</code> and then do an unconditional jump
-to the function label.  So you could achieve the same results with the
-following:</p>
+<p>What <code>jal</code> actually does, is save the address of the next instruction to <code>$ra</code>
+and then do an unconditional jump to the function label.  So you could achieve
+the same results with the following:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3107,9 +3112,9 @@ next_instr:</pre>
 <div class="paragraph">
 <p>That would get tiring and ugly fast though, having to come up with unique labels
 for the next instruction every time.  You also might be confused about why the
-greensheet says jal saves PC+8 in <code>$ra</code> instead of PC+4.  The reason for that
+greensheet says <code>jal</code> saves PC+8 in <code>$ra</code> instead of PC+4.  The reason
 is that MIPS technically has delayed branching, i.e. a single instruction after
-every branch instruction is executed before the jump actually happens.  So jal
+every branch instruction is executed before the jump actually happens.  So <code>jal</code>
 adds 8 instead of 4 to account for that extra instruction delay.  However,
 every simulator we&#8217;ve mentioned does non-delayed branching by default so you
 can ignore it.</p>
@@ -3121,9 +3126,9 @@ can ignore it.</p>
 <p>We&#8217;ve gone as far as we can without starting to talk about registers and their
 purposes in functions.  You can think about registers as variables<sup class="footnote">[<a id="_footnoteref_8" class="footnote" href="#_footnotedef_8" title="View footnote.">8</a>]</sup> that
 are part of the CPU.  In this case, since we&#8217;re dealing with a 32-bit MIPS
-architecture, they are 4 byte/word variables.  Since they&#8217;re part of the CPU,
-they exist for the life of the program and the whole program shares the same
-registers.</p>
+architecture, they are 32-bit (aka 4 bytes, 1 word) variables.  Since they&#8217;re
+part of the CPU, they exist for the life of the program and the whole program
+shares the same registers.</p>
 </div>
 <div class="paragraph">
 <p>But how does that work?  If all parts of the program use the same
@@ -3133,12 +3138,12 @@ pass arguments or return results?  All these questions are solved by deciding
 on a "Calling Convention".  It&#8217;s different for different architectures and even
 different operating systems on the same architecture.  This is because different
 architectures have different numbers of registers, and some registers like <code>$ra</code>
-have hardcoded uses.  The op <code>jal</code> modifies <code>$ra</code> and <code>$0</code> is a constant 0 and
+have hardcoded uses.  The op <code>jal</code> modifies <code>$ra</code>, and <code>$0</code> is a constant 0 and
 there&#8217;s no way to change either of those facts.  That still leaves a lot of
 flexibility about designing a calling convention.  While they mostly match,
 you&#8217;ll find several variations of MIPS calling conventions online.  They
 usually differ in how they setup a stack frame.  The convention covered
-in this chapter is consistent with, and sufficient for almost every college
+in this chapter is consistent with, and sufficient for, almost every college
 course I&#8217;ve ever heard of.</p>
 </div>
 <div class="paragraph">
@@ -3147,15 +3152,15 @@ course I&#8217;ve ever heard of.</p>
 </div>
 <div class="paragraph">
 <p>If you&#8217;re unfamiliar with the
-runtime stack, it&#8217;s exactly what it sounds like.  It&#8217;s a First-In-Last-Out (FILO)
+runtime stack, it&#8217;s exactly what it sounds like.  It&#8217;s a Last-In-First-Out (LIFO)
 data structure that you can use to store smaller values in a program.  It grows
 in a negative direction, so to allocate 12 bytes, you would subtract 12 from the
 stack pointer (in MIPS that&#8217;s <code>$sp</code>).</p>
 </div>
 <div class="paragraph">
-<p>MIPS specifically, designates certain registers to be used for passing arguments
-(at least the first 4), others for return values, and others as misc temporary
-saved respectively.  The rest are special use registers like <code>$ra</code>.</p>
+<p>MIPS specifically designates certain registers to be used for passing arguments
+(at least the first 4), others for return values, and others for misc. temporary
+or saved values.  The rest are special use registers like <code>$ra</code>.</p>
 </div>
 <div class="paragraph">
 <p>The quickest way to summarize is to look at the table
@@ -3266,7 +3271,7 @@ from a function, thus preserving the original value.</p>
 <div class="paragraph">
 <p>You can ignore <code>$at, $k0-$k1, $gp</code> and most of the time <code>$fp</code> too.  In 5 years
 of tutoring I&#8217;ve helped students with MIPS from at least 2 dozen different colleges
-and I think a professor I&#8217;ve only seen a professor force his students to use <code>$fp</code>
+and I think I&#8217;ve only seen a professor force his students to use <code>$fp</code>
 or pass more than 4 arguments twice.  I&#8217;ve actually seen<sup class="footnote">[<a id="_footnoteref_9" class="footnote" href="#_footnotedef_9" title="View footnote.">9</a>]</sup> register 30 referred to
 as <code>$s8</code> rather than, or in addition to, <code>$fp</code> which shows you how rarely it&#8217;s
 actually used as a frame pointer.</p>
@@ -3325,31 +3330,31 @@ is in <code>$v0</code> before returning.</p>
 <div class="sect3">
 <h4 id="_using_the_stack">Using the Stack</h4>
 <div class="paragraph">
-<p>Ok first let&#8217;s establish the rules on when you <em>have</em> to use the stack (You can
-always use it for arbitrary local variables, like a local array for example but
+<p>Ok, first let&#8217;s establish the rules on when you <em>have</em> to use the stack (You can
+always use it for arbitrary local variables, like a local array for example, but
 generally don&#8217;t if you don&#8217;t have a good reason).</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>You call another function, ie you&#8217;re a non-leaf function.</p>
+<p><strong>You call another function, ie you&#8217;re a non-leaf function.</strong></p>
 <div class="paragraph">
 <p>This means you have to save <code>$ra</code> on the stack at the very least, otherwise when you
-do your <code>jr $ra</code> you&#8217;d jump back into yourself (right after the last jal instruction).
+do your <code>jr $ra</code> you&#8217;d jump back into yourself (right after the last <code>jal</code> instruction).
 This does not apply to main because you don&#8217;t/shouldn&#8217;t return from main, you should
 call the exit (or exit2) syscall (10 or 17).</p>
 </div>
 </li>
 <li>
-<p>You need to save values across a function call (automatically includes reason 1).</p>
+<p><strong>You need to save values across a function call (automatically includes reason 1).</strong></p>
 <div class="paragraph">
 <p>This is fairly common for non-trivial functions. Obvious examples are calling a
-function in a loop or loops (you&#8217;d have to preserve the iterator(s), and
+function in a loop or loops (you&#8217;d have to preserve the iterator(s)), and
 many recursive functions.</p>
 </div>
 </li>
 <li>
-<p>You run out of temporary registers and overflow into the s registers.</p>
+<p><strong>You run out of temporary registers and overflow into the s registers.</strong></p>
 <div class="paragraph">
 <p>This is very rare.  The most common reason this "happens" is people forget they have
 10 t registers instead of 8 like s registers and even if they remember that they
@@ -3362,7 +3367,7 @@ at the same time.</p>
 </div>
 <div class="paragraph">
 <p>Ok let&#8217;s look at an example for the first two.  Any example for the last rule
-would be prohibitively large/complicated.</p>
+would be prohibitively large and complicated.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3397,7 +3402,7 @@ would be prohibitively large/complicated.</p>
 <span class="normal">12</span></pre></div></td><td class="code"><pre><span></span>#int non_leaf()
 non_leaf:
 	addi    $sp, $sp, -4  # space to save 1 register, $ra
-	sw      $ra, 0($sp)
+	sw      $ra, 0($sp)   # store $ra in the newly allocated stack space
 
 	jal     func1
 
@@ -3411,8 +3416,8 @@ non_leaf:
 </div>
 <div class="paragraph">
 <p>The bit of code at the top and bottom of the function are called the prologue
-and the epilogue for obvious reasons.  You can see how we allocate 4 bytes on
-the stack by subtracting 4 (I add a negative rather than subtract, both
+and epilogue respectively for obvious reasons.  We allocate 4 bytes on the stack
+by subtracting 4 (I add a negative rather than subtract
 because I can copy-paste the line with a single character change for the
 epilogue).  Then we store the current <code>$ra</code> in that space at the new top of the
 stack.  Then before we exit we have to load it back and pop the stack.</p>
@@ -3503,7 +3508,7 @@ across a function call.</p>
 <span class="normal">37</span>
 <span class="normal">38</span></pre></div></td><td class="code"><pre><span></span>#void print_letters(char letter, int count)
 print_letters:
-	ble     $a1, $0, exit_pl
+	ble     $a1, $0, exit_pl   # if (count &lt;= 0) goto exit_pl
 	li      $v0, 11            # print character
 pl_loop:
 	syscall
@@ -3544,15 +3549,15 @@ sv_loop:
 </div>
 <div class="paragraph">
 <p>Notice that for print_letters, we not only convert the loop to a do-while, but
-we also use the parameter count as the iterator to count down to 0.  It saves
-us an instruction initializing an i.</p>
+we also use the parameter <code>count</code> as the iterator to count down to 0.  It saves
+us an instruction initializing an <code>i</code>.</p>
 </div>
 <div class="paragraph">
-<p>Secondly, for save_vals, we save not only <code>$ra</code> because we call another function,
-but also two s registers to save i and our stopping point.  The second is not
+<p>Secondly, for <code>save_vals</code>, we save not only <code>$ra</code> because we call another function,
+but also two s registers to save <code>i</code> and our stopping point.  The second is not
 actually necessary.  Because it&#8217;s a constant, we could just load 10 into a register
-right before the check every iteration of the loop.  Which is better depends on
-several factors, like how long/complex the loop is, how many times it executes, and
+right before the check every iteration of the loop.  Which version is better depends on
+several factors, like how long or complex the loop is, how many times it executes, and
 of course personal preference.</p>
 </div>
 </div>
@@ -3580,9 +3585,9 @@ of course personal preference.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>You can see how at the very least, we&#8217;ll have to save <code>$ra</code> and n because we
+<p>You can see how, at the very least, we&#8217;ll have to save <code>$ra</code> and <code>n</code>, because we
 need the original even after the first recursive fib call.  It&#8217;s not as
-obvious but we&#8217;ll also have to save the return value of the first call so
+obvious, but we&#8217;ll also have to save the return value of the first call so
 we&#8217;ll still have it to do the addition after the second.  You might think
 this would require using two s regs, but does it?  Let&#8217;s see&#8230;&#8203;</p>
 </div>
@@ -3643,10 +3648,10 @@ exit_fib:
 </div>
 </div>
 <div class="paragraph">
-<p>Notice how we don&#8217;t have to save n any sooner than necessary, ie right before
-we have to use a0 to setup the first recursive call.  Also the ordering of
-lines 16 and 17 is important.  We needed the original n to calculate n-1 but
-once that&#8217;s in <code>$a0</code> ready for the call, because we won&#8217;t need n again afterward
+<p>Notice how we don&#8217;t have to save <code>n</code> any sooner than necessary, ie right before
+we have to use <code>$a0</code> to setup the first recursive call.  Also, the ordering of
+lines 16 and 17 is important.  We needed the original <code>n</code> to calculate <code>n-1</code> but
+once that&#8217;s in <code>$a0</code> ready for the call, because we won&#8217;t need <code>n</code> again afterward,
 we can now use <code>$s0</code> to preserve the return value of the first call.</p>
 </div>
 <div class="paragraph">
@@ -3655,10 +3660,10 @@ a few instructions of performance if you moved the base case testing before the
 prologue as long as you put the exit label after the epilogue.  This is true,
 but I&#8217;d recommend against it unless you were really trying to eke out every last
 microsecond.  It&#8217;s just nicer/cleaner to keep the prologue and epilogue as the
-first and last thing; they&#8217;re one more thing to catch your eye and help delineate
+first and last things; they&#8217;re one more thing to catch your eye and help delineate
 where functions start and end.  Regardless, if you&#8217;re curious, you can see that
 version, along with every other function in this chapter in the included program
-calling.s.</p>
+<a href="https://raw.githubusercontent.com/rswinkle/mips_book/master/code/calling.s">calling.s</a>.</p>
 </div>
 </div>
 </div>
@@ -3666,8 +3671,8 @@ calling.s.</p>
 <h3 id="_conclusion_4">Conclusion</h3>
 <div class="paragraph">
 <p>While grasping the basics of a calling convention is not too difficult, it takes
-practice to get used to it and there are many things that we haven&#8217;t covered
-in this chapter, like how to pass more than 4 arguments or use <code>$fp</code> or handle
+practice to get used to it.  There are many things that we haven&#8217;t covered
+in this chapter, like how to pass more than 4 arguments, or use <code>$fp</code> or handle
 floating point arguments or return values.</p>
 </div>
 </div>
@@ -5333,7 +5338,11 @@ reason to do a complicated transformation if you don&#8217;t have to and <code>b
 the same thing here.</p>
 </div>
 <div class="paragraph">
-<p>See the example program args_bare.s which is just args.s for a complete example.</p>
+<p>See the example program
+<a href="https://raw.githubusercontent.com/rswinkle/mips_book/master/code/args_bare.s">args_bare.s</a>
+which is just
+<a href="https://raw.githubusercontent.com/rswinkle/mips_book/master/code/args.s">args.s</a>
+in bare mode for a complete example.</p>
 </div>
 </div>
 </div>
@@ -5398,8 +5407,8 @@ the same thing here.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 0.8.4<br>
-Last updated 2021-06-23 11:41:31 -0700
+Version 0.8.5<br>
+Last updated 2021-06-25 18:10:31 -0700
 </div>
 </div>
 <style>
