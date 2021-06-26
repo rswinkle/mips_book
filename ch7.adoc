@@ -68,7 +68,7 @@ if it's out of order I might as well make it obvious.
 This was already covered in the chapters on branching and loops but it bears
 repeating.
 
-. *In your prologue save `$ra` first, if necessary then all s regs used starting at `$s0`.*
+. *In your prologue save `$ra` first, if necessary, then all s regs used starting at `$s0`.*
 +
 Then copy paste the whole thing to the bottom, move the first line to the bottom and
 change the number to positive and change all the `sw` to `lw`.
