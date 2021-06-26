@@ -38,7 +38,8 @@ func1:
 As you can see my policy is to put a single line comment of the C prototype above
 label.
 
-But how do you call a function in assembly?  You use the opcode `jal func_label`.
+But how do you call a function in assembly?  You use the instruction Jump and Link:
+`jal func_label`.
 Let's change the hello world program from chapter 0 to call a function:
 
 
@@ -65,10 +66,9 @@ hello_world:
 
 ----
 
-The op `jal` stands for "jump and link".  What it actually does is save the
-address of the next instruction to `$ra` and then do an unconditional jump
-to the function label.  So you could achieve the same results with the
-following:
+What `jal` actually does, is save the address of the next instruction to `$ra`
+and then do an unconditional jump to the function label.  So you could achieve
+the same results with the following:
 
 ----
 	jal    func
@@ -82,9 +82,9 @@ next_instr:
 
 That would get tiring and ugly fast though, having to come up with unique labels
 for the next instruction every time.  You also might be confused about why the
-greensheet says jal saves PC+8 in `$ra` instead of PC+4.  The reason for that
+greensheet says `jal` saves PC+8 in `$ra` instead of PC+4.  The reason
 is that MIPS technically has delayed branching, i.e. a single instruction after
-every branch instruction is executed before the jump actually happens.  So jal
+every branch instruction is executed before the jump actually happens.  So `jal`
 adds 8 instead of 4 to account for that extra instruction delay.  However,
 every simulator we've mentioned does non-delayed branching by default so you
 can ignore it.
@@ -97,9 +97,9 @@ can ignore it.
 We've gone as far as we can without starting to talk about registers and their
 purposes in functions.  You can think about registers as variables{zero_reg} that
 are part of the CPU.  In this case, since we're dealing with a 32-bit MIPS
-architecture, they are 4 byte/word variables.  Since they're part of the CPU,
-they exist for the life of the program and the whole program shares the same
-registers.
+architecture, they are 32-bit (aka 4 bytes, 1 word) variables.  Since they're
+part of the CPU, they exist for the life of the program and the whole program
+shares the same registers.
 
 But how does that work?  If all parts of the program use the same
 32 registers, how does one function not stomp all over what another was doing
@@ -108,26 +108,26 @@ pass arguments or return results?  All these questions are solved by deciding
 on a "Calling Convention".  It's different for different architectures and even
 different operating systems on the same architecture.  This is because different
 architectures have different numbers of registers, and some registers like `$ra`
-have hardcoded uses.  The op `jal` modifies `$ra` and `$0` is a constant 0 and
+have hardcoded uses.  The op `jal` modifies `$ra`, and `$0` is a constant 0 and
 there's no way to change either of those facts.  That still leaves a lot of
 flexibility about designing a calling convention.  While they mostly match,
 you'll find several variations of MIPS calling conventions online.  They
 usually differ in how they setup a stack frame.  The convention covered
-in this chapter is consistent with, and sufficient for almost every college
+in this chapter is consistent with, and sufficient for, almost every college
 course I've ever heard of.
 
 Regardless, what matters, is that the calling convention works by setting rules
 (and guidelines) for register use, and when/how to use the stack.
 
 If you're unfamiliar with the
-runtime stack, it's exactly what it sounds like.  It's a First-In-Last-Out (FILO)
+runtime stack, it's exactly what it sounds like.  It's a Last-In-First-Out (LIFO)
 data structure that you can use to store smaller values in a program.  It grows
 in a negative direction, so to allocate 12 bytes, you would subtract 12 from the
 stack pointer (in MIPS that's `$sp`).
 
-MIPS specifically, designates certain registers to be used for passing arguments
-(at least the first 4), others for return values, and others as misc temporary
-saved respectively.  The rest are special use registers like `$ra`.
+MIPS specifically designates certain registers to be used for passing arguments
+(at least the first 4), others for return values, and others for misc. temporary
+or saved values.  The rest are special use registers like `$ra`.
 
 The quickest way to summarize is to look at the table
 on the greensheet which is reproduced (with some modifications) below:
@@ -175,7 +175,7 @@ from a function, thus preserving the original value.
 
 You can ignore `$at, $k0-$k1, $gp` and most of the time `$fp` too.  In 5 years
 of tutoring I've helped students with MIPS from at least 2 dozen different colleges
-and I think a professor I've only seen a professor force his students to use `$fp`
+and I think I've only seen a professor force his students to use `$fp`
 or pass more than 4 arguments twice.  I've actually seen{fp_is_s8} register 30 referred to
 as `$s8` rather than, or in addition to, `$fp` which shows you how rarely it's
 actually used as a frame pointer.
@@ -227,24 +227,24 @@ is in `$v0` before returning.
 
 ==== Using the Stack
 
-Ok first let's establish the rules on when you _have_ to use the stack (You can
-always use it for arbitrary local variables, like a local array for example but
+Ok, first let's establish the rules on when you _have_ to use the stack (You can
+always use it for arbitrary local variables, like a local array for example, but
 generally don't if you don't have a good reason).
 
-. You call another function, ie you're a non-leaf function.
+. *You call another function, ie you're a non-leaf function.*
 +
 This means you have to save `$ra` on the stack at the very least, otherwise when you
-do your `jr $ra` you'd jump back into yourself (right after the last jal instruction).
+do your `jr $ra` you'd jump back into yourself (right after the last `jal` instruction).
 This does not apply to main because you don't/shouldn't return from main, you should
 call the exit (or exit2) syscall (10 or 17).
 
-. You need to save values across a function call (automatically includes reason 1).
+. *You need to save values across a function call (automatically includes reason 1).*
 +
 This is fairly common for non-trivial functions. Obvious examples are calling a
-function in a loop or loops (you'd have to preserve the iterator(s), and
+function in a loop or loops (you'd have to preserve the iterator(s)), and
 many recursive functions.
 
-. You run out of temporary registers and overflow into the s registers.
+. *You run out of temporary registers and overflow into the s registers.*
 +
 This is very rare.  The most common reason this "happens" is people forget they have
 10 t registers instead of 8 like s registers and even if they remember that they
@@ -253,7 +253,7 @@ enough to handle pretty much any function because you rarely need 17 discrete va
 at the same time.
 
 Ok let's look at an example for the first two.  Any example for the last rule
-would be prohibitively large/complicated.
+would be prohibitively large and complicated.
 
 
 [source,c,linenums]
@@ -272,7 +272,7 @@ This just calls the empty function discussed at the top of this chapter.
 #int non_leaf()
 non_leaf:
 	addi    $sp, $sp, -4  # space to save 1 register, $ra
-	sw      $ra, 0($sp)
+	sw      $ra, 0($sp)   # store $ra in the newly allocated stack space
 
 	jal     func1
 
@@ -284,8 +284,8 @@ non_leaf:
 ----
 
 The bit of code at the top and bottom of the function are called the prologue
-and the epilogue for obvious reasons.  You can see how we allocate 4 bytes on
-the stack by subtracting 4 (I add a negative rather than subtract, both
+and epilogue respectively for obvious reasons.  We allocate 4 bytes on the stack
+by subtracting 4 (I add a negative rather than subtract
 because I can copy-paste the line with a single character change for the
 epilogue).  Then we store the current `$ra` in that space at the new top of the
 stack.  Then before we exit we have to load it back and pop the stack.
@@ -321,7 +321,7 @@ That becomes this in mips:
 ----
 #void print_letters(char letter, int count)
 print_letters:
-	ble     $a1, $0, exit_pl
+	ble     $a1, $0, exit_pl   # if (count <= 0) goto exit_pl
 	li      $v0, 11            # print character
 pl_loop:
 	syscall
@@ -360,16 +360,15 @@ sv_loop:
 ----
 
 Notice that for print_letters, we not only convert the loop to a do-while, but
-we also use the parameter count as the iterator to count down to 0.  It saves
-us an instruction initializing an i.
+we also use the parameter `count` as the iterator to count down to 0.  It saves
+us an instruction initializing an `i`.
 
-Secondly, for save_vals, we save not only `$ra` because we call another function,
-but also two s registers to save i and our stopping point.  The second is not
+Secondly, for `save_vals`, we save not only `$ra` because we call another function,
+but also two s registers to save `i` and our stopping point.  The second is not
 actually necessary.  Because it's a constant, we could just load 10 into a register
-right before the check every iteration of the loop.  Which is better depends on
-several factors, like how long/complex the loop is, how many times it executes, and
+right before the check every iteration of the loop.  Which version is better depends on
+several factors, like how long or complex the loop is, how many times it executes, and
 of course personal preference.
-
 
 ==== Recursive Functions
 
@@ -387,9 +386,9 @@ int fib(int n)
 
 ----
 
-You can see how at the very least, we'll have to save `$ra` and n because we
+You can see how, at the very least, we'll have to save `$ra` and `n`, because we
 need the original even after the first recursive fib call.  It's not as
-obvious but we'll also have to save the return value of the first call so
+obvious, but we'll also have to save the return value of the first call so
 we'll still have it to do the addition after the second.  You might think
 this would require using two s regs, but does it?  Let's see...
 
@@ -423,10 +422,10 @@ exit_fib:
 	jr      $ra
 ----
 
-Notice how we don't have to save n any sooner than necessary, ie right before
-we have to use a0 to setup the first recursive call.  Also the ordering of
-lines 16 and 17 is important.  We needed the original n to calculate n-1 but
-once that's in `$a0` ready for the call, because we won't need n again afterward
+Notice how we don't have to save `n` any sooner than necessary, ie right before
+we have to use `$a0` to setup the first recursive call.  Also, the ordering of
+lines 16 and 17 is important.  We needed the original `n` to calculate `n-1` but
+once that's in `$a0` ready for the call, because we won't need `n` again afterward,
 we can now use `$s0` to preserve the return value of the first call.
 
 Some of you, if you were paying attention, might point out that you could save
@@ -434,18 +433,18 @@ a few instructions of performance if you moved the base case testing before the
 prologue as long as you put the exit label after the epilogue.  This is true,
 but I'd recommend against it unless you were really trying to eke out every last
 microsecond.  It's just nicer/cleaner to keep the prologue and epilogue as the
-first and last thing; they're one more thing to catch your eye and help delineate
+first and last things; they're one more thing to catch your eye and help delineate
 where functions start and end.  Regardless, if you're curious, you can see that
 version, along with every other function in this chapter in the included program
-calling.s.
+https://raw.githubusercontent.com/rswinkle/mips_book/master/code/calling.s[calling.s].
 
 // TODO A recursive function that doesn't require saving anything but $ra
 
 === Conclusion
 
 While grasping the basics of a calling convention is not too difficult, it takes
-practice to get used to it and there are many things that we haven't covered
-in this chapter, like how to pass more than 4 arguments or use `$fp` or handle
+practice to get used to it.  There are many things that we haven't covered
+in this chapter, like how to pass more than 4 arguments, or use `$fp` or handle
 floating point arguments or return values.
 
 

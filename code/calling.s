@@ -23,6 +23,12 @@ next_instr:
 	li      $a0, 10    # '\n'
 	syscall
 
+	jal     save_vals
+
+	li      $v0, 11    # print char
+	li      $a0, 10    # '\n'
+	syscall
+
 	li      $s0, 0     # i = 0 (I can use s regs without saving because I exit from main, rather than return)
 	li      $s1, 10
 fib_loop:
@@ -100,6 +106,48 @@ hello_name_number:
 
 	addi    $v0, $a1, 10  # return number+10
 	jr      $ra
+
+
+
+#void print_letters(char letter, int count)
+print_letters:
+	ble     $a1, $0, exit_pl   # if (count <= 0) goto exit_pl
+	li      $v0, 11            # print character
+pl_loop:
+	syscall
+	addi    $a1, $a1, -1       # count--
+	bgt     $a1, $0, pl_loop   # while (count > 0)
+
+	li      $a0, 10            # '\n'
+	syscall
+	
+exit_pl:
+	jr      $ra
+
+
+#int save_vals()
+save_vals:
+	addi    $sp, $sp, -12
+	sw      $ra, 0($sp)
+	sw      $s0, 4($sp)
+	sw      $s1, 8($sp)
+
+	li      $s0, 0  # i = 0
+	li      $s1, 10
+sv_loop:
+	addi    $a0, $s0, 65   # i + 'A'
+	addi    $a1, $s0, 1    # i + 1
+	jal     print_letters
+
+	addi    $s0, $s0, 1        # i++
+	blt     $s0, $s1, sv_loop  # while (i < 10)
+
+	lw      $ra, 0($sp)
+	lw      $s0, 4($sp)
+	lw      $s1, 8($sp)
+	addi    $sp, $sp, 12
+	jr      $ra
+
 
 
 
