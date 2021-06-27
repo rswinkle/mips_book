@@ -166,8 +166,8 @@ the system call using the syscall instruction.
 Finally we call the exit system call which takes no arguments and exits the program.
 
 Again, we'll cover system calls in a later chapter.  This is just an intro/overview
-so don't worry if some things aren't completly clear.  This chapter is about getting
-you up and running, not really about teaching anything yet.
+so don't worry if some things aren't completely clear.  This chapter is about getting
+you up and running, not really about teaching anything specific yet.
 
 === Building and Running
 
