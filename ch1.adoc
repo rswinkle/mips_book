@@ -82,10 +82,10 @@ name:        .space 30
 ----
 
 As you can see in the example, we just extract all the string literals and
-the character array name and declare them as MIPS globals.  One thing to note
-is the second printf.  Because it prints a variable, name, using the conversion
+the character array `name` and declare them as MIPS globals.  One thing to note
+is the second `printf`.  Because it prints a variable, `name`, using the conversion
 specifier, we break the literal into pieces around that.  Since there is no
-built-in printf function in MIPS, you have to handle printing variables yourself
+built-in `printf` function in MIPS, you have to handle printing variables yourself
 with the appropriate system calls.
 
 
@@ -96,7 +96,7 @@ strings are special cases, that can be handled with `.ascii` or `.asciiz` for li
 but for other types or user inputed strings how do we do it?
 
 Well the first way, which was demonstrated in the snippet above is to use `.space`
-to just declare array of the necessary byte size.  Keep in mind that the size is
+to just declare an array of the necessary byte size.  Keep in mind that the size is
 specified in bytes not elements, so it only matches for character arrays.  For
 arrays of ints/words, floats, doubles etc. you'd have to multiply by the sizeof(type).
 
