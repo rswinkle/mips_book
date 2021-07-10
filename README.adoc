@@ -21,7 +21,7 @@ http://www.robertwinkler.com/projects/mips_book/mips_book.pdf[PDF]
 == License
 
 The book (all adoc files and final generated pdf/html) is under a
-https://creativecommons.org/licenses/by-nc-sa/3.0/[Creative Commons License].
+https://creativecommons.org/licenses/by-nc-sa/4.0/[Creative Commons License].
 
 The separate code files in the code subdirectory are under the MIT license.
 

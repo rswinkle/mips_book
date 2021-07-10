@@ -2,7 +2,7 @@
 
 Copyright (C) 2021 http://robertwinkler.com[Robert Winkler]
 
-Licensed under https://creativecommons.org/licenses/by-nc-sa/3.0/[Creative Commons].
+Licensed under https://creativecommons.org/licenses/by-nc-sa/4.0/[Creative Commons].
 
 This book is available online in both
 http://www.robertwinkler.com/projects/mips_book/mips_book.html[HTML] and
