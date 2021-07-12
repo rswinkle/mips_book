@@ -433,7 +433,8 @@ well as disabling pseudoinstructions (ie it simulates the "bare" machine without
 any of the niceties).  MARS is the same as SPIM in that it defaults to the more
 user friendly mode, but you can turn on delayed branches is the settings (but
 not delayed loads, that isn't supported as far as I can tell).  From the command
-line you can turn it on with the `db` argument.
+line you can turn it on with the `db` argument and you can turn off pseudoinstructions
+with `np` (for next section).
 
 Now, why would you ever want to do any of this?  The only reason I can think of,
 and the only one that I've ever run into, is if your professor requires it for
