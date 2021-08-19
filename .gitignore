@@ -17,6 +17,7 @@
 *.app
 
 # misc
+experiments/
 *.c
 *~
 *.kate-swp

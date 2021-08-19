@@ -521,8 +521,8 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <div class="details">
 <span id="author" class="author">Robert Winkler</span><br>
 <span id="email" class="email"><a href="mailto:mips@robertwinkler.com">mips@robertwinkler.com</a></span><br>
-<span id="revnumber">version 0.9.3,</span>
-<span id="revdate">2021-07-10</span>
+<span id="revnumber">version 0.9.4,</span>
+<span id="revdate">2021-08-19</span>
 <br><span id="revremark">Beta</span>
 </div>
 <div id="toc" class="toc">
@@ -4243,7 +4243,7 @@ hard tabs a bad name.  When you use hard tabs for alignment, rather than indenta
 and then someone else opens your code with their tab set to a different width,
 suddenly everything looks like crap.  Tabs for indentation, spaces for alignment.
 Or as is increasingly common (thanks Python), spaces for everything but I refuse
-to do that to the poor planet.{green_tabs}</p>
+to do that to the poor planet.<sup class="footnote">[<a id="_footnoteref_10" class="footnote" href="#_footnotedef_10" title="View footnote.">10</a>]</sup></p>
 </div>
 </li>
 <li>
@@ -4690,7 +4690,7 @@ to use to jump to.</p>
 </div>
 <div class="paragraph">
 <p>The <code>&amp;&amp;</code> and <code>goto *var</code> syntax are actually not standard C/C++ but are GNU
-extensions that are supported in gcc (naturally) and clang, possibly others.<sup class="footnote">[<a id="_footnoteref_10" class="footnote" href="#_footnotedef_10" title="View footnote.">10</a>]</sup></p>
+extensions that are supported in gcc (naturally) and clang, possibly others.<sup class="footnote">[<a id="_footnoteref_11" class="footnote" href="#_footnotedef_11" title="View footnote.">11</a>]</sup></p>
 </div>
 <div class="paragraph">
 <p>Notice how the size of the jump table is the value of the highest valued label
@@ -5074,7 +5074,8 @@ well as disabling pseudoinstructions (ie it simulates the "bare" machine without
 any of the niceties).  MARS is the same as SPIM in that it defaults to the more
 user friendly mode, but you can turn on delayed branches is the settings (but
 not delayed loads, that isn&#8217;t supported as far as I can tell).  From the command
-line you can turn it on with the <code>db</code> argument.</p>
+line you can turn it on with the <code>db</code> argument and you can turn off pseudoinstructions
+with <code>np</code> (for next section).</p>
 </div>
 <div class="paragraph">
 <p>Now, why would you ever want to do any of this?  The only reason I can think of,
@@ -5507,13 +5508,16 @@ in bare mode for a complete example.
 <a href="#_footnoteref_9">9</a>. It&#8217;s an <a href="https://www.cs.uaf.edu/2000/fall/cs301/notes/notes/node66.html">old link</a>, but not as old as SPIM so maybe using it for a frame pointer was added later
 </div>
 <div class="footnote" id="_footnotedef_10">
-<a href="#_footnoteref_10">10</a>. <a href="https://gcc.gnu.org/onlinedocs/gcc/Labels-as-Values.html" class="bare">https://gcc.gnu.org/onlinedocs/gcc/Labels-as-Values.html</a>
+<a href="#_footnoteref_10">10</a>. When I find the post I read years ago about how using tabs saves CO2 I&#8217;ll put it here, but I&#8217;m joking.  I use tabs because it makes sense and there are accessibility reasons too: <a href="https://www.reddit.com/r/javascript/comments/c8drjo/nobody_talks_about_the_real_reason_to_use_tabs/" class="bare">https://www.reddit.com/r/javascript/comments/c8drjo/nobody_talks_about_the_real_reason_to_use_tabs/</a>
+</div>
+<div class="footnote" id="_footnotedef_11">
+<a href="#_footnoteref_11">11</a>. <a href="https://gcc.gnu.org/onlinedocs/gcc/Labels-as-Values.html" class="bare">https://gcc.gnu.org/onlinedocs/gcc/Labels-as-Values.html</a>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 0.9.3<br>
-Last updated 2021-07-10 14:37:23 -0700
+Version 0.9.4<br>
+Last updated 2021-08-19 00:19:54 -0700
 </div>
 </div>
 </body>

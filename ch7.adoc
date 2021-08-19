@@ -1,5 +1,7 @@
 :source-highlighter: pygments
 
+:green_tabs: footnote:[When I find the post I read years ago about how using tabs saves CO2 I'll put it here, but I'm joking.  I use tabs because it makes sense and there are accessibility reasons too: https://www.reddit.com/r/javascript/comments/c8drjo/nobody_talks_about_the_real_reason_to_use_tabs/]
+
 :label_addresses: footnote:[https://gcc.gnu.org/onlinedocs/gcc/Labels-as-Values.html]
 
 
