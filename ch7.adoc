@@ -22,8 +22,8 @@ it's just 1 indent according to your preferences.
 
 . *Use _spaces_ to align the first operand of all instructions out far enough.*
 +
-Given my 4 space tabs, this usually means column
-11-13 for me.  The reason to use spaces is to prevent the circumstances that gave
+Given my 4 space tabs, this means column 13+ (due to syscall, though I often stop at 11).
+The reason to use spaces is to prevent the circumstances that gave
 hard tabs a bad name.  When you use hard tabs for alignment, rather than indentation,
 and then someone else opens your code with their tab set to a different width,
 suddenly everything looks like crap.  Tabs for indentation, spaces for alignment.

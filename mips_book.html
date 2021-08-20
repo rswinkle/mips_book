@@ -521,8 +521,8 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <div class="details">
 <span id="author" class="author">Robert Winkler</span><br>
 <span id="email" class="email"><a href="mailto:mips@robertwinkler.com">mips@robertwinkler.com</a></span><br>
-<span id="revnumber">version 0.9.4,</span>
-<span id="revdate">2021-08-19</span>
+<span id="revnumber">version 0.9.5,</span>
+<span id="revdate">2021-08-20</span>
 <br><span id="revremark">Beta</span>
 </div>
 <div id="toc" class="toc">
@@ -4237,8 +4237,8 @@ it&#8217;s just 1 indent according to your preferences.</p>
 <li>
 <p><strong>Use <em>spaces</em> to align the first operand of all instructions out far enough.</strong></p>
 <div class="paragraph">
-<p>Given my 4 space tabs, this usually means column
-11-13 for me.  The reason to use spaces is to prevent the circumstances that gave
+<p>Given my 4 space tabs, this means column 13+ (due to syscall, though I often stop at 11).
+The reason to use spaces is to prevent the circumstances that gave
 hard tabs a bad name.  When you use hard tabs for alignment, rather than indentation,
 and then someone else opens your code with their tab set to a different width,
 suddenly everything looks like crap.  Tabs for indentation, spaces for alignment.
@@ -5186,7 +5186,7 @@ or    $0, $0, $0</pre>
 <div class="content">
 <pre># use 0x1001 for MARS
 lui   $t0, 0x1000
-ori   $t0, $0, byte_offset</pre>
+ori   $t0, $t0, byte_offset</pre>
 </div>
 </div>
 <hr></div></td>
@@ -5516,8 +5516,8 @@ in bare mode for a complete example.
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 0.9.4<br>
-Last updated 2021-08-19 00:19:54 -0700
+Version 0.9.5<br>
+Last updated 2021-08-20 12:38:53 -0700
 </div>
 </div>
 </body>

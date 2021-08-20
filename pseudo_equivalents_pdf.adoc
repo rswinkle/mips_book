@@ -34,7 +34,7 @@
 
  # use 0x1001 for MARS
  lui   $t0, 0x1000
- ori   $t0, $0, byte_offset
+ ori   $t0, $t0, byte_offset
 
 | Branch Less Than |
 
