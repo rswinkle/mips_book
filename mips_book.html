@@ -521,8 +521,8 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <div class="details">
 <span id="author" class="author">Robert Winkler</span><br>
 <span id="email" class="email"><a href="mailto:mips@robertwinkler.com">mips@robertwinkler.com</a></span><br>
-<span id="revnumber">version 0.9.5,</span>
-<span id="revdate">2021-08-20</span>
+<span id="revnumber">version 0.9.6,</span>
+<span id="revdate">2021-08-21</span>
 <br><span id="revremark">Beta</span>
 </div>
 <div id="toc" class="toc">
@@ -5072,7 +5072,7 @@ these turned off but you can turn them on with the arguments <code>-delayed_bran
 and <code>-delayed_loads</code> respectively or use the <code>-bare</code> which turns on both, as
 well as disabling pseudoinstructions (ie it simulates the "bare" machine without
 any of the niceties).  MARS is the same as SPIM in that it defaults to the more
-user friendly mode, but you can turn on delayed branches is the settings (but
+user friendly mode, but you can turn on delayed branches in the settings (but
 not delayed loads, that isn&#8217;t supported as far as I can tell).  From the command
 line you can turn it on with the <code>db</code> argument and you can turn off pseudoinstructions
 with <code>np</code> (for next section).</p>
@@ -5249,11 +5249,10 @@ bne    $t2, $0, label</pre>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="literalblock">
 <div class="content">
-<pre># add 1 to change &gt;= to &gt;
-addi  $t0, $t0, 1
-# t2 = t1 &lt; t0 aka t0 &gt; t1
-slt   $t2, $t1, $t0
-bne   $t2, $0, label</pre>
+<pre># test for opposite
+# and branch on failure
+slt  $t2, $t0, $t1
+beq  $t2, $0, label</pre>
 </div>
 </div>
 <hr></div></td>
@@ -5516,8 +5515,8 @@ in bare mode for a complete example.
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 0.9.5<br>
-Last updated 2021-08-20 12:38:53 -0700
+Version 0.9.6<br>
+Last updated 2021-08-21 19:08:31 -0700
 </div>
 </div>
 </body>

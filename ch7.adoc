@@ -433,7 +433,7 @@ these turned off but you can turn them on with the arguments `-delayed_branches`
 and `-delayed_loads` respectively or use the `-bare` which turns on both, as
 well as disabling pseudoinstructions (ie it simulates the "bare" machine without
 any of the niceties).  MARS is the same as SPIM in that it defaults to the more
-user friendly mode, but you can turn on delayed branches is the settings (but
+user friendly mode, but you can turn on delayed branches in the settings (but
 not delayed loads, that isn't supported as far as I can tell).  From the command
 line you can turn it on with the `db` argument and you can turn off pseudoinstructions
 with `np` (for next section).

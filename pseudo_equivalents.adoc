@@ -80,11 +80,10 @@
 
  bge  $t0, $t1, label |
 
- # add 1 to change >= to >
- addi  $t0, $t0, 1
- # t2 = t1 < t0 aka t0 > t1
- slt   $t2, $t1, $t0
- bne   $t2, $0, label
+ # test for opposite
+ # and branch on failure
+ slt  $t2, $t0, $t1
+ beq  $t2, $0, label
 
 '''
 
