@@ -1,6 +1,4 @@
-:source-highlighter: pygments
-
-:one_return: footnote:[I do not agree with an ironclad "one return" policy in higher level languages.  Sometime returning early results in cleaner code, sometimes not.  Similarly, `goto` is not evil and there are rare cases where using it creates the best code.]
+:one_return: footnote:[I do not agree with an ironclad "one return" policy in higher level languages.  Sometimes returning early results in cleaner code, sometimes not.  Similarly, `goto` is not evil and there are rare cases where using it creates the best code.]
 :zero_reg: footnote:[Obviously the zero register is not really a variable.  I never understood how people could say "const variable" with a straight face, it's literally an oxymoron.]
 :fp_is_s8: footnote:[It's an https://www.cs.uaf.edu/2000/fall/cs301/notes/notes/node66.html[old link], but not as old as SPIM so maybe using it for a frame pointer was added later]
 

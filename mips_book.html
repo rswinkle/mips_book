@@ -521,8 +521,8 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <div class="details">
 <span id="author" class="author">Robert Winkler</span><br>
 <span id="email" class="email"><a href="mailto:mips@robertwinkler.com">mips@robertwinkler.com</a></span><br>
-<span id="revnumber">version 0.9.6,</span>
-<span id="revdate">2021-08-21</span>
+<span id="revnumber">version 0.9.7,</span>
+<span id="revdate">2021-09-28</span>
 <br><span id="revremark">Beta</span>
 </div>
 <div id="toc" class="toc">
@@ -590,6 +590,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_no_pseudoinstructions_allowed">No Pseudoinstructions Allowed</a></li>
 </ul>
 </li>
+<li><a href="#_references_and_useful_links">References and Useful Links</a></li>
 </ul>
 </div>
 </div>
@@ -615,8 +616,7 @@ any errors (submit an issue or even a pull request) is
 </div>
 <div class="paragraph">
 <p>If you&#8217;re interested in contacting me regarding MIPS tutoring or any other
-business request related to the book, you can reach me at <a href="mailto:mips@robertwinkler.com">mips@robertwinkler.com</a>.
-:source-highlighter: pygments</p>
+business request related to the book, you can reach me at <a href="mailto:mips@robertwinkler.com">mips@robertwinkler.com</a>.</p>
 </div>
 </div>
 </div>
@@ -930,8 +930,7 @@ since the whole point is to be a GUI wrapper around spim.</p>
 <div class="paragraph">
 <p>Well, there you have it, you have written and run your first MIPS program.  Another
 few chapters and you will have no trouble with almost anything you would want
-to do in MIPS, whether for a class, or on your own for fun.
-:source-highlighter: pygments</p>
+to do in MIPS, whether for a class, or on your own for fun.</p>
 </div>
 </div>
 </div>
@@ -1538,8 +1537,7 @@ you can assume it is unmodified.</p>
 </div>
 <div class="paragraph">
 <p>Lastly, many people will declare a string <code>"\n"</code> and use print string to print a newline,
-but it&#8217;s easier to just use the print char syscall as we do just before exiting.
-:source-highlighter: pygments</p>
+but it&#8217;s easier to just use the print char syscall as we do just before exiting.</p>
 </div>
 </div>
 </div>
@@ -3084,8 +3082,7 @@ imagine how much worse it would be for a 3D array with 3 nested loops.</p>
 MIPS and how to transform various loops and array accesses into the form
 that makes your life the easiest.  There is more we could cover here, like
 looping through a linked list, but I think that&#8217;s beyond the scope of what we&#8217;ve
-covered so far.  Perhaps in a later chapter.
-:source-highlighter: pygments</p>
+covered so far.  Perhaps in a later chapter.</p>
 </div>
 </div>
 </div>
@@ -3758,8 +3755,7 @@ version, along with every other function in this chapter in the included program
 <p>While grasping the basics of a calling convention is not too difficult, it takes
 practice to get used to it.  There are many things that we haven&#8217;t covered
 in this chapter, like how to pass more than 4 arguments, or use <code>$fp</code> or handle
-floating point arguments or return values.
-:source-highlighter: pygments</p>
+floating point arguments or return values.</p>
 </div>
 </div>
 </div>
@@ -4206,8 +4202,7 @@ brief overview, combined with the knowledge of previous chapters is sufficient.<
 <a href="https://raw.githubusercontent.com/rswinkle/mips_book/master/code/conversions.s">conversions.s</a>
 and
 <a href="https://raw.githubusercontent.com/rswinkle/mips_book/master/code/calc_pi.s">calc_pi.s</a>
-for you to study.
-:source-highlighter: pygments</p>
+for you to study.</p>
 </div>
 </div>
 </div>
@@ -5451,9 +5446,14 @@ the same thing here.</p>
 <a href="https://raw.githubusercontent.com/rswinkle/mips_book/master/code/args_bare.s">args_bare.s</a>
 which is just
 <a href="https://raw.githubusercontent.com/rswinkle/mips_book/master/code/args.s">args.s</a>
-in bare mode for a complete example.
-== References and Useful Links</p>
+in bare mode for a complete example.</p>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_references_and_useful_links">References and Useful Links</h2>
+<div class="sectionbody">
 <div class="ulist">
 <ul>
 <li>
@@ -5472,7 +5472,6 @@ in bare mode for a complete example.
 <p><a href="https://chortle.ccsu.edu/AssemblyTutorial/index.html">CCSU MIPS Reference</a></p>
 </li>
 </ul>
-</div>
 </div>
 </div>
 </div>
@@ -5498,7 +5497,7 @@ in bare mode for a complete example.
 <a href="#_footnoteref_6">6</a>. <a href="https://en.wikipedia.org/wiki/De_Morgan%27s_laws" class="bare">https://en.wikipedia.org/wiki/De_Morgan%27s_laws</a>
 </div>
 <div class="footnote" id="_footnotedef_7">
-<a href="#_footnoteref_7">7</a>. I do not agree with an ironclad "one return" policy in higher level languages.  Sometime returning early results in cleaner code, sometimes not.  Similarly, `goto` is not evil and there are rare cases where using it creates the best code.
+<a href="#_footnoteref_7">7</a>. I do not agree with an ironclad "one return" policy in higher level languages.  Sometimes returning early results in cleaner code, sometimes not.  Similarly, `goto` is not evil and there are rare cases where using it creates the best code.
 </div>
 <div class="footnote" id="_footnotedef_8">
 <a href="#_footnoteref_8">8</a>. Obviously the zero register is not really a variable.  I never understood how people could say "const variable" with a straight face, it&#8217;s literally an oxymoron.
@@ -5515,8 +5514,8 @@ in bare mode for a complete example.
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 0.9.6<br>
-Last updated 2021-08-21 19:08:31 -0700
+Version 0.9.7<br>
+Last updated 2021-12-28 13:52:39 -0700
 </div>
 </div>
 </body>

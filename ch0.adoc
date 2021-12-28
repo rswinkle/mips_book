@@ -1,5 +1,3 @@
-:source-highlighter: pygments
-
 :mars_slow: footnote:[Starting up the MARS GUI (an old Java app) is often annoyingly slow]
 :mars_versions: footnote:[Some schools/professors have their own versions with extra features and other improvements over the old version available on the MARS website]
 :mars_commandline: footnote:[https://courses.missouristate.edu/KenVollmar/mars/Help/MarsHelpCommand.html]

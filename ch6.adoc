@@ -1,5 +1,3 @@
-:source-highlighter: pygments
-
 :zero_reg: footnote:[Obviously the zero register is not really a variable.  I never understood how people could say "const variable" with a straight face, it's literally an oxymoron.]
 
 == Chapter 6: Floating Point Types

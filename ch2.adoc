@@ -1,5 +1,3 @@
-:source-highlighter: pygments
-
 :mars_syscalls: footnote:[https://courses.missouristate.edu/KenVollmar/mars/Help/SyscallHelp.html]
 
 == Chapter 2: System Calls

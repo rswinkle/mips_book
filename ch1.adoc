@@ -1,4 +1,3 @@
-:source-highlighter: pygments
 
 == Chapter 1: Data
 
