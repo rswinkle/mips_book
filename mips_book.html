@@ -521,8 +521,8 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <div class="details">
 <span id="author" class="author">Robert Winkler</span><br>
 <span id="email" class="email"><a href="mailto:mips@robertwinkler.com">mips@robertwinkler.com</a></span><br>
-<span id="revnumber">version 0.9.7,</span>
-<span id="revdate">2021-09-28</span>
+<span id="revnumber">version 0.9.8,</span>
+<span id="revdate">2022-01-08</span>
 <br><span id="revremark">Beta</span>
 </div>
 <div id="toc" class="toc">
@@ -599,7 +599,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <h2 id="_info">Info</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Copyright &#169; 2021 <a href="http://robertwinkler.com">Robert Winkler</a></p>
+<p>Copyright &#169; 2021-2022 <a href="http://robertwinkler.com">Robert Winkler</a></p>
 </div>
 <div class="paragraph">
 <p>Licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons</a>.</p>
@@ -4268,7 +4268,7 @@ it, even less than I would in a higher level language.</p>
 <p><strong>Put the <code>.data</code> section at the top, similar to declaring globals in C.</strong></p>
 <div class="paragraph">
 <p>There are exceptions for this.  When dealing with a larger program with lots
-of strings, it can be convienent to have multiple <code>.data</code> sections with the
+of strings, it can be convenient to have multiple <code>.data</code> sections with the
 strings you&#8217;re using declared close to where you use them.  The downside is
 you have to keep swapping back and forth between <code>.text</code> and <code>.data</code>.</p>
 </div>
@@ -5200,6 +5200,14 @@ slt   $t2, $t0, $t1
 bne   $t2, $0, label</pre>
 </div>
 </div>
+<div class="literalblock">
+<div class="content">
+<pre># or if you're counting up and
+# you know they'll be equal,
+# you can simplify to
+bne   $t0, $t1, label</pre>
+</div>
+</div>
 <hr></div></td>
 </tr>
 <tr>
@@ -5227,9 +5235,19 @@ bne   $t2, $0, label</pre>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="literalblock">
 <div class="content">
-<pre># add 1 to change &lt;= to &lt;
-addi   $t1, $t1, 1
+<pre># test for &lt; and = separately
 slt    $t2, $t0, $t1
+bne    $t2, $0, label
+beq    $t0, $t1, label</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre># or add 1 to change &lt;= to &lt;
+# use a spare reg if you need
+# to preserve the original value
+addi   $t3, $t1, 1
+slt    $t2, $t0, $t3
 bne    $t2, $0, label</pre>
 </div>
 </div>
@@ -5256,7 +5274,7 @@ beq  $t2, $0, label</pre>
 </table>
 <div class="paragraph">
 <p>You can see how you use the non-pseudoinstructions to match the same behavior, and
-there&#8217;s often (usually) more than one way.  Of all of them, the <code>ble</code> and <code>bge</code> are
+there&#8217;s often (usually) more than one way.  Of all of them, <code>ble</code> is
 the worst, because what was 1 instruction becomes 3, and you&#8217;ll sometimes need an
 extra register to hold the "plus 1" value if you still need the original.</p>
 </div>
@@ -5514,8 +5532,8 @@ in bare mode for a complete example.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 0.9.7<br>
-Last updated 2021-12-28 13:52:39 -0700
+Version 0.9.8<br>
+Last updated 2022-01-08 13:07:18 -0700
 </div>
 </div>
 </body>

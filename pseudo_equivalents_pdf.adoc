@@ -44,6 +44,11 @@
  slt   $t2, $t0, $t1
  bne   $t2, $0, label
 
+ # or if you're counting up and
+ # you know they'll be equal,
+ # you can simplify to
+ bne   $t0, $t1, label
+
 | Branch Greater Than |
 
  bgt  $t0, $t1, label |
@@ -56,9 +61,16 @@
 
  ble  $t0, $t1, label |
 
- # add 1 to change <= to <
- addi   $t1, $t1, 1
+ # test for < and = separately
  slt    $t2, $t0, $t1
+ bne    $t2, $0, label
+ beq    $t0, $t1, label
+
+ # or add 1 to change <= to <
+ # use a spare reg if you need
+ # to preserve the original value
+ addi   $t3, $t1, 1
+ slt    $t2, $t0, $t3
  bne    $t2, $0, label
 
 | Branch Greater Than or Equal |

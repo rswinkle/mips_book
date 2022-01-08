@@ -50,7 +50,7 @@ it, even less than I would in a higher level language.
 . *Put the `.data` section at the top, similar to declaring globals in C.*
 +
 There are exceptions for this.  When dealing with a larger program with lots
-of strings, it can be convienent to have multiple `.data` sections with the
+of strings, it can be convenient to have multiple `.data` sections with the
 strings you're using declared close to where you use them.  The downside is
 you have to keep swapping back and forth between `.text` and `.data`.
 
@@ -477,7 +477,7 @@ include::pseudo_equivalents_pdf.adoc[]
 endif::[]
 
 You can see how you use the non-pseudoinstructions to match the same behavior, and
-there's often (usually) more than one way.  Of all of them, the `ble` and `bge` are
+there's often (usually) more than one way.  Of all of them, `ble` is
 the worst, because what was 1 instruction becomes 3, and you'll sometimes need an
 extra register to hold the "plus 1" value if you still need the original.
 
