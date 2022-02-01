@@ -521,7 +521,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <div class="details">
 <span id="author" class="author">Robert Winkler</span><br>
 <span id="email" class="email"><a href="mailto:mips@robertwinkler.com">mips@robertwinkler.com</a></span><br>
-<span id="revnumber">version 0.9.9,</span>
+<span id="revnumber">version 0.9.10,</span>
 <span id="revdate">2022-02-01</span>
 <br><span id="revremark">Beta</span>
 </div>
@@ -4305,9 +4305,11 @@ it worth reproducing here.</p>
 precision or d for double precision.</p>
 </div>
 <div class="paragraph">
-<p>The <em>y</em> in the Compare instructions are one of eq, ne, lt, le, gt, ge.  Since
-only eq, lt, and le are on the greensheet it&#8217;s safe to assume the other 3 are
-pseudoinstructions.  Naturally <em>op</em> would be the matching ==, !=, &lt;, &#8656;, &gt;, or &gt;=.</p>
+<p>The <em>y</em> in the Compare instructions are one of eq, lt, le.
+Naturally <em>op</em> would be the matching ==, &lt;, &#8656;.  Unfortunately, you don&#8217;t
+get not equal, greater than, or greater equal, even as pseudoinstructions,
+but it&#8217;s easy enough to flip the order of operands or branch on the
+opposite result.</p>
 </div>
 </div>
 <div class="sect2">
@@ -5970,8 +5972,8 @@ which case it continues counting up from there).</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 0.9.9<br>
-Last updated 2022-02-01 11:00:24 -0700
+Version 0.9.10<br>
+Last updated 2022-02-01 11:14:30 -0700
 </div>
 </div>
 </body>

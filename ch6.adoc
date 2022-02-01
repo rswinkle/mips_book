@@ -109,9 +109,11 @@ M[R[rs]+n+4] = F[ft+1]
 With all of the opcodes that end in ._x_, the x is either s for single
 precision or d for double precision.
 
-The _y_ in the Compare instructions are one of eq, ne, lt, le, gt, ge.  Since
-only eq, lt, and le are on the greensheet it's safe to assume the other 3 are
-pseudoinstructions.  Naturally _op_ would be the matching ==, !=, <, <=, >, or >=.
+The _y_ in the Compare instructions are one of eq, lt, le.
+Naturally _op_ would be the matching ==, <, <=.  Unfortunately, you don't
+get not equal, greater than, or greater equal, even as pseudoinstructions,
+but it's easy enough to flip the order of operands or branch on the
+opposite result.
 
 
 === Practice
