@@ -521,8 +521,8 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <div class="details">
 <span id="author" class="author">Robert Winkler</span><br>
 <span id="email" class="email"><a href="mailto:mips@robertwinkler.com">mips@robertwinkler.com</a></span><br>
-<span id="revnumber">version 0.9.8,</span>
-<span id="revdate">2022-01-08</span>
+<span id="revnumber">version 0.9.9,</span>
+<span id="revdate">2022-02-01</span>
 <br><span id="revremark">Beta</span>
 </div>
 <div id="toc" class="toc">
@@ -537,28 +537,33 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_hello_world">Hello World</a></li>
 <li><a href="#_building_and_running">Building and Running</a></li>
 <li><a href="#_conclusion">Conclusion</a></li>
+<li><a href="#_exercises">Exercises</a></li>
 </ul>
 </li>
 <li><a href="#_chapter_1_data">Chapter 1: Data</a>
 <ul class="sectlevel2">
 <li><a href="#_arrays">Arrays</a></li>
+<li><a href="#_exercises_2">Exercises</a></li>
 </ul>
 </li>
 <li><a href="#_chapter_2_system_calls">Chapter 2: System Calls</a>
 <ul class="sectlevel2">
 <li><a href="#_examples">Examples</a></li>
+<li><a href="#_exercises_3">Exercises</a></li>
 </ul>
 </li>
 <li><a href="#_chapter_3_branches_and_logic">Chapter 3: Branches and Logic</a>
 <ul class="sectlevel2">
 <li><a href="#_practice">Practice</a></li>
 <li><a href="#_conclusion_2">Conclusion</a></li>
+<li><a href="#_exercises_4">Exercises</a></li>
 </ul>
 </li>
 <li><a href="#_chapter_4_loops">Chapter 4: Loops</a>
 <ul class="sectlevel2">
 <li><a href="#_looping_through_arrays">Looping Through Arrays</a></li>
 <li><a href="#_conclusion_3">Conclusion</a></li>
+<li><a href="#_exercises_5">Exercises</a></li>
 </ul>
 </li>
 <li><a href="#_chapter_5_functions_and_the_mips_calling_convention">Chapter 5: Functions and the MIPS Calling Convention</a>
@@ -566,6 +571,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_functions">Functions</a></li>
 <li><a href="#_the_convention">The Convention</a></li>
 <li><a href="#_conclusion_4">Conclusion</a></li>
+<li><a href="#_exercises_6">Exercises</a></li>
 </ul>
 </li>
 <li><a href="#_chapter_6_floating_point_types">Chapter 6: Floating Point Types</a>
@@ -576,6 +582,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_branching">Branching</a></li>
 <li><a href="#_functions_2">Functions</a></li>
 <li><a href="#_conclusion_5">Conclusion</a></li>
+<li><a href="#_exercises_7">Exercises</a></li>
 </ul>
 </li>
 <li><a href="#_chapter_7_tips_and_tricks">Chapter 7: Tips and Tricks</a>
@@ -588,6 +595,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <li><a href="#_command_line_arguments">Command Line Arguments</a></li>
 <li><a href="#_delayed_branches_and_delayed_loads">Delayed Branches and Delayed Loads</a></li>
 <li><a href="#_no_pseudoinstructions_allowed">No Pseudoinstructions Allowed</a></li>
+<li><a href="#_exercises_8">Exercises</a></li>
 </ul>
 </li>
 <li><a href="#_references_and_useful_links">References and Useful Links</a></li>
@@ -933,6 +941,19 @@ few chapters and you will have no trouble with almost anything you would want
 to do in MIPS, whether for a class, or on your own for fun.</p>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_exercises">Exercises</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Modify the hello world program to print something different, perhaps your name.</p>
+</li>
+<li>
+<p>Run it with both SPIM and MARS.</p>
+</li>
+</ol>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -1139,6 +1160,50 @@ c:        .word 9,8,7,6,5,4,3,2,1,0
 d:        .byte &#39;a&#39;, &#39;b&#39;, &#39;c&#39;
 </pre></td></tr></table></code></pre>
 </div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_exercises_2">Exercises</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Create a MIPS data section that declares variables equivalent to the following.  This will not be a runnable program without a main.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="c"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span></pre></div></td><td class="code"><pre><span></span>	<span class="tok-kt">float</span> <span class="tok-n">a</span><span class="tok-p">;</span>
+	<span class="tok-kt">float</span> <span class="tok-n">b</span> <span class="tok-o">=</span> <span class="tok-mf">2.71</span><span class="tok-p">;</span>
+	<span class="tok-kt">int</span> <span class="tok-n">myarray</span><span class="tok-p">[</span><span class="tok-mi">10</span><span class="tok-p">]</span> <span class="tok-o">=</span> <span class="tok-p">{</span> <span class="tok-mi">9</span><span class="tok-p">,</span> <span class="tok-mi">8</span><span class="tok-p">,</span> <span class="tok-mi">7</span><span class="tok-p">,</span> <span class="tok-mi">6</span><span class="tok-p">,</span> <span class="tok-mi">5</span><span class="tok-p">,</span> <span class="tok-mi">4</span><span class="tok-p">,</span> <span class="tok-mi">3</span><span class="tok-p">,</span> <span class="tok-mi">2</span><span class="tok-p">,</span> <span class="tok-mi">1</span> <span class="tok-p">};</span>
+	<span class="tok-kt">short</span> <span class="tok-n">array2</span><span class="tok-p">[</span><span class="tok-mi">10</span><span class="tok-p">];</span>
+
+	<span class="tok-kt">char</span> <span class="tok-n">mips_str</span><span class="tok-p">[]</span> <span class="tok-o">=</span> <span class="tok-s">&quot;MIPS assembly is awesome!&quot;</span><span class="tok-p">;</span>
+</pre></td></tr></table></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>How would you declare an array of 500 points?  The point structure is tightly
+packed and defined like this:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="c"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span></pre></div></td><td class="code"><pre><span></span><span class="tok-k">struct</span> <span class="tok-nc">point</span> <span class="tok-p">{</span>
+	<span class="tok-kt">float</span> <span class="tok-n">x</span><span class="tok-p">;</span>
+	<span class="tok-kt">float</span> <span class="tok-n">y</span><span class="tok-p">;</span>
+	<span class="tok-kt">float</span> <span class="tok-n">z</span><span class="tok-p">;</span>
+<span class="tok-p">};</span>
+</pre></td></tr></table></code></pre>
+</div>
+</div>
+</li>
+</ol>
 </div>
 </div>
 </div>
@@ -1538,6 +1603,64 @@ you can assume it is unmodified.</p>
 <div class="paragraph">
 <p>Lastly, many people will declare a string <code>"\n"</code> and use print string to print a newline,
 but it&#8217;s easier to just use the print char syscall as we do just before exiting.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_exercises_3">Exercises</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Convert the following C code to MIPS</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="c"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span></pre></div></td><td class="code"><pre><span></span><span class="tok-cp">#include</span> <span class="tok-cpf">&lt;stdio.h&gt;</span><span class="tok-cp"></span>
+
+<span class="tok-kt">int</span> <span class="tok-nf">main</span><span class="tok-p">()</span>
+<span class="tok-p">{</span>
+	<span class="tok-kt">float</span> <span class="tok-n">price</span><span class="tok-p">;</span>
+	<span class="tok-kt">double</span> <span class="tok-n">golden</span> <span class="tok-o">=</span> <span class="tok-mf">1.618</span><span class="tok-p">;</span>
+	<span class="tok-kt">int</span> <span class="tok-n">ret</span><span class="tok-p">;</span>
+
+	<span class="tok-n">printf</span><span class="tok-p">(</span><span class="tok-s">&quot;Enter what the price of gas was last time you filled up: &quot;</span><span class="tok-p">);</span>
+	<span class="tok-n">scanf</span><span class="tok-p">(</span><span class="tok-s">&quot;%f&quot;</span><span class="tok-p">,</span> <span class="tok-o">&amp;</span><span class="tok-n">price</span><span class="tok-p">);</span>
+
+	<span class="tok-n">printf</span><span class="tok-p">(</span><span class="tok-s">&quot;%f is too expensive!</span><span class="tok-se">\n</span><span class="tok-s">&quot;</span><span class="tok-p">,</span> <span class="tok-n">price</span><span class="tok-p">);</span>
+
+	<span class="tok-n">printf</span><span class="tok-p">(</span><span class="tok-s">&quot;The golden ratio is roughly %f</span><span class="tok-se">\n</span><span class="tok-s">&quot;</span><span class="tok-p">,</span> <span class="tok-n">golden</span><span class="tok-p">);</span>
+
+
+	<span class="tok-n">printf</span><span class="tok-p">(</span><span class="tok-s">&quot;Enter an integer for the program to return: &quot;</span>
+	<span class="tok-n">scanf</span><span class="tok-p">(</span><span class="tok-s">&quot;%d&quot;</span><span class="tok-p">,</span> <span class="tok-o">&amp;</span><span class="tok-n">ret</span><span class="tok-p">);</span>
+	<span class="tok-k">return</span> <span class="tok-n">ret</span><span class="tok-p">;</span>
+<span class="tok-p">}</span>
+</pre></td></tr></table></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Write a program that asks the user for their name, reads it in, and then
+prints "Hello [user&#8217;s name]!"</p>
+</li>
+</ol>
 </div>
 </div>
 </div>
@@ -2449,6 +2572,61 @@ left with <code>beq</code>, <code>bne</code>, <code>j</code> and the <code>slt</
 using pseudoinstructions in a later chapter.</p>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_exercises_4">Exercises</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Convert the following C code to MIPS.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="c"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span></pre></div></td><td class="code"><pre><span></span><span class="tok-cp">#include</span> <span class="tok-cpf">&lt;stdio.h&gt;</span><span class="tok-cp"></span>
+
+<span class="tok-kt">int</span> <span class="tok-nf">main</span><span class="tok-p">()</span>
+<span class="tok-p">{</span>
+	<span class="tok-kt">int</span> <span class="tok-n">num</span><span class="tok-p">;</span>
+	<span class="tok-n">printf</span><span class="tok-p">(</span><span class="tok-s">&quot;Enter an integer: &quot;</span><span class="tok-p">);</span>
+	<span class="tok-n">scanf</span><span class="tok-p">(</span><span class="tok-s">&quot;%d&quot;</span><span class="tok-p">,</span> <span class="tok-o">&amp;</span><span class="tok-n">num</span><span class="tok-p">);</span>
+
+	<span class="tok-k">if</span> <span class="tok-p">(</span><span class="tok-n">num</span> <span class="tok-o">&gt;</span> <span class="tok-mi">50</span><span class="tok-p">)</span> <span class="tok-p">{</span>
+		<span class="tok-n">puts</span><span class="tok-p">(</span><span class="tok-s">&quot;The number is greater than 50&quot;</span><span class="tok-p">);</span>
+	<span class="tok-p">}</span> <span class="tok-k">else</span> <span class="tok-k">if</span> <span class="tok-p">(</span><span class="tok-n">num</span> <span class="tok-o">&lt;</span> <span class="tok-mi">50</span><span class="tok-p">)</span> <span class="tok-p">{</span>
+		<span class="tok-n">puts</span><span class="tok-p">(</span><span class="tok-s">&quot;The number is less than 50&quot;</span><span class="tok-p">);</span>
+	<span class="tok-p">}</span> <span class="tok-k">else</span> <span class="tok-p">{</span>
+		<span class="tok-n">puts</span><span class="tok-p">(</span><span class="tok-s">&quot;You entered 50!&quot;</span><span class="tok-p">);</span>
+	<span class="tok-p">}</span>
+
+	<span class="tok-k">return</span> <span class="tok-mi">0</span><span class="tok-p">;</span>
+<span class="tok-p">}</span>
+</pre></td></tr></table></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Prompt for the user&#8217;s name, then tell them whether their name starts with
+a letter from the first or second half of the alphabet. Be sure to handle both
+upper and lower case correctly, but assume they entered a valid letter.</p>
+</li>
+</ol>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -3083,6 +3261,86 @@ MIPS and how to transform various loops and array accesses into the form
 that makes your life the easiest.  There is more we could cover here, like
 looping through a linked list, but I think that&#8217;s beyond the scope of what we&#8217;ve
 covered so far.  Perhaps in a later chapter.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_exercises_5">Exercises</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Convert the following C code to MIPS.  If using SPIM, you can just hard code
+a "random" number between 0 and 100.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="c"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span></pre></div></td><td class="code"><pre><span></span><span class="tok-cp">#include</span> <span class="tok-cpf">&lt;stdio.h&gt;</span><span class="tok-cp"></span>
+<span class="tok-cp">#include</span> <span class="tok-cpf">&lt;stdlib.h&gt;</span><span class="tok-cp"></span>
+
+<span class="tok-kt">int</span> <span class="tok-nf">main</span><span class="tok-p">()</span>
+<span class="tok-p">{</span>
+	<span class="tok-kt">int</span> <span class="tok-n">num</span> <span class="tok-o">=</span> <span class="tok-n">rand</span><span class="tok-p">()</span> <span class="tok-o">%</span> <span class="tok-mi">101</span>
+	<span class="tok-kt">int</span> <span class="tok-n">guess</span><span class="tok-p">;</span>
+	<span class="tok-n">puts</span><span class="tok-p">(</span><span class="tok-s">&quot;I&#39;m thinking of a number 0-100.  Try to guess it!&quot;</span><span class="tok-p">);</span>
+	<span class="tok-k">while</span> <span class="tok-p">(</span><span class="tok-mi">1</span><span class="tok-p">)</span> <span class="tok-p">{</span>
+		<span class="tok-n">printf</span><span class="tok-p">(</span><span class="tok-s">&quot;Guess a number: &quot;</span><span class="tok-p">);</span>
+		<span class="tok-n">scanf</span><span class="tok-p">(</span><span class="tok-s">&quot;%d&quot;</span><span class="tok-p">,</span> <span class="tok-o">&amp;</span><span class="tok-n">guess</span><span class="tok-p">);</span>
+
+		<span class="tok-k">if</span> <span class="tok-p">(</span><span class="tok-n">guess</span> <span class="tok-o">&gt;</span> <span class="tok-n">num</span><span class="tok-p">)</span> <span class="tok-p">{</span>
+			<span class="tok-n">puts</span><span class="tok-p">(</span><span class="tok-s">&quot;Too high!&quot;</span><span class="tok-p">);</span>
+		<span class="tok-p">}</span> <span class="tok-k">else</span> <span class="tok-k">if</span> <span class="tok-p">(</span><span class="tok-n">guess</span> <span class="tok-o">&lt;</span> <span class="tok-n">num</span><span class="tok-p">)</span> <span class="tok-p">{</span>
+			<span class="tok-n">puts</span><span class="tok-p">(</span><span class="tok-s">&quot;Too low!&quot;</span><span class="tok-p">);</span>
+		<span class="tok-p">}</span> <span class="tok-k">else</span> <span class="tok-p">{</span>
+			<span class="tok-k">break</span><span class="tok-p">;</span>
+		<span class="tok-p">}</span>
+	<span class="tok-p">}</span>
+
+	<span class="tok-n">printf</span><span class="tok-p">(</span><span class="tok-s">&quot;Correct, it was %d!</span><span class="tok-se">\n</span><span class="tok-s">&quot;</span><span class="tok-p">,</span> <span class="tok-n">num</span><span class="tok-p">);</span>
+
+	<span class="tok-k">return</span> <span class="tok-mi">0</span><span class="tok-p">;</span>
+<span class="tok-p">}</span>
+</pre></td></tr></table></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Write a MIPS program to find and print the average of the following array.
+Just use integer division.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="mips"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
+<span class="normal">2</span></pre></div></td><td class="code"><pre><span></span>.data
+array:        .word 93,8,78,-6,51,49,3,2,128,0
+</pre></td></tr></table></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Write a program to find the min and max of the array in the previous exercise</p>
+</li>
+</ol>
 </div>
 </div>
 </div>
@@ -3758,6 +4016,65 @@ in this chapter, like how to pass more than 4 arguments, or use <code>$fp</code>
 floating point arguments or return values.</p>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_exercises_6">Exercises</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Implement the following functions in MIPS and write a program to demonstrate their use.
+You can reuse much of your code from the previous chapter&#8217;s exercises.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="c"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span></pre></div></td><td class="code"><pre><span></span><span class="tok-c1">// return the min or max</span>
+<span class="tok-kt">int</span> <span class="tok-nf">get_min</span><span class="tok-p">(</span><span class="tok-kt">int</span><span class="tok-o">*</span> <span class="tok-n">array</span><span class="tok-p">,</span> <span class="tok-kt">int</span> <span class="tok-n">size</span><span class="tok-p">);</span>
+<span class="tok-kt">int</span> <span class="tok-nf">get_max</span><span class="tok-p">(</span><span class="tok-kt">int</span><span class="tok-o">*</span> <span class="tok-n">array</span><span class="tok-p">,</span> <span class="tok-kt">int</span> <span class="tok-n">size</span><span class="tok-p">);</span>
+
+<span class="tok-c1">// return the index of the min/max</span>
+<span class="tok-kt">int</span> <span class="tok-nf">locate_min</span><span class="tok-p">(</span><span class="tok-kt">int</span><span class="tok-o">*</span> <span class="tok-n">array</span><span class="tok-p">,</span> <span class="tok-kt">int</span> <span class="tok-n">size</span><span class="tok-p">);</span>
+<span class="tok-kt">int</span> <span class="tok-nf">locate_max</span><span class="tok-p">(</span><span class="tok-kt">int</span><span class="tok-o">*</span> <span class="tok-n">array</span><span class="tok-p">,</span> <span class="tok-kt">int</span> <span class="tok-n">size</span><span class="tok-p">);</span>
+
+<span class="tok-c1">// return the average of the array</span>
+<span class="tok-kt">int</span> <span class="tok-nf">calc_average</span><span class="tok-p">(</span><span class="tok-kt">int</span><span class="tok-o">*</span> <span class="tok-n">array</span><span class="tok-p">,</span> <span class="tok-kt">int</span> <span class="tok-n">size</span><span class="tok-p">);</span>
+</pre></td></tr></table></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>The Collatz conjecture is defined as follows: start with any positive integer n,
+if n is even, divide by 2, otherwise, multiply by 3 and add 1.  The conjecture is
+that all sequences will eventually reach 1.  Write 2 versions of the collatz function,
+one iterative and one recursive.  Print out the sequence as they go.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="c"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><pre><span></span><span class="tok-kt">void</span> <span class="tok-nf">collatz_iterative</span><span class="tok-p">(</span><span class="tok-kt">int</span> <span class="tok-n">n</span><span class="tok-p">);</span>
+<span class="tok-kt">void</span> <span class="tok-nf">collatz_recursive</span><span class="tok-p">(</span><span class="tok-kt">int</span> <span class="tok-n">n</span><span class="tok-p">);</span>
+
+<span class="tok-c1">// for an added challenge return the number of steps taken to reach 1</span>
+<span class="tok-c1">// you can remove the printing of the steps</span>
+<span class="tok-kt">int</span> <span class="tok-nf">collatz_iterative2</span><span class="tok-p">(</span><span class="tok-kt">int</span> <span class="tok-n">n</span><span class="tok-p">);</span>
+<span class="tok-kt">int</span> <span class="tok-nf">collatz_recursive2</span><span class="tok-p">(</span><span class="tok-kt">int</span> <span class="tok-n">n</span><span class="tok-p">);</span>
+</pre></td></tr></table></code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -4203,6 +4520,27 @@ brief overview, combined with the knowledge of previous chapters is sufficient.<
 and
 <a href="https://raw.githubusercontent.com/rswinkle/mips_book/master/code/calc_pi.s">calc_pi.s</a>
 for you to study.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_exercises_7">Exercises</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Write a program to convert an input in minutes to hours.</p>
+</li>
+<li>
+<p>Write the following functions and use them in a program.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="c"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
+<span class="normal">2</span></pre></div></td><td class="code"><pre><span></span><span class="tok-kt">float</span> <span class="tok-nf">miles2kilometers</span><span class="tok-p">(</span><span class="tok-kt">float</span> <span class="tok-n">miles</span><span class="tok-p">);</span>
+<span class="tok-kt">float</span> <span class="tok-nf">pounds2kilograms</span><span class="tok-p">(</span><span class="tok-kt">float</span> <span class="tok-n">pounds</span><span class="tok-p">);</span>
+</pre></td></tr></table></code></pre>
+</div>
+</div>
+</li>
+</ol>
 </div>
 </div>
 </div>
@@ -5467,6 +5805,106 @@ which is just
 in bare mode for a complete example.</p>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_exercises_8">Exercises</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Convert the exercises from chapter 5 to run in <code>spim -bare</code> mode and/or
+in MARS with delayed branches and no pseudoinstructions (<code>java -jar ~/Mars_4.5.jar db np file.s</code> on the command line).</p>
+</li>
+<li>
+<p>Convert the following C code to MIPS using a jump table (Note in C/C++
+enum values start at 0 and go up by one unless the user manually assigns a value, in
+which case it continues counting up from there).</p>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="c"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span></pre></div></td><td class="code"><pre><span></span><span class="tok-k">enum</span> <span class="tok-p">{</span> <span class="tok-n">STATE0</span><span class="tok-p">,</span> <span class="tok-n">STATE1</span><span class="tok-p">,</span> <span class="tok-n">STATE2</span><span class="tok-p">,</span> <span class="tok-n">STATE3</span><span class="tok-p">,</span> <span class="tok-n">STATE14</span> <span class="tok-o">=</span> <span class="tok-mi">14</span><span class="tok-p">,</span> <span class="tok-n">STATE42</span> <span class="tok-o">=</span> <span class="tok-mi">42</span><span class="tok-p">,</span> <span class="tok-n">STATE43</span><span class="tok-p">,</span> <span class="tok-n">STATE44</span> <span class="tok-p">};</span>
+
+
+<span class="tok-kt">int</span> <span class="tok-nf">main</span><span class="tok-p">()</span>
+<span class="tok-p">{</span>
+	<span class="tok-kt">int</span> <span class="tok-n">num</span><span class="tok-p">;</span>
+	<span class="tok-k">do</span> <span class="tok-p">{</span>
+		<span class="tok-n">printf</span><span class="tok-p">(</span><span class="tok-s">&quot;Enter a number between 0 and 50: &quot;</span><span class="tok-p">);</span>
+		<span class="tok-n">scanf</span><span class="tok-p">(</span><span class="tok-s">&quot;%d&quot;</span><span class="tok-p">,</span> <span class="tok-o">&amp;</span><span class="tok-n">num</span><span class="tok-p">);</span>
+	<span class="tok-p">}</span> <span class="tok-k">while</span> <span class="tok-p">(</span><span class="tok-n">num</span> <span class="tok-o">&lt;</span> <span class="tok-mi">0</span> <span class="tok-o">||</span> <span class="tok-n">num</span> <span class="tok-o">&gt;</span> <span class="tok-mi">50</span><span class="tok-p">);</span>
+
+	<span class="tok-k">switch</span> <span class="tok-p">(</span><span class="tok-n">num</span><span class="tok-p">)</span> <span class="tok-p">{</span>
+	<span class="tok-k">case</span> <span class="tok-nl">STATE0</span><span class="tok-p">:</span>
+		<span class="tok-n">puts</span><span class="tok-p">(</span><span class="tok-s">&quot;Zilch&quot;</span><span class="tok-p">);</span>
+		<span class="tok-k">break</span><span class="tok-p">;</span>
+	<span class="tok-k">case</span> <span class="tok-nl">STATE1</span><span class="tok-p">:</span>
+		<span class="tok-n">puts</span><span class="tok-p">(</span><span class="tok-s">&quot;Uno&quot;</span><span class="tok-p">);</span>
+		<span class="tok-k">break</span><span class="tok-p">;</span>
+	<span class="tok-k">case</span> <span class="tok-nl">STATE2</span><span class="tok-p">:</span>
+		<span class="tok-n">puts</span><span class="tok-p">(</span><span class="tok-s">&quot;Dos&quot;</span><span class="tok-p">);</span>
+		<span class="tok-k">break</span><span class="tok-p">;</span>
+	<span class="tok-k">case</span> <span class="tok-nl">STATE3</span><span class="tok-p">:</span>
+		<span class="tok-n">puts</span><span class="tok-p">(</span><span class="tok-s">&quot;Tres&quot;</span><span class="tok-p">);</span>
+		<span class="tok-k">break</span><span class="tok-p">;</span>
+	<span class="tok-k">case</span> <span class="tok-nl">STATE14</span><span class="tok-p">:</span>
+		<span class="tok-n">puts</span><span class="tok-p">(</span><span class="tok-s">&quot;Catorce&quot;</span><span class="tok-p">);</span>
+	<span class="tok-k">case</span> <span class="tok-nl">STATE42</span><span class="tok-p">:</span>
+		<span class="tok-n">puts</span><span class="tok-p">(</span><span class="tok-s">&quot;The answer to life, the universe, and everything.&quot;</span><span class="tok-p">);</span>
+	<span class="tok-k">case</span> <span class="tok-nl">STATE43</span><span class="tok-p">:</span>
+		<span class="tok-n">puts</span><span class="tok-p">(</span><span class="tok-s">&quot;Off by one&quot;</span><span class="tok-p">);</span>
+	<span class="tok-k">case</span> <span class="tok-nl">STATE44</span><span class="tok-p">:</span>
+		<span class="tok-n">puts</span><span class="tok-p">(</span><span class="tok-s">&quot;4 * 11?&quot;</span><span class="tok-p">);</span>
+		<span class="tok-k">break</span><span class="tok-p">;</span>
+	<span class="tok-p">}</span>
+
+	<span class="tok-n">puts</span><span class="tok-p">(</span><span class="tok-s">&quot;Thanks for playing!&quot;</span><span class="tok-p">);</span>
+
+
+	<span class="tok-k">return</span> <span class="tok-mi">0</span><span class="tok-p">;</span>
+<span class="tok-p">}</span>
+</pre></td></tr></table></code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -5532,8 +5970,8 @@ in bare mode for a complete example.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 0.9.8<br>
-Last updated 2022-01-08 13:07:18 -0700
+Version 0.9.9<br>
+Last updated 2022-02-01 11:00:24 -0700
 </div>
 </div>
 </body>

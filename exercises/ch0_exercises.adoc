@@ -1,0 +1,7 @@
+
+=== Exercises
+
+. Modify the hello world program to print something different, perhaps your name.
+
+. Run it with both SPIM and MARS.
+
