@@ -5,12 +5,12 @@
 We mentioned system calls (aka syscalls from now on) in chapter 0 when we were
 going over our "Hello World" program, but what exactly are they?
 
-Essentially, they are the built in functions of a operating system, in this case,
+Essentially, they are the built in functions of a operating system; in this case,
 the simple operating system of the MIPS simulators.  They provide access to all the
 fundamental features, like input and output to/from both the console and files,
 allocating memory, and exiting.  That covers all the 17 syscalls supported by spim,
-but MARS supports many more, for things from playing MIDI sounds, to getting a random
-number, to creating GUI dialogs.{mars_syscalls}
+but MARS supports many more, for things ranging from playing MIDI sounds, to getting
+a random number, to creating GUI dialogs.{mars_syscalls}
 
 NOTE: Except for the MARS or SPIM specific chapters/sections, I'll be sticking to code
 compatible with both throughout this book, meaning we only use the first 17 syscalls,
@@ -65,15 +65,18 @@ $a2 = number of characters to write | $v0 = number of characters written, negati
 
 |===
 
-As you can see, it's just the basics.  You can read or write the different types,
-do file I/O using calls identical to POSIX functions (open, read, write, close;
-see man pages), allocate memory, and exit.  Even so, they're sufficient to build
-anything you want.
+As you can see, they really only cover the basics.  You can read or write the
+different types, do file I/O using calls identical to POSIX functions
+(open, read, write, close; see man pages), allocate memory, and exit.
+Even so, they're sufficient to build anything you want.
 
 So, what does that table mean?  How do these actually work?
 
-The process is, put the number for the syscall you want in $v0, fill in the appropriate
-arguments, if any, and then do the syscall:
+The process is:
+
+. Put the number for the syscall you want in `$v0`
+. Fill in the appropriate arguments, if any
+. Execute the syscall with `syscall`
 
 [source,mips,linenums]
 ----
@@ -188,20 +191,20 @@ main:
 There a few things to note from the example.
 
 We don't declare global variables for age or height.  We could, but there's no reason
-to since we have to have them in registers to do the addition anyway.  So we just
-copy/save height to $t0 so we can use $v0 for overwrite $v0 for 2 more syscalls,
-then add age to t0.
+to since we have to have them in registers to do the addition anyway.  Instead, we
+copy/save height to `$t0` so we can use `$v0`  for 2 more syscalls,
+then add age to `$t0`.
 
 This is generally how it works.  Use registers for local variables unless
 required to do otherwise.  We'll cover more about register use when we
 cover the MIPS calling convention.
 
-Another thing is when we print their name, we don't put 4 in $v0 again because it
+Another thing is when we print their name, we don't put 4 in `$v0` again because it
 is still/already 4 from the lines above.  Unless the syscall says it writes to $v0
 you can assume it is unmodified.
 
 Lastly, many people will declare a string `"\n"` and use print string to print a newline,
-but it's easier to just use the print char syscall as we do just before exiting.
+but it's easier to use the print char syscall as we do right before exiting.
 
 
 
