@@ -4,9 +4,9 @@
 == Chapter 3: Branches and Logic
 
 We can't go much farther in our MIPS programming journey without covering branching.
-Almost every non-trivial program requires some logic, even if it's just a few if or
+Almost every non-trivial program requires some logic, even if it's only a few if or
 if-else statements.  In other words, almost every program requires branching, a way
-to do code a instead of code b, or to do code a only if certain conditions are met.
+to do a instead of b, or to do a only if certain conditions are met.
 
 You already know how to do this in higher level languages, the aforementioned if
 statement.  In assembly it's more complicated.  Your only tool is the ability
@@ -45,7 +45,7 @@ You can see the same information and more (like which ones are pseudoinstruction
 on the MIPS greensheet.{greensheet}
 
 There are additional pseudoinstructions in the form of beq/bne/blt/bgt/ble/bge + 'z' which
-are just shortcuts to compare a register against 0, ie the 0 register.
+are syntactic sugar to compare a register against 0, ie the 0 register.
 
 So the following:
 ----
@@ -60,12 +60,12 @@ would be equivalent to:
 	bltz    $t2, label
 ----
 
-Note `$0` is the same as `zero` and is just the hard coded 0 register.  I'll cover
+Note `$0` is the same as `zero` and is the hard coded 0 register.  I'll cover
 registers in more detail in the chapter on functions and the calling conventions.
 
 One final thing is that labels have the same naming requirements as C variables and
 functions.  They must start with a letter or underscore and the rest can be letters,
-underscores, and digits.
+underscores, or digits.
 
 === Practice
 
@@ -145,13 +145,12 @@ be supported everywhere but is not on the green sheet) would take 2:
 	mul   $t0, $t0, $t1   # a *= 2
 ----
 
-Given that, when multiplying or dividing by a power of 2 it's common practice,
-and just common sense, to use `sll` or `sra`.  This is true in all assembly
-languages because multiplication (and division) is a relatively costly operation
-so using shifts when you can saves performance even if you didn't actually save
-instructions.
+Given that, when multiplying or dividing by a power of 2 it's common practice
+to use `sll` or `sra`.  This is true in all assembly languages because
+multiplication and division are relatively costly operations so using shifts
+when you can saves performance even if you didn't actually save instructions.
 
-Ok, let's look at an if-else example.  Again the actual code is arbitrary and
+Ok, let's look at an if-else example.  Again, the actual code is arbitrary and
 we're assuming a and b are in `$t0` and `$t1` respectively
 
 [source,c,linenums]
@@ -176,7 +175,7 @@ less_eq_0:
 
 	# or
 
-	ble    $t0, $0, less_eq0     $ if (a <= 0) goto less_eq_0
+	ble    $t0, $0, less_eq0    # if (a <= 0) goto less_eq_0
 	li     $t1, 100             # b = 100
 	j      greater_0
 less_eq_0:
@@ -191,7 +190,7 @@ order.  In both cases, an extra unconditional branch and label is necessary
 so we don't fall through the else case.  This is inefficient and wasteful,
 not to mention complicates the code unecessarily.  Remember how our job
 is to match the behavior, not the exact structure?  Imagine how we could
-rewrite it in C to simplify it:
+rewrite it in C to simplify the logic:
 
 [source,c,linenums]
 ----
@@ -211,12 +210,12 @@ which becomes
 less_eq_0:
 ----
 
-That is just one simple example of rearranging code to make your life easier.
+That is a simple example of rearranging code to make your life easier.
 In this case, we are taking advantage of what the code is doing to make a
 default path or default case.  Obviously, because of the nature of the code
-subtracting 50 has to be the default because just setting b to 100 loses
-the original value in case we were supposed to subtract 50 instead.  In cases
-where you can't avoid destructive changes (like where the condition and the
+subtracting 50 has to be the default since setting b to 100 overwrites
+the original value which we'd need if we were supposed to subtract 50 instead.
+In cases where you can't avoid destructive changes (like where the condition and the
 code are using/modifying the same variable), you can use a temporary variable;
 i.e. copy the value into a spare register.  You still save yourself an unecessary
 jump and label.
@@ -238,7 +237,7 @@ Let's look at *and* first.  Variables a, b, and c are in t0, t1, and t2.
 	b &= 0xFF;
 ----
 
-So what's our first step?  Well, just like previous examples we need to test
+So what's our first step?  Like previous examples, we need to test
 for the opposite when we switch to assembly, so we need the equivalent of
 
 [source,c,linenums]
@@ -250,8 +249,8 @@ no_add20:
 	b &= 0xFF;
 ----
 
-Well, that didn't help us much, we still don't know how to handle that compound
-condition.  In fact we've just made it more complicated.  If only there were
+That didn't help us much because we still don't know how to handle that compound
+condition.  In fact we've made it more complicated.  If only there were
 a way to convert it to *or* instead of *and*.  Why would we want that?  Because,
 while both *and* and *or* in C allow for short circuit evaluation (where
 the result of the whole expression is known early and the rest of expression
@@ -314,7 +313,7 @@ c_true:
 	something;
 failure:
 	
-	// Man that's ugly and overcomplicated and hard to read
+	// Man that's ugly, overcomplicated, and hard to read
 	// But what if we did this instead:
 
 	if (!a) goto dont_do_something;
@@ -356,8 +355,9 @@ so when you apply De Morgan's Law recursively you get:
 ----
 
 
-Let's apply the law to our current example.  Of course the negation of comparisons
-is just covering the rest of the number line so:
+Let's apply the law to our current compound *and* example.  Of course
+the negation of greater or less than comparisons means covering the rest
+of the number line so it becomes:
 
 [source,c,linenums]
 ----
@@ -456,7 +456,7 @@ So let's convert the better version to MIPS (a,b,c = `$t0`, `$t1`, `$t2`):
 true_str: .asciiz "true\n"
 
 .text
-	li    $t8, 10   # just get the necessary literals in some unused regs
+	li    $t8, 10   # get the necessary literals in some unused regs
 	li    $t9, 100
 
 	bgt   $t0, $t8, do_true   # if (a > 10) goto do_true
@@ -476,7 +476,7 @@ done_if:
 
 ==== If-Else Chain
 
-Ok, let's look at a larger example.  Let's say you're trying to determine
+Ok, let's look at a larger example.  Say you're trying to determine
 a student's letter grade based on their score.  We're going to need a chain
 of if-else-if's to handle all cases.  Assume `score` is declared and
 set somewhere before.
@@ -557,7 +557,7 @@ code simpler and more sensible to you.
 === Conclusion
 
 Branching and logic and learning to translate from higher level code to assembly
-is something that just takes a lot of practice but eventually it'll become
+is something that takes a lot of practice, but eventually it'll become
 second nature.  We'll get more practice in the chapter on looping which naturally
 also involves branching.
 
