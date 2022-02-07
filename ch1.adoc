@@ -3,7 +3,7 @@
 
 In MIPS, you can declare global variables in the `.data` section.
 
-At a minimum this is where you would declare/define any literal strings
+At a minimum, this is where you would declare/define any literal strings
 your program will be printing, since virtually every program has
 at least 1 or 2 of those.
 
@@ -60,8 +60,8 @@ int main()
 The first thing you have to remember is that when converting from a higher level
 language to assembly (any assembly) is that what matters is whether it's functionally
 the same, not that everything is done in exactly the same way.  In this instance,
-that means realizing that your literal strings and the name array become globals in
-MIPS.
+that means realizing that your literal strings and your local variables `name`
+and `age` become globals in MIPS.
 
 [source,mips,linenums]
 ----
@@ -80,28 +80,27 @@ name:        .space 30
 
 ----
 
-As you can see in the example, we just extract all the string literals and
-the character array `name` and declare them as MIPS globals.  One thing to note
-is the second `printf`.  Because it prints a variable, `name`, using the conversion
-specifier, we break the literal into pieces around that.  Since there is no
-built-in `printf` function in MIPS, you have to handle printing variables yourself
-with the appropriate system calls.
+As you can see in the example, we extract all the string literals and
+the character array `name` and int `age` and declare them as MIPS globals.
+One thing to note is the second `printf`.  Because it prints a variable, `name`,
+using the conversion specifier, we break the literal into pieces around that.
+Since there is no built-in `printf` function in MIPS, you have to handle printing
+variables yourself with the appropriate system calls.
 
 
 === Arrays
 
-Declaring arrays is just an extension of declaring single variables.  Obviously
-strings are special cases, that can be handled with `.ascii` or `.asciiz` for literals,
-but for other types or user inputed strings how do we do it?
+Obviously strings are special cases that can be handled with `.ascii` or `.asciiz`
+for literals, but for other types or user inputed strings how do we do it?
 
-Well the first way, which was demonstrated in the snippet above is to use `.space`
-to just declare an array of the necessary byte size.  Keep in mind that the size is
+The first way, which was demonstrated in the snippet above is to use `.space`
+to declare an array of the necessary byte size.  Keep in mind that the size is
 specified in bytes not elements, so it only matches for character arrays.  For
 arrays of ints/words, floats, doubles etc. you'd have to multiply by the sizeof(type).
 
 "But, `.space` only lets you declare uninitialized arrays, how do I do initialized ones?"
 
-Well, it's just an extension of declaring a single variable of that type.  You specify
+Well, the syntax is an extension of declaring a single variable of that type.  You specify
 all the values, comma separated.  This actually gives you another way to declare a string
 or a character array, though I can't really think of a reason you'd want to.  You could
 declare a `.byte` array and list all the characters individually.  See below for examples.
