@@ -89,7 +89,7 @@ download them, and MARS at these addresses
 There are a few references that you should bookmark (or download) before you get started.
 The first is the
 https://raw.githubusercontent.com/rswinkle/mips_book/master/references/MIPS_Green_Sheet.pdf[MIPS Greensheet].
-It's likely you already have a physical copy of this as it's actually the tearout from the Patterson
+It's possible you already have a physical copy of this as it's actually the tearout from the Patterson
 and Hennessey textbook https://amzn.to/3zN71KP[_Computer Architecture and Design_]
 that is commonly used in college courses.
 
