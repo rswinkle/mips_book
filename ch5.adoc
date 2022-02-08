@@ -12,7 +12,7 @@ certain registers.  We'll get to the why and how later.
 
 === Functions
 
-In assembly, a function is just a label with a return instruction associated with it;
+In assembly, a function is simply a label with a return instruction associated with it;
 because this is far more ambiguous than a function in a higher level language, it
 is good practice to only have a single return instruction associated with a
 function.{one_return}  A comment above the label is also helpful.  Together those help you
@@ -101,7 +101,7 @@ shares the same registers.
 
 But how does that work?  If all parts of the program use the same
 32 registers, how does one function not stomp all over what another was doing
-when they use them?  In fact, how do functions communicate at all?  How do they
+when it uses them?  In fact, how do functions communicate at all?  How do they
 pass arguments or return results?  All these questions are solved by deciding
 on a "Calling Convention".  It's different for different architectures and even
 different operating systems on the same architecture.  This is because different
@@ -114,7 +114,7 @@ usually differ in how they setup a stack frame.  The convention covered
 in this chapter is consistent with, and sufficient for, almost every college
 course I've ever heard of.
 
-Regardless, what matters, is that the calling convention works by setting rules
+Regardless, what matters is that the calling convention works by setting rules
 (and guidelines) for register use, and when/how to use the stack.
 
 If you're unfamiliar with the
@@ -163,7 +163,7 @@ on the greensheet which is reproduced (with some modifications) below:
 |===
 
 To summarize, you have 16 registers that can be used anytime for temporary
-values, though some have special uses too (the v, a and t registers).
+values, though some have special uses too (the v, a, and t registers).
 You have 8 s registers that have to be saved on the stack if you use
 them, plus `$ra` as well.  The `$zero` register is obviously a special case.
 
@@ -171,12 +171,12 @@ The `$sp` register is technically preserved but not in the same way.  Basically
 what you allocate (subtract) you have to deallocate (add) before returning
 from a function, thus preserving the original value.
 
-You can ignore `$at, $k0-$k1, $gp` and most of the time `$fp` too.  In 5 years
+You can ignore `$at, $k0-$k1, $gp` and most of the time `$fp` too.  In over 5 years
 of tutoring I've helped students with MIPS from at least 2 dozen different colleges
 and I think I've only seen a professor force his students to use `$fp`
-or pass more than 4 arguments twice.  I've actually seen{fp_is_s8} register 30 referred to
-as `$s8` rather than, or in addition to, `$fp` which shows you how rarely it's
-actually used as a frame pointer.
+or pass more than 4 arguments twice.  You can see{fp_is_s8} register 30 sometimes
+referred to as `$s8` rather than, or in addition to, `$fp` which shows you how rarely
+it's actually used/needed as a frame pointer.
 
 ==== Basic example
 
@@ -198,7 +198,7 @@ hello_space:  .asciiz "Hello "
 exclaim_nl:   .asciiz "!\n"
 
 .text
-#int hello_name_number(char* name, int number)
+# int hello_name_number(char* name, int number)
 hello_name_number:
 	move    $t0, $a0   # save name in t0 since we need a0 for the syscall
 
@@ -209,7 +209,7 @@ hello_name_number:
 	move      $a0, $t0    # print name (v0 is still 4)
 	syscall
 
-	la        $a0, exclaim_nl
+	la        $a0, exclaim_nl  # print "!\n"
 	syscall
 
 
@@ -217,10 +217,10 @@ hello_name_number:
 	jr      $ra
 ----
 
-Some things to note, syscalls are not function calls, so we can "save" `$a0` in
+Some things to note, syscalls are not function calls so we can "save" `$a0` in
 a t register and know that it'll still be there when the syscall is done.  In the
 same way, we know that `$v0` is still the same so we don't have to keep setting
-it to 4 for print string.  Lastly, to return a value, we just make sure that value
+it to 4 for print string.  Lastly, to return a value, we make sure that value
 is in `$v0` before returning.
 
 ==== Using the Stack
@@ -263,7 +263,7 @@ int non_leaf()
 }
 ----
 
-This just calls the empty function discussed at the top of this chapter.
+This calls the empty function discussed at the top of this chapter.
 
 [source,mips,linenums]
 ----
@@ -357,13 +357,13 @@ sv_loop:
 	jr      $ra
 ----
 
-Notice that for print_letters, we not only convert the loop to a do-while, but
-we also use the parameter `count` as the iterator to count down to 0.  It saves
+Notice that for print_letters, we not only convert the loop to a `do-while`, but
+we also use the parameter `count` as the iterator to count _down_ to 0.  It saves
 us an instruction initializing an `i`.
 
-Secondly, for `save_vals`, we save not only `$ra` because we call another function,
+Second, for `save_vals`, we save not only `$ra` because we call another function,
 but also two s registers to save `i` and our stopping point.  The second is not
-actually necessary.  Because it's a constant, we could just load 10 into a register
+actually necessary.  Because it's a constant, we could load 10 into a register
 right before the check every iteration of the loop.  Which version is better depends on
 several factors, like how long or complex the loop is, how many times it executes, and
 of course personal preference.
@@ -385,7 +385,7 @@ int fib(int n)
 ----
 
 You can see how, at the very least, we'll have to save `$ra` and `n`, because we
-need the original even after the first recursive fib call.  It's not as
+need the original even after the first recursive call.  It's not as
 obvious, but we'll also have to save the return value of the first call so
 we'll still have it to do the addition after the second.  You might think
 this would require using two s regs, but does it?  Let's see...
@@ -400,14 +400,14 @@ fib:
 
 	move    $v0, $a0        # prepare to return n
 	li      $t0, 1
-	ble     $a0, $t0, exit_fib  # if (n <= 2) goto exit_fib (ie return n)
+	ble     $a0, $t0, exit_fib  # if (n <= 1) goto exit_fib (ie return n)
 
 	move    $s0, $a0        # save n
 
-	addi    $a0, $a0, -2
+	addi    $a0, $a0, -2    # a0 = n - 2
 	jal     fib             # fib(n-2)
 
-	addi    $a0, $s0, -1    # prep arg first so we can use s0 to save v0
+	addi    $a0, $s0, -1    # a0 = n - 1, prep arg first so we can use s0 to save v0
 	move    $s0, $v0        # save return of fib(n-2) in s0
 	jal     fib             # fib(n-1)
 
@@ -430,7 +430,7 @@ Some of you, if you were paying attention, might point out that you could save
 a few instructions of performance if you moved the base case testing before the
 prologue as long as you put the exit label after the epilogue.  This is true,
 but I'd recommend against it unless you were really trying to eke out every last
-microsecond.  It's just nicer/cleaner to keep the prologue and epilogue as the
+microsecond.  It's nicer/cleaner to keep the prologue and epilogue as the
 first and last things; they're one more thing to catch your eye and help delineate
 where functions start and end.  Regardless, if you're curious, you can see that
 version, along with every other function in this chapter in the included program
@@ -442,8 +442,9 @@ https://raw.githubusercontent.com/rswinkle/mips_book/master/code/calling.s[calli
 
 While grasping the basics of a calling convention is not too difficult, it takes
 practice to get used to it.  There are many things that we haven't covered
-in this chapter, like how to pass more than 4 arguments, or use `$fp` or handle
-floating point arguments or return values.
+in this chapter, like how to pass more than 4 arguments, or use `$fp`, or handle
+floating point arguments or return values.  The latter at least, will be covered in
+the next chapter.
 
 
 
