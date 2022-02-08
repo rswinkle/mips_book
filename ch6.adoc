@@ -1,11 +1,11 @@
-:zero_reg: footnote:[Obviously the zero register is not really a variable.  I never understood how people could say "const variable" with a straight face, it's literally an oxymoron.]
+:old_website: footnote:[Besides, https://www.cs.uaf.edu/2000/fall/cs301/notes/notes/node66.html[it's], the same one we referenced last chapter about fp == s8]
 
 == Chapter 6: Floating Point Types
 
 Up to this point we haven't really mentioned floating point values or instructions
 at all, except how to declare them in the `.data` section and the syscalls for
 reading and printing them.  There are two reasons we've left them alone till now.
-First, they use a whole separate set of registers and instructions.  Secondly, and
+First, they use a whole separate set of registers and instructions.  Second, and
 partly because of the first reason, most MIPS college courses do not ever require
 you to know or use floating point values.  Since this book is targeted at college
 students, if you know you won't need to know this feel free to skip this chapter.
@@ -18,13 +18,16 @@ You can use them all for floats but they are paired even-odd for doubles.  In ot
 words, you can only use even numbers for doubles, because storing a double at $f0 actually
 uses $f0 and $f1 because it takes 64 bits/8 bytes.
 
-As far as the calling conventions for floating point registers, it is actually hard
-to find anything definitive even for the basics.  Obviously you could make up your own
+As far as the calling conventions for floating point registers, it is actually
+https://techpubs.jurassic.nl/manuals/0630/developer/Mpro_n32_ABI/sgi_html/ch02.html[hard]
+to
+https://microcontrollerslab.com/mips-floating-point-architecture-using-pcspim/[find]
+anything definitive and clear even for the basics.  You could make up your own
 but the float/double syscalls, and the tiny code snippet in
 https://amzn.to/3zN71KP[Patterson and Hennessy] were
-at least consistent with this old website so I'll go with that.  I have seen at least
-one course page where the prof wanted _all_ float registers preserved which seems
-excessive and ridiculous but prof's are gonna prof.
+at least consistent with this old website{old_website} so we'll go with that.
+I have seen at least one course page where the prof wanted _all_ float registers
+preserved which seems excessive and ridiculous but prof's are gonna prof.
 
 .MIPS Floating Point Registers and Uses
 [cols="1,2,2"]
@@ -46,7 +49,14 @@ excessive and ridiculous but prof's are gonna prof.
 This table is based on doubles so it may look like it's skipping odd registers but
 they're included where the even they're paired with is.  So, for example you actually
 have 4 registers for float arguments `$f12` through `$f15` but only 2 for doubles
-`$f12` and `f14`.  Similarly you have 12 saved registers for floats but 6 for doubles.
+`$f12` and `$f14`.  Similarly you have 12 saved registers for floats but 6 for doubles.
+
+You might find things like
+https://www.dsi.unive.it/~architet/LAB/spim.htm#Floating%20Point[this], which seems
+to say that SPIM doesn't support using the odd registers at all but both example
+programs for this chapter use `$f1` and work with both SPIM and MARS.  Given that,
+and the fact that it references instructions [l.d] and [l.s] which don't work
+(`li.s` and `li.d` do, see below), it's probably really out of date.
 
 Most of the next table is actually on the Greensheet but not all of it and I thought
 it worth reproducing here.
@@ -111,7 +121,7 @@ precision or d for double precision.
 
 The _y_ in the Compare instructions are one of eq, lt, le.
 Naturally _op_ would be the matching ==, <, <=.  Unfortunately, you don't
-get not equal, greater than, or greater equal, even as pseudoinstructions,
+get _not equal_, _greater than_, or _greater equal_, even as pseudoinstructions,
 but it's easy enough to flip the order of operands or branch on the
 opposite result.
 
@@ -119,15 +129,15 @@ opposite result.
 === Practice
 
 We're going to briefly go over some of the more different aspects of dealing
-with floating point numbers, but since most of it is the same with just a different
+with floating point numbers, but since most of it is the same but with a new
 set of registers and calling convention, we won't be rehashing most concepts.
 
 === Getting Floating Point Literals
 
-The first thing to know when dealing with floats is how to actually get float
+The first thing to know when dealing with floats is how to get float
 (or double) literals into registers where you can actually operate on them.
 
-There are 2 ways.  The first, and simpler way, is to just declare them as globals
+There are two ways.  The first, and simpler way, is to declare them as globals
 and then use the `lwc1` or `ldw1` instructions:
 
 
@@ -150,8 +160,8 @@ main:
 ----
 
 The second way is to use the regular registers and convert the values.  Of course
-this means unless you want a integer value, you'd have to actually do it twice
-and divide and even that would limit you to rational numbers.  It looks like this.
+this means unless you want an integer value, you'd have to actually do it twice
+and divide, and even that would limit you to rational numbers.  It looks like this.
 
 [source,mips,linenums]
 ----
@@ -198,10 +208,10 @@ blah:
 
 === Functions
 
-Lastly, lets do a simple example of writing a function that takes a float and
+Finally, lets do a simple example of writing a function that takes a float and
 returns a float.  I'm not going to bother doing one for doubles because it'd
 be effectively the same, or doing one that requires the stack, because the only
-difference from normal is a new set of registers and knowing which ones to save
+differences from normal are a new set of registers and knowing which ones to save
 or not from the table above.
 
 So, how about a function to convert a fahrenheit temperature to celsius:
