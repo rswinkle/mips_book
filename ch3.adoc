@@ -4,11 +4,11 @@
 == Chapter 3: Branches and Logic
 
 We can't go much farther in our MIPS programming journey without covering branching.
-Almost every non-trivial program requires some logic, even if it's only a few if or
-if-else statements.  In other words, almost every program requires branching, a way
+Almost every non-trivial program requires some logic, even if it's only a few `if` or
+`if-else` statements.  In other words, almost every program requires branching, a way
 to do a instead of b, or to do a only if certain conditions are met.
 
-You already know how to do this in higher level languages, the aforementioned if
+You already know how to do this in higher level languages, the aforementioned `if`
 statement.  In assembly it's more complicated.  Your only tool is the ability
 to jump to a label on another line based on the result of various comparisons.  The
 relevant instructions are listed in the following table:
@@ -150,7 +150,7 @@ to use `sll` or `sra`.  This is true in all assembly languages because
 multiplication and division are relatively costly operations so using shifts
 when you can saves performance even if you didn't actually save instructions.
 
-Ok, let's look at an if-else example.  Again, the actual code is arbitrary and
+Ok, let's look at an `if-else` example.  Again, the actual code is arbitrary and
 we're assuming a and b are in `$t0` and `$t1` respectively
 
 [source,c,linenums]
