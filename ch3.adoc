@@ -61,7 +61,7 @@ would be equivalent to:
 ----
 
 Note `$0` is the same as `zero` and is the hard coded 0 register.  I'll cover
-registers in more detail in the chapter on functions and the calling conventions.
+registers in xref:ch5.adoc#_the_convention[more detail] in the chapter on functions and the calling conventions.
 
 One final thing is that labels have the same naming requirements as C variables and
 functions.  They must start with a letter or underscore and the rest can be letters,
@@ -478,7 +478,7 @@ done_if:
 
 Ok, let's look at a larger example.  Say you're trying to determine
 a student's letter grade based on their score.  We're going to need a chain
-of if-else-if's to handle all cases.  Assume `score` is declared and
+of ``if-else-if``'s to handle all cases.  Assume `score` is declared and
 set somewhere before.
 
 [source,c,linenums]

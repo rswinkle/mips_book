@@ -93,7 +93,7 @@ can ignore it.
 === The Convention
 
 We've gone as far as we can without starting to talk about registers and their
-purposes in functions.  You can think about registers as variables{zero_reg} that
+purposes in functions.  You can think of registers as variables{zero_reg} that
 are part of the CPU.  In this case, since we're dealing with a 32-bit MIPS
 architecture, they are 32-bit (aka 4 bytes, 1 word) variables.  Since they're
 part of the CPU, they exist for the life of the program and the whole program

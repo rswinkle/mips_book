@@ -196,8 +196,8 @@ copy/save height to `$t0` so we can use `$v0`  for 2 more syscalls,
 then add age to `$t0`.
 
 This is generally how it works.  Use registers for local variables unless
-required to do otherwise.  We'll cover more about register use when we
-cover the MIPS calling convention.
+required to do otherwise.  We'll cover xref:ch5.adoc#_the_convention[more about]
+register use when we cover the MIPS calling convention.
 
 Another thing is when we print their name, we don't put 4 in `$v0` again because it
 is still/already 4 from the lines above.  Unless the syscall says it writes to $v0

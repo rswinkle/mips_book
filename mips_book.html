@@ -521,8 +521,8 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <div class="details">
 <span id="author" class="author">Robert Winkler</span><br>
 <span id="email" class="email"><a href="mailto:mips@robertwinkler.com">mips@robertwinkler.com</a></span><br>
-<span id="revnumber">version 0.9.10,</span>
-<span id="revdate">2022-02-01</span>
+<span id="revnumber">version 0.9.11,</span>
+<span id="revdate">2022-02-08</span>
 <br><span id="revremark">Beta</span>
 </div>
 <div id="toc" class="toc">
@@ -765,7 +765,7 @@ download them, and MARS at these addresses</p>
 <p>There are a few references that you should bookmark (or download) before you get started.
 The first is the
 <a href="https://raw.githubusercontent.com/rswinkle/mips_book/master/references/MIPS_Green_Sheet.pdf">MIPS Greensheet</a>.
-It&#8217;s likely you already have a physical copy of this as it&#8217;s actually the tearout from the Patterson
+It&#8217;s possible you already have a physical copy of this as it&#8217;s actually the tearout from the Patterson
 and Hennessey textbook <a href="https://amzn.to/3zN71KP"><em>Computer Architecture and Design</em></a>
 that is commonly used in college courses.</p>
 </div>
@@ -1215,12 +1215,12 @@ packed and defined like this:</p>
 going over our "Hello World" program, but what exactly are they?</p>
 </div>
 <div class="paragraph">
-<p>Essentially, they are the built in functions of a operating system, in this case,
+<p>Essentially, they are the built in functions of a operating system; in this case,
 the simple operating system of the MIPS simulators.  They provide access to all the
 fundamental features, like input and output to/from both the console and files,
 allocating memory, and exiting.  That covers all the 17 syscalls supported by spim,
-but MARS supports many more, for things from playing MIDI sounds, to getting a random
-number, to creating GUI dialogs.<sup class="footnote">[<a id="_footnoteref_4" class="footnote" href="#_footnotedef_4" title="View footnote.">4</a>]</sup></p>
+but MARS supports many more, for things ranging from playing MIDI sounds, to getting
+a random number, to creating GUI dialogs.<sup class="footnote">[<a id="_footnoteref_4" class="footnote" href="#_footnotedef_4" title="View footnote.">4</a>]</sup></p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -1366,17 +1366,29 @@ $a2 = number of characters to write</p></td>
 </tbody>
 </table>
 <div class="paragraph">
-<p>As you can see, it&#8217;s just the basics.  You can read or write the different types,
-do file I/O using calls identical to POSIX functions (open, read, write, close;
-see man pages), allocate memory, and exit.  Even so, they&#8217;re sufficient to build
-anything you want.</p>
+<p>As you can see, they really only cover the basics.  You can read or write the
+different types, do file I/O using calls identical to POSIX functions
+(open, read, write, close; see man pages), allocate memory, and exit.
+Even so, they&#8217;re sufficient to build anything you want.</p>
 </div>
 <div class="paragraph">
 <p>So, what does that table mean?  How do these actually work?</p>
 </div>
 <div class="paragraph">
-<p>The process is, put the number for the syscall you want in $v0, fill in the appropriate
-arguments, if any, and then do the syscall:</p>
+<p>The process is:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Put the number for the syscall you want in <code>$v0</code></p>
+</li>
+<li>
+<p>Fill in the appropriate arguments, if any</p>
+</li>
+<li>
+<p>Execute the syscall with <code>syscall</code></p>
+</li>
+</ol>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1585,23 +1597,23 @@ main:
 </div>
 <div class="paragraph">
 <p>We don&#8217;t declare global variables for age or height.  We could, but there&#8217;s no reason
-to since we have to have them in registers to do the addition anyway.  So we just
-copy/save height to $t0 so we can use $v0 for overwrite $v0 for 2 more syscalls,
-then add age to t0.</p>
+to since we have to have them in registers to do the addition anyway.  Instead, we
+copy/save height to <code>$t0</code> so we can use <code>$v0</code>  for 2 more syscalls,
+then add age to <code>$t0</code>.</p>
 </div>
 <div class="paragraph">
 <p>This is generally how it works.  Use registers for local variables unless
-required to do otherwise.  We&#8217;ll cover more about register use when we
-cover the MIPS calling convention.</p>
+required to do otherwise.  We&#8217;ll cover <a href="#_the_convention">more about</a>
+register use when we cover the MIPS calling convention.</p>
 </div>
 <div class="paragraph">
-<p>Another thing is when we print their name, we don&#8217;t put 4 in $v0 again because it
+<p>Another thing is when we print their name, we don&#8217;t put 4 in <code>$v0</code> again because it
 is still/already 4 from the lines above.  Unless the syscall says it writes to $v0
 you can assume it is unmodified.</p>
 </div>
 <div class="paragraph">
 <p>Lastly, many people will declare a string <code>"\n"</code> and use print string to print a newline,
-but it&#8217;s easier to just use the print char syscall as we do just before exiting.</p>
+but it&#8217;s easier to use the print char syscall as we do right before exiting.</p>
 </div>
 </div>
 <div class="sect2">
@@ -1669,12 +1681,12 @@ prints "Hello [user&#8217;s name]!"</p>
 <div class="sectionbody">
 <div class="paragraph">
 <p>We can&#8217;t go much farther in our MIPS programming journey without covering branching.
-Almost every non-trivial program requires some logic, even if it&#8217;s just a few if or
-if-else statements.  In other words, almost every program requires branching, a way
-to do code a instead of code b, or to do code a only if certain conditions are met.</p>
+Almost every non-trivial program requires some logic, even if it&#8217;s only a few <code>if</code> or
+<code>if-else</code> statements.  In other words, almost every program requires branching, a way
+to do a instead of b, or to do a only if certain conditions are met.</p>
 </div>
 <div class="paragraph">
-<p>You already know how to do this in higher level languages, the aforementioned if
+<p>You already know how to do this in higher level languages, the aforementioned <code>if</code>
 statement.  In assembly it&#8217;s more complicated.  Your only tool is the ability
 to jump to a label on another line based on the result of various comparisons.  The
 relevant instructions are listed in the following table:</p>
@@ -1764,7 +1776,7 @@ on the MIPS greensheet.<sup class="footnote">[<a id="_footnoteref_5" class="foot
 </div>
 <div class="paragraph">
 <p>There are additional pseudoinstructions in the form of beq/bne/blt/bgt/ble/bge + 'z' which
-are just shortcuts to compare a register against 0, ie the 0 register.</p>
+are syntactic sugar to compare a register against 0, ie the 0 register.</p>
 </div>
 <div class="paragraph">
 <p>So the following:</p>
@@ -1787,13 +1799,13 @@ are just shortcuts to compare a register against 0, ie the 0 register.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Note <code>$0</code> is the same as <code>zero</code> and is just the hard coded 0 register.  I&#8217;ll cover
-registers in more detail in the chapter on functions and the calling conventions.</p>
+<p>Note <code>$0</code> is the same as <code>zero</code> and is the hard coded 0 register.  I&#8217;ll cover
+registers in <a href="#_the_convention">more detail</a> in the chapter on functions and the calling conventions.</p>
 </div>
 <div class="paragraph">
 <p>One final thing is that labels have the same naming requirements as C variables and
 functions.  They must start with a letter or underscore and the rest can be letters,
-underscores, and digits.</p>
+underscores, or digits.</p>
 </div>
 <div class="sect2">
 <h3 id="_practice">Practice</h3>
@@ -1903,14 +1915,13 @@ be supported everywhere but is not on the green sheet) would take 2:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Given that, when multiplying or dividing by a power of 2 it&#8217;s common practice,
-and just common sense, to use <code>sll</code> or <code>sra</code>.  This is true in all assembly
-languages because multiplication (and division) is a relatively costly operation
-so using shifts when you can saves performance even if you didn&#8217;t actually save
-instructions.</p>
+<p>Given that, when multiplying or dividing by a power of 2 it&#8217;s common practice
+to use <code>sll</code> or <code>sra</code>.  This is true in all assembly languages because
+multiplication and division are relatively costly operations so using shifts
+when you can saves performance even if you didn&#8217;t actually save instructions.</p>
 </div>
 <div class="paragraph">
-<p>Ok, let&#8217;s look at an if-else example.  Again the actual code is arbitrary and
+<p>Ok, let&#8217;s look at an <code>if-else</code> example.  Again, the actual code is arbitrary and
 we&#8217;re assuming a and b are in <code>$t0</code> and <code>$t1</code> respectively</p>
 </div>
 <div class="listingblock">
@@ -1955,7 +1966,7 @@ less_eq_0:
 
 	# or
 
-	ble    $t0, $0, less_eq0     $ if (a &lt;= 0) goto less_eq_0
+	ble    $t0, $0, less_eq0    # if (a &lt;= 0) goto less_eq_0
 	li     $t1, 100             # b = 100
 	j      greater_0
 less_eq_0:
@@ -1972,7 +1983,7 @@ order.  In both cases, an extra unconditional branch and label is necessary
 so we don&#8217;t fall through the else case.  This is inefficient and wasteful,
 not to mention complicates the code unecessarily.  Remember how our job
 is to match the behavior, not the exact structure?  Imagine how we could
-rewrite it in C to simplify it:</p>
+rewrite it in C to simplify the logic:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2002,12 +2013,12 @@ less_eq_0:
 </div>
 </div>
 <div class="paragraph">
-<p>That is just one simple example of rearranging code to make your life easier.
+<p>That is a simple example of rearranging code to make your life easier.
 In this case, we are taking advantage of what the code is doing to make a
 default path or default case.  Obviously, because of the nature of the code
-subtracting 50 has to be the default because just setting b to 100 loses
-the original value in case we were supposed to subtract 50 instead.  In cases
-where you can&#8217;t avoid destructive changes (like where the condition and the
+subtracting 50 has to be the default since setting b to 100 overwrites
+the original value which we&#8217;d need if we were supposed to subtract 50 instead.
+In cases where you can&#8217;t avoid destructive changes (like where the condition and the
 code are using/modifying the same variable), you can use a temporary variable;
 i.e. copy the value into a spare register.  You still save yourself an unecessary
 jump and label.</p>
@@ -2037,7 +2048,7 @@ to match the logic using the operations you have.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>So what&#8217;s our first step?  Well, just like previous examples we need to test
+<p>So what&#8217;s our first step?  Like previous examples, we need to test
 for the opposite when we switch to assembly, so we need the equivalent of</p>
 </div>
 <div class="listingblock">
@@ -2055,8 +2066,8 @@ for the opposite when we switch to assembly, so we need the equivalent of</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Well, that didn&#8217;t help us much, we still don&#8217;t know how to handle that compound
-condition.  In fact we&#8217;ve just made it more complicated.  If only there were
+<p>That didn&#8217;t help us much because we still don&#8217;t know how to handle that compound
+condition.  In fact we&#8217;ve made it more complicated.  If only there were
 a way to convert it to <strong>or</strong> instead of <strong>and</strong>.  Why would we want that?  Because,
 while both <strong>and</strong> and <strong>or</strong> in C allow for short circuit evaluation (where
 the result of the whole expression is known early and the rest of expression
@@ -2184,7 +2195,7 @@ the whole expression is false the second a single false term is found.</p>
 <span class="tok-w">	</span><span class="tok-n">something</span><span class="tok-p">;</span><span class="tok-w"></span>
 <span class="tok-nl">failure</span><span class="tok-p">:</span><span class="tok-w"></span>
 
-<span class="tok-w">	</span><span class="tok-c1">// Man that&#39;s ugly and overcomplicated and hard to read</span>
+<span class="tok-w">	</span><span class="tok-c1">// Man that&#39;s ugly, overcomplicated, and hard to read</span>
 <span class="tok-w">	</span><span class="tok-c1">// But what if we did this instead:</span>
 
 <span class="tok-w">	</span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-o">!</span><span class="tok-n">a</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-k">goto</span><span class="tok-w"> </span><span class="tok-n">dont_do_something</span><span class="tok-p">;</span><span class="tok-w"></span>
@@ -2233,8 +2244,9 @@ so when you apply De Morgan's Law recursively you get:
 </div>
 </div>
 <div class="paragraph">
-<p>Let&#8217;s apply the law to our current example.  Of course the negation of comparisons
-is just covering the rest of the number line so:</p>
+<p>Let&#8217;s apply the law to our current compound <strong>and</strong> example.  Of course
+the negation of greater or less than comparisons means covering the rest
+of the number line so it becomes:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2398,7 +2410,7 @@ failure for the entire expression.  Here&#8217;s how it would look otherwise:</p
 true_str: .asciiz &quot;true\n&quot;
 
 .text
-	li    $t8, 10   # just get the necessary literals in some unused regs
+	li    $t8, 10   # get the necessary literals in some unused regs
 	li    $t9, 100
 
 	bgt   $t0, $t8, do_true   # if (a &gt; 10) goto do_true
@@ -2419,9 +2431,9 @@ done_if:
 <div class="sect3">
 <h4 id="_if_else_chain">If-Else Chain</h4>
 <div class="paragraph">
-<p>Ok, let&#8217;s look at a larger example.  Let&#8217;s say you&#8217;re trying to determine
+<p>Ok, let&#8217;s look at a larger example.  Say you&#8217;re trying to determine
 a student&#8217;s letter grade based on their score.  We&#8217;re going to need a chain
-of if-else-if&#8217;s to handle all cases.  Assume <code>score</code> is declared and
+of <code>if-else-if</code>'s to handle all cases.  Assume <code>score</code> is declared and
 set somewhere before.</p>
 </div>
 <div class="listingblock">
@@ -2560,7 +2572,7 @@ code simpler and more sensible to you.</p>
 <h3 id="_conclusion_2">Conclusion</h3>
 <div class="paragraph">
 <p>Branching and logic and learning to translate from higher level code to assembly
-is something that just takes a lot of practice but eventually it&#8217;ll become
+is something that takes a lot of practice, but eventually it&#8217;ll become
 second nature.  We&#8217;ll get more practice in the chapter on looping which naturally
 also involves branching.</p>
 </div>
@@ -2643,8 +2655,8 @@ upper and lower case correctly, but assume they entered a valid letter.</p>
 <div class="paragraph">
 <p>Before we get into the MIPS, I want to cover something that may be obvious to some but
 may have never occurred to others.  Any loop structure can be converted to any other
-(possibly with the addition of an if statement).  So a for can be written as a while
-and vice versa.  Even a do-while can be written as a for or while loop.  Let&#8217;s look
+(possibly with the addition of an <code>if</code> statement).  So a <code>for</code> can be written as a <code>while</code>
+and vice versa.  Even a <code>do-while</code> can be written as a <code>for</code> or <code>while</code> loop.  Let&#8217;s look
 at some equivalencies.</p>
 </div>
 <div class="listingblock">
@@ -2688,11 +2700,12 @@ at some equivalencies.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>I think in general, when writing assembly, it can help to think more in terms of while or
-do-while rather than for because the former more resemble what the assembly looks like
-in terms of what goes where.  So just like in the last chapter, where we would think
-of the if-else statements in "jump-form" or "branch-form", we can do the same here,
-converting for to while in our head as an intermediary step before going to assembly.</p>
+<p>In general, when writing assembly, it can help to think more in terms of <code>while</code> or
+<code>do-while</code> rather than <code>for</code> because the former more closely resemble what the
+assembly looks like in terms of what goes where.  Like in the last chapter,
+where we would think of the <code>if-else</code> statements in "jump-form" or "branch-form",
+we can do the same here, converting for to while in our head as an intermediary
+step before going to assembly.</p>
 </div>
 <div class="paragraph">
 <p>Speaking of "jump-form", lets apply it to the loop above:</p>
@@ -2723,9 +2736,9 @@ converting for to while in our head as an intermediary step before going to asse
 </div>
 <div class="paragraph">
 <p>You can see how that starts to look more like assembly.  Another thing to note is that
-unlike with if statements where we test for the opposite to jump over the block of code,
-when you&#8217;re doing the test for a loop at the bottom, like a do-while loop, it is unchanged
-from C, because you are jumping to continue the loop.  If you put the test at the top it
+unlike with <code>if</code> statements where we test for the opposite to jump over the block of code,
+when you&#8217;re doing the loop test at the bottom like with a <code>do-while</code>, it is unchanged
+from C because you are jumping to <em>continue</em> the loop.  If you put the test at the top it
 becomes inverted, and you put an unconditional jump at the bottom:</p>
 </div>
 <div class="listingblock">
@@ -2751,9 +2764,9 @@ becomes inverted, and you put an unconditional jump at the bottom:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>In general it&#8217;s better to test at the bottom, both because it&#8217;s closer to C with the matching
-condition, and because, when you know the loop is going to execute at least once, it requires
-only one jump + label, rather than 2 because you can forgo the the initial if check:</p>
+<p>In general it&#8217;s better to test at the bottom, both because the condition matches
+the higher level form, and because when you know the loop is going to execute at least once it requires
+only one jump + label, rather than 2 since you can forgo the the initial <code>if</code> check:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2798,7 +2811,7 @@ one in MIPS.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>That&#8217;s about as basic as it gets, add up 1 to 99.</p>
+<p>That&#8217;s about as basic as it gets, adding up the numbers 0 to 99.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2825,11 +2838,11 @@ are most often used for, looping through data structures, most commonly arrays.<
 <div class="sect2">
 <h3 id="_looping_through_arrays">Looping Through Arrays</h3>
 <div class="paragraph">
-<p>Looping and arrays go together for obvious reasons.  An array is a sequence of
+<p>Looping and arrays go together like peanut butter and jam.  An array is a sequence of
 variables of the same type, almost always related in some way.  Naturally, you
 want to operate on them all together in various ways; sorting, searching,
 accumulating, etc.  Given that the only way to do that is with loops, in this
-section we&#8217;ll cover looping through arrays in various ways, and dealing with
+section we&#8217;ll cover different ways of looping through arrays, and dealing with
 multi-dimentional arrays.</p>
 </div>
 <div class="sect3">
@@ -2881,18 +2894,18 @@ sum_loop:
 </div>
 </div>
 <div class="paragraph">
-<p>We initialize the relevant variables beforehand (numbers and 10 could be set
-every iteration but that&#8217;s less efficient).  Now what&#8217;s with the i*4?  We already
+<p>We initialize the relevant variables beforehand (<code>numbers</code> and <code>$t3</code> could be set
+every iteration but that&#8217;s less efficient).  Now what&#8217;s with the <code>i*4</code>?  We already
 discussed using shifts to multiply and divide by powers of 2 in a previous chapter,
 but here we&#8217;re doing something that higher level languages do automatically for you
-every time you do an array access.  When you access the i&#8217;th element, under the hood
-it is multiplying i by the size of the type of the array and adding that number of
+every time you do an array access.  When you access the <em>i</em>'th element, under the hood
+it is multiplying <code>i</code> by the size of the type of the array and adding that number of
 bytes to the base address and then loading the element located there.</p>
 </div>
 <div class="paragraph">
 <p>If you&#8217;re unfamiliar with the C syntax in the comments, <code>&amp;</code> means "address of", so
-<code>$t4</code> is being set to the address of the i&#8217;th element.  Actually that C syntax is
-redundant because the the &amp; counteracts the brackets.  In C adding a number to a
+<code>$t4</code> is being set to the address of the <em>i</em>'th element.  Actually that C syntax is
+redundant because the the <code>&amp;</code> counteracts the brackets.  In C adding a number to a
 pointer does pointer math (ie it multiplies by the size of the items as discussed
 above).  This means that the following comparison is true:</p>
 </div>
@@ -2900,17 +2913,17 @@ above).  This means that the following comparison is true:</p>
 <p><code>&amp;numbers[i] == numbers + i</code></p>
 </div>
 <div class="paragraph">
-<p>whichmeans that this is true too</p>
+<p>which means that this is true too</p>
 </div>
 <div class="paragraph">
 <p><code>&amp;numbers[0] == numbers</code></p>
 </div>
 <div class="paragraph">
-<p>The reason I use the left form in C/C++ even when I can use the right is it makes it
-more explicit and obvious that I&#8217;m getting the address of an element of an array.
-If you were scanning the code quickly and saw the expression on the right, you might
-not realize that&#8217;s an address at all, it could just be some mathematical expression
-(though the array name would hopefully clue you in if it was picked well).</p>
+<p>The reason I use the form on the left in C/C++ even when I can use the right is it
+makes it more explicit and obvious that I&#8217;m getting the address of an element of an
+array.  If you were scanning the code quickly and saw the expression on the right,
+you might not realize that&#8217;s an address at all, it could be some mathematical
+expression (though the array name would hopefully clue you in if it was picked well).</p>
 </div>
 <div class="paragraph">
 <p>Anyway, back to the MIPS code.  After we get the address of the element we want, we
@@ -2918,15 +2931,15 @@ have to actually read it from memory (ie load it).  Since it&#8217;s an array of
 (aka 4 byte ints) we can use load word, <code>lw</code>.</p>
 </div>
 <div class="paragraph">
-<p>Finally we add that value to <code>total</code>, increment <code>i</code>, and perform the loop check.</p>
+<p>Finally, we add that value to <code>total</code>, increment <code>i</code>, and perform the loop check.</p>
 </div>
 <div class="paragraph">
 <p>Now, I said at the beginning that this was the most literal, direct translation
-(not counting the restructuring to a do-while form).  However, it is not my preferred
-form because it&#8217;s not the simplest nor the shortest.</p>
+(not counting the restructuring to a <code>do-while</code> form).  However, it is not my preferred
+form because it&#8217;s not the simplest, nor the shortest.</p>
 </div>
 <div class="paragraph">
-<p>Rather than calculate the element address every iteration, why not just keep a pointer
+<p>Rather than calculate the element address every iteration, why not keep a pointer
 to the current element and iterate through the array with it?  In C what I&#8217;m suggesting
 is this:</p>
 </div>
@@ -2951,7 +2964,7 @@ is this:</p>
 <div class="paragraph">
 <p>In other words, we set <code>p</code> to point at the first element and then increment it every
 step to keep it pointing at <code>numbers[i]</code>.  Again, all mathematical operations on pointers
-in C deal in increments of the byte syze of the type, so <code>p++</code> is really adding 1*sizeof(int).</p>
+in C deal in increments of the byte syze of the type, so <code>p++</code> is really adding <code>1*sizeof(int)</code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2981,15 +2994,15 @@ sum_loop:
 </div>
 <div class="paragraph">
 <p>Now, that may not look much better, we only saved 1 instuction, and if we were
-looping through a string (aka an array of characters, sizeof(char) == 1) we wouldn&#8217;t
+looping through a string (aka an array of characters, <code>sizeof(char) == 1</code>) we wouldn&#8217;t
 have saved any.  However, imagine if we weren&#8217;t using <code>sll</code> to do the multiply but
 <code>mult</code>.  That would take 3 instructions, not 1.  Even <code>mul</code> would take 2.  Remember
 we <em>would</em> have to use one of those if we were iterating through an array of
 structures with a size that wasn&#8217;t a power of 2.</p>
 </div>
 <div class="paragraph">
-<p>But there is one more variant that you can use that can save a few more instructions.
-Instead of using <code>i</code> and <code>i&lt;10</code> to control the loop, use p and the address just past the
+<p>However, there is one more variant that you can use that can save a few more instructions.
+Instead of using <code>i</code> and <code>i&lt;10</code> to control the loop, use <code>p</code> and the address just past the
 end of the array.  In C it would be this:</p>
 </div>
 <div class="listingblock">
@@ -3038,9 +3051,9 @@ sum_loop:
 </div>
 <div class="paragraph">
 <p>So we dropped from 10 to 7 instructions and even more if we had had to do <code>mul</code>
-or <code>mult</code> originally.  And this was just for a 1D array.  Imagine if you had 2
-or 3 indices you had to use to calculate the correct offset.  That&#8217;s in the
-next section.</p>
+or <code>mult</code> originally.  And this was for a 1D array.  Imagine if you had 2
+or 3 indices you had to use to calculate the correct offset.  That&#8217;s what
+we go over in the next section.</p>
 </div>
 </div>
 <div class="sect3">
@@ -3247,7 +3260,7 @@ loopcols:
 </div>
 <div class="paragraph">
 <p>That chunk in the middle calculating the offset of every element?  Not only is
-it far slower than just iterating the pointer through the array, but you can
+it far slower than iterating the pointer through the array, but you can
 imagine how much worse it would be for a 3D array with 3 nested loops.</p>
 </div>
 </div>
@@ -3356,7 +3369,7 @@ certain registers.  We&#8217;ll get to the why and how later.</p>
 <div class="sect2">
 <h3 id="_functions">Functions</h3>
 <div class="paragraph">
-<p>In assembly, a function is just a label with a return instruction associated with it;
+<p>In assembly, a function is simply a label with a return instruction associated with it;
 because this is far more ambiguous than a function in a higher level language, it
 is good practice to only have a single return instruction associated with a
 function.<sup class="footnote">[<a id="_footnoteref_7" class="footnote" href="#_footnotedef_7" title="View footnote.">7</a>]</sup>  A comment above the label is also helpful.  Together those help you
@@ -3463,7 +3476,7 @@ can ignore it.</p>
 <h3 id="_the_convention">The Convention</h3>
 <div class="paragraph">
 <p>We&#8217;ve gone as far as we can without starting to talk about registers and their
-purposes in functions.  You can think about registers as variables<sup class="footnote">[<a id="_footnoteref_8" class="footnote" href="#_footnotedef_8" title="View footnote.">8</a>]</sup> that
+purposes in functions.  You can think of registers as variables<sup class="footnote">[<a id="_footnoteref_8" class="footnote" href="#_footnotedef_8" title="View footnote.">8</a>]</sup> that
 are part of the CPU.  In this case, since we&#8217;re dealing with a 32-bit MIPS
 architecture, they are 32-bit (aka 4 bytes, 1 word) variables.  Since they&#8217;re
 part of the CPU, they exist for the life of the program and the whole program
@@ -3472,7 +3485,7 @@ shares the same registers.</p>
 <div class="paragraph">
 <p>But how does that work?  If all parts of the program use the same
 32 registers, how does one function not stomp all over what another was doing
-when they use them?  In fact, how do functions communicate at all?  How do they
+when it uses them?  In fact, how do functions communicate at all?  How do they
 pass arguments or return results?  All these questions are solved by deciding
 on a "Calling Convention".  It&#8217;s different for different architectures and even
 different operating systems on the same architecture.  This is because different
@@ -3486,7 +3499,7 @@ in this chapter is consistent with, and sufficient for, almost every college
 course I&#8217;ve ever heard of.</p>
 </div>
 <div class="paragraph">
-<p>Regardless, what matters, is that the calling convention works by setting rules
+<p>Regardless, what matters is that the calling convention works by setting rules
 (and guidelines) for register use, and when/how to use the stack.</p>
 </div>
 <div class="paragraph">
@@ -3598,7 +3611,7 @@ on the greensheet which is reproduced (with some modifications) below:</p>
 </table>
 <div class="paragraph">
 <p>To summarize, you have 16 registers that can be used anytime for temporary
-values, though some have special uses too (the v, a and t registers).
+values, though some have special uses too (the v, a, and t registers).
 You have 8 s registers that have to be saved on the stack if you use
 them, plus <code>$ra</code> as well.  The <code>$zero</code> register is obviously a special case.</p>
 </div>
@@ -3608,12 +3621,12 @@ what you allocate (subtract) you have to deallocate (add) before returning
 from a function, thus preserving the original value.</p>
 </div>
 <div class="paragraph">
-<p>You can ignore <code>$at, $k0-$k1, $gp</code> and most of the time <code>$fp</code> too.  In 5 years
+<p>You can ignore <code>$at, $k0-$k1, $gp</code> and most of the time <code>$fp</code> too.  In over 5 years
 of tutoring I&#8217;ve helped students with MIPS from at least 2 dozen different colleges
 and I think I&#8217;ve only seen a professor force his students to use <code>$fp</code>
-or pass more than 4 arguments twice.  I&#8217;ve actually seen<sup class="footnote">[<a id="_footnoteref_9" class="footnote" href="#_footnotedef_9" title="View footnote.">9</a>]</sup> register 30 referred to
-as <code>$s8</code> rather than, or in addition to, <code>$fp</code> which shows you how rarely it&#8217;s
-actually used as a frame pointer.</p>
+or pass more than 4 arguments twice.  You can see<sup class="footnote">[<a id="_footnoteref_9" class="footnote" href="#_footnotedef_9" title="View footnote.">9</a>]</sup> register 30 sometimes
+referred to as <code>$s8</code> rather than, or in addition to, <code>$fp</code> which shows you how rarely
+it&#8217;s actually used/needed as a frame pointer.</p>
 </div>
 <div class="sect3">
 <h4 id="_basic_example">Basic example</h4>
@@ -3639,7 +3652,7 @@ hello_space:  .asciiz "Hello "
 exclaim_nl:   .asciiz "!\n"
 
 .text
-#int hello_name_number(char* name, int number)
+# int hello_name_number(char* name, int number)
 hello_name_number:
 	move    $t0, $a0   # save name in t0 since we need a0 for the syscall
 
@@ -3650,7 +3663,7 @@ hello_name_number:
 	move      $a0, $t0    # print name (v0 is still 4)
 	syscall
 
-	la        $a0, exclaim_nl
+	la        $a0, exclaim_nl  # print "!\n"
 	syscall
 
 
@@ -3659,10 +3672,10 @@ hello_name_number:
 </div>
 </div>
 <div class="paragraph">
-<p>Some things to note, syscalls are not function calls, so we can "save" <code>$a0</code> in
+<p>Some things to note, syscalls are not function calls so we can "save" <code>$a0</code> in
 a t register and know that it&#8217;ll still be there when the syscall is done.  In the
 same way, we know that <code>$v0</code> is still the same so we don&#8217;t have to keep setting
-it to 4 for print string.  Lastly, to return a value, we just make sure that value
+it to 4 for print string.  Lastly, to return a value, we make sure that value
 is in <code>$v0</code> before returning.</p>
 </div>
 </div>
@@ -3723,7 +3736,7 @@ would be prohibitively large and complicated.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>This just calls the empty function discussed at the top of this chapter.</p>
+<p>This calls the empty function discussed at the top of this chapter.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3887,14 +3900,14 @@ sv_loop:
 </div>
 </div>
 <div class="paragraph">
-<p>Notice that for print_letters, we not only convert the loop to a do-while, but
-we also use the parameter <code>count</code> as the iterator to count down to 0.  It saves
+<p>Notice that for print_letters, we not only convert the loop to a <code>do-while</code>, but
+we also use the parameter <code>count</code> as the iterator to count <em>down</em> to 0.  It saves
 us an instruction initializing an <code>i</code>.</p>
 </div>
 <div class="paragraph">
-<p>Secondly, for <code>save_vals</code>, we save not only <code>$ra</code> because we call another function,
+<p>Second, for <code>save_vals</code>, we save not only <code>$ra</code> because we call another function,
 but also two s registers to save <code>i</code> and our stopping point.  The second is not
-actually necessary.  Because it&#8217;s a constant, we could just load 10 into a register
+actually necessary.  Because it&#8217;s a constant, we could load 10 into a register
 right before the check every iteration of the loop.  Which version is better depends on
 several factors, like how long or complex the loop is, how many times it executes, and
 of course personal preference.</p>
@@ -3925,7 +3938,7 @@ of course personal preference.</p>
 </div>
 <div class="paragraph">
 <p>You can see how, at the very least, we&#8217;ll have to save <code>$ra</code> and <code>n</code>, because we
-need the original even after the first recursive fib call.  It&#8217;s not as
+need the original even after the first recursive call.  It&#8217;s not as
 obvious, but we&#8217;ll also have to save the return value of the first call so
 we&#8217;ll still have it to do the addition after the second.  You might think
 this would require using two s regs, but does it?  Let&#8217;s see&#8230;&#8203;</p>
@@ -3965,14 +3978,14 @@ fib:
 
 	move    $v0, $a0        # prepare to return n
 	li      $t0, 1
-	ble     $a0, $t0, exit_fib  # if (n &lt;= 2) goto exit_fib (ie return n)
+	ble     $a0, $t0, exit_fib  # if (n &lt;= 1) goto exit_fib (ie return n)
 
 	move    $s0, $a0        # save n
 
-	addi    $a0, $a0, -2
+	addi    $a0, $a0, -2    # a0 = n - 2
 	jal     fib             # fib(n-2)
 
-	addi    $a0, $s0, -1    # prep arg first so we can use s0 to save v0
+	addi    $a0, $s0, -1    # a0 = n - 1, prep arg first so we can use s0 to save v0
 	move    $s0, $v0        # save return of fib(n-2) in s0
 	jal     fib             # fib(n-1)
 
@@ -3998,7 +4011,7 @@ we can now use <code>$s0</code> to preserve the return value of the first call.<
 a few instructions of performance if you moved the base case testing before the
 prologue as long as you put the exit label after the epilogue.  This is true,
 but I&#8217;d recommend against it unless you were really trying to eke out every last
-microsecond.  It&#8217;s just nicer/cleaner to keep the prologue and epilogue as the
+microsecond.  It&#8217;s nicer/cleaner to keep the prologue and epilogue as the
 first and last things; they&#8217;re one more thing to catch your eye and help delineate
 where functions start and end.  Regardless, if you&#8217;re curious, you can see that
 version, along with every other function in this chapter in the included program
@@ -4011,8 +4024,9 @@ version, along with every other function in this chapter in the included program
 <div class="paragraph">
 <p>While grasping the basics of a calling convention is not too difficult, it takes
 practice to get used to it.  There are many things that we haven&#8217;t covered
-in this chapter, like how to pass more than 4 arguments, or use <code>$fp</code> or handle
-floating point arguments or return values.</p>
+in this chapter, like how to pass more than 4 arguments, or use <code>$fp</code>, or handle
+floating point arguments or return values.  The latter at least, will be covered in
+the next chapter.</p>
 </div>
 </div>
 <div class="sect2">
@@ -4083,7 +4097,7 @@ one iterative and one recursive.  Print out the sequence as they go.</p>
 <p>Up to this point we haven&#8217;t really mentioned floating point values or instructions
 at all, except how to declare them in the <code>.data</code> section and the syscalls for
 reading and printing them.  There are two reasons we&#8217;ve left them alone till now.
-First, they use a whole separate set of registers and instructions.  Secondly, and
+First, they use a whole separate set of registers and instructions.  Second, and
 partly because of the first reason, most MIPS college courses do not ever require
 you to know or use floating point values.  Since this book is targeted at college
 students, if you know you won&#8217;t need to know this feel free to skip this chapter.</p>
@@ -4098,13 +4112,16 @@ words, you can only use even numbers for doubles, because storing a double at $f
 uses $f0 and $f1 because it takes 64 bits/8 bytes.</p>
 </div>
 <div class="paragraph">
-<p>As far as the calling conventions for floating point registers, it is actually hard
-to find anything definitive even for the basics.  Obviously you could make up your own
+<p>As far as the calling conventions for floating point registers, it is actually
+<a href="https://techpubs.jurassic.nl/manuals/0630/developer/Mpro_n32_ABI/sgi_html/ch02.html">hard</a>
+to
+<a href="https://microcontrollerslab.com/mips-floating-point-architecture-using-pcspim/">find</a>
+anything definitive and clear even for the basics.  You could make up your own
 but the float/double syscalls, and the tiny code snippet in
 <a href="https://amzn.to/3zN71KP">Patterson and Hennessy</a> were
-at least consistent with this old website so I&#8217;ll go with that.  I have seen at least
-one course page where the prof wanted <em>all</em> float registers preserved which seems
-excessive and ridiculous but prof&#8217;s are gonna prof.</p>
+at least consistent with this old website<sup class="footnote">[<a id="_footnoteref_10" class="footnote" href="#_footnotedef_10" title="View footnote.">10</a>]</sup> so we&#8217;ll go with that.
+I have seen at least one course page where the prof wanted <em>all</em> float registers
+preserved which seems excessive and ridiculous but prof&#8217;s are gonna prof.</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 5. MIPS Floating Point Registers and Uses</caption>
@@ -4152,7 +4169,15 @@ excessive and ridiculous but prof&#8217;s are gonna prof.</p>
 <p>This table is based on doubles so it may look like it&#8217;s skipping odd registers but
 they&#8217;re included where the even they&#8217;re paired with is.  So, for example you actually
 have 4 registers for float arguments <code>$f12</code> through <code>$f15</code> but only 2 for doubles
-<code>$f12</code> and <code>f14</code>.  Similarly you have 12 saved registers for floats but 6 for doubles.</p>
+<code>$f12</code> and <code>$f14</code>.  Similarly you have 12 saved registers for floats but 6 for doubles.</p>
+</div>
+<div class="paragraph">
+<p>You might find things like
+<a href="https://www.dsi.unive.it/~architet/LAB/spim.htm#Floating%20Point">this</a>, which seems
+to say that SPIM doesn&#8217;t support using the odd registers at all but both example
+programs for this chapter use <code>$f1</code> and work with both SPIM and MARS.  Given that,
+and the fact that it references instructions [l.d] and [l.s] which don&#8217;t work
+(<code>li.s</code> and <code>li.d</code> do, see below), it&#8217;s probably really out of date.</p>
 </div>
 <div class="paragraph">
 <p>Most of the next table is actually on the Greensheet but not all of it and I thought
@@ -4306,7 +4331,7 @@ precision or d for double precision.</p>
 <div class="paragraph">
 <p>The <em>y</em> in the Compare instructions are one of eq, lt, le.
 Naturally <em>op</em> would be the matching ==, &lt;, &#8656;.  Unfortunately, you don&#8217;t
-get not equal, greater than, or greater equal, even as pseudoinstructions,
+get <em>not equal</em>, <em>greater than</em>, or <em>greater equal</em>, even as pseudoinstructions,
 but it&#8217;s easy enough to flip the order of operands or branch on the
 opposite result.</p>
 </div>
@@ -4315,18 +4340,18 @@ opposite result.</p>
 <h3 id="_practice_2">Practice</h3>
 <div class="paragraph">
 <p>We&#8217;re going to briefly go over some of the more different aspects of dealing
-with floating point numbers, but since most of it is the same with just a different
+with floating point numbers, but since most of it is the same but with a new
 set of registers and calling convention, we won&#8217;t be rehashing most concepts.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_getting_floating_point_literals">Getting Floating Point Literals</h3>
 <div class="paragraph">
-<p>The first thing to know when dealing with floats is how to actually get float
+<p>The first thing to know when dealing with floats is how to get float
 (or double) literals into registers where you can actually operate on them.</p>
 </div>
 <div class="paragraph">
-<p>There are 2 ways.  The first, and simpler way, is to just declare them as globals
+<p>There are two ways.  The first, and simpler way, is to declare them as globals
 and then use the <code>lwc1</code> or <code>ldw1</code> instructions:</p>
 </div>
 <div class="listingblock">
@@ -4363,8 +4388,8 @@ main:
 </div>
 <div class="paragraph">
 <p>The second way is to use the regular registers and convert the values.  Of course
-this means unless you want a integer value, you&#8217;d have to actually do it twice
-and divide and even that would limit you to rational numbers.  It looks like this.</p>
+this means unless you want an integer value, you&#8217;d have to actually do it twice
+and divide, and even that would limit you to rational numbers.  It looks like this.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -4444,10 +4469,10 @@ blah:
 <div class="sect2">
 <h3 id="_functions_2">Functions</h3>
 <div class="paragraph">
-<p>Lastly, lets do a simple example of writing a function that takes a float and
+<p>Finally, lets do a simple example of writing a function that takes a float and
 returns a float.  I&#8217;m not going to bother doing one for doubles because it&#8217;d
 be effectively the same, or doing one that requires the stack, because the only
-difference from normal is a new set of registers and knowing which ones to save
+differences from normal are a new set of registers and knowing which ones to save
 or not from the table above.</p>
 </div>
 <div class="paragraph">
@@ -4575,9 +4600,9 @@ it&#8217;s just 1 indent according to your preferences.</p>
 The reason to use spaces is to prevent the circumstances that gave
 hard tabs a bad name.  When you use hard tabs for alignment, rather than indentation,
 and then someone else opens your code with their tab set to a different width,
-suddenly everything looks like crap.  Tabs for indentation, spaces for alignment.
+suddenly everything looks terrible.  Thus, tabs for indentation, spaces for alignment.
 Or as is increasingly common (thanks Python), spaces for everything but I refuse
-to do that to the poor planet.<sup class="footnote">[<a id="_footnoteref_10" class="footnote" href="#_footnotedef_10" title="View footnote.">10</a>]</sup></p>
+to do that to the poor planet.<sup class="footnote">[<a id="_footnoteref_11" class="footnote" href="#_footnotedef_11" title="View footnote.">11</a>]</sup></p>
 </div>
 </li>
 <li>
@@ -4585,14 +4610,14 @@ to do that to the poor planet.<sup class="footnote">[<a id="_footnoteref_10" cla
 <div class="paragraph">
 <p>The simulators don&#8217;t actually require the comma but since other assembly
 languages/assemblers do, you might as well get used to it.  Besides I think
-it&#8217;s easier to read with the comma, though that might just be me comparing it
+it&#8217;s easier to read with the comma, though that might be me comparing it
 to passing arguments to a function.</p>
 </div>
 </li>
 <li>
 <p><strong>Comment every line or group of closely related lines with the purpose.</strong></p>
 <div class="paragraph">
-<p>This is often just the equivalent C code.  You can relax this a little as you get
+<p>This is often simply the equivalent C code.  You can relax this a little as you get
 more experience.</p>
 </div>
 </li>
@@ -4623,9 +4648,9 @@ you have to keep swapping back and forth between <code>.text</code> and <code>.d
 <p><strong>Try to use registers starting from 0 and working your way up.</strong></p>
 <div class="paragraph">
 <p>It helps you keep track of where things are (esp. combined with the comments).
-This obviously can fall apart when you discover you forgot something or need to
+This can fall apart when you discover you forgot something or need to
 modify the code later and it&#8217;s often not worth changing all the registers
-you&#8217;re already using just so you have that nice sequence.  When that happens
+you&#8217;re already using so you can maintain that nice sequence.  When that happens
 I&#8217;ll sometimes just pick the other end of sequence (ie <code>$t9</code> or <code>$s7</code>) since
 if it&#8217;s out of order I might as well make it obvious.</p>
 </div>
@@ -4678,7 +4703,7 @@ aren&#8217;t "constant variables" that take up space in memory, it&#8217;s as if
 search+replace was done on them right before assembling the program.</p>
 </div>
 <div class="paragraph">
-<p>Let&#8217;s look at our Hello World program using constants for SPM and MARS</p>
+<p>Let&#8217;s look at our Hello World program using constants for SPIM and MARS</p>
 </div>
 <div class="paragraph">
 <p>SPIM:</p>
@@ -4859,13 +4884,13 @@ despite what MARS&#8217;s documentation implies about using a $ instead of a % f
 <div class="sect2">
 <h3 id="_switch_case_statements">Switch-Case Statements</h3>
 <div class="paragraph">
-<p>It is relatively common in programming to have to compare an integral type variable
-(ie basically any built in type but float and double) against a bunch of different
+<p>It is relatively common in programming to compare an integral type variable
+(ie basically any built-in type but float and double) against a bunch of different
 constants and do something different based on what it matches or if it matches none.</p>
 </div>
 <div class="paragraph">
-<p>This could be done with a long if-else-if chain, but the longer the chain the more
-likely the programmer is to choose a switch-case statement instead.</p>
+<p>This could be done with a long <code>if-else-if</code> chain, but the longer the chain the more
+likely the programmer is to choose a <code>switch-case</code> statement instead.</p>
 </div>
 <div class="paragraph">
 <p>Here&#8217;s a pretty short/simple example in C:</p>
@@ -4895,13 +4920,13 @@ likely the programmer is to choose a switch-case statement instead.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>You could translate this to its eqivalent if-else chain and handle it just like we
+<p>You could translate this to its eqivalent <code>if-else</code> chain and handle it like we
 cover in the chapter on branching.  However, imagine if this switch statment had
 a dozen cases, two dozen etc.  The MIPS code for that quickly becomes long and ugly.</p>
 </div>
 <div class="paragraph">
-<p>So what if we implemented the switch in MIPS the same way it is semantically in C?
-The same way compilers often (but not necessarily) use?  Well before we do that,
+<p>So what if we implemented it in MIPS the same way it is semantically in C?
+The same way compilers often (but not necessarily) use?  Well, before we do that,
 what is a switch actually doing?  It is <em>jumping</em> to a specific case label based
 on the value in the specified variable.  It then starts executing, falling through
 any other labels, till it hits a <code>break</code> which will jump to the end of the switch
@@ -5024,13 +5049,13 @@ to use to jump to.</p>
 </div>
 <div class="paragraph">
 <p>The <code>&amp;&amp;</code> and <code>goto *var</code> syntax are actually not standard C/C++ but are GNU
-extensions that are supported in gcc (naturally) and clang, possibly others.<sup class="footnote">[<a id="_footnoteref_11" class="footnote" href="#_footnotedef_11" title="View footnote.">11</a>]</sup></p>
+extensions that are supported in gcc (naturally) and clang, possibly others.<sup class="footnote">[<a id="_footnoteref_12" class="footnote" href="#_footnotedef_12" title="View footnote.">12</a>]</sup></p>
 </div>
 <div class="paragraph">
-<p>Notice how the size of the jump table is the value of the highest valued label
+<p>First, notice how the size of the jump table is the value of the highest valued label
 minus the lowest + 1.  That&#8217;s why we subtract the lowest value to shift the range
-to start at 0 for the indexing.  Secondly, any values without labels within that
-range are filled with the <code>default_label</code> address.  Lastly, there has to be an initial
+to start at 0 for the indexing.  Second, any values without labels within that range
+are filled with the <code>default_label</code> address.  Third, there has to be an initial
 check for values outside the range to jump to default otherwise you could get an
 error from an invalid access outside of the array&#8217;s bounds.</p>
 </div>
@@ -5176,29 +5201,31 @@ end_switch:
 </div>
 </div>
 <div class="paragraph">
-<p>It&#8217;s easy to forget that <code>jr</code> does not actually stand for "jump return" even though
-it&#8217;s almost always used for that purpose.  Instead it stands for "jump register"
-and we can use it to do the eqivalent of the computed goto statement in C.</p>
+<p>It&#8217;s easy to forget that <code>jr</code> does not actually stand for "jump return" or
+"jump ra," though it&#8217;s almost always used for that purpose.  Instead, it stands
+for "jump register" and we can use it to do the eqivalent of the computed goto
+statement in C.</p>
 </div>
 <div class="paragraph">
-<p>While this example probably wasn&#8217;t worth making switch style, because the overhead
+<p>This example probably wasn&#8217;t worth making switch style, because the overhead
 and extra code of making the table and preparing to jump balanced out or even
-outweighed the savings of a branch instruction for every case, as the number
-of options increases, the favor tilts toward using a jump table like this as
-long as the range of values isn&#8217;t too sparse.  If the range of values is is the 100&#8217;s
-or 1000&#8217;s but you only have cases for a dozen or so, then obviously that isn&#8217;t worth
-it to create a table that large just to fill it almost entirely with the default label.</p>
+outweighed the savings of a branch instruction for every case.  However, as the
+number of options increases, the favor tilts toward using a jump table like this as
+long as the range of values isn&#8217;t too sparse.  If the range of values is in the 100&#8217;s
+or 1000&#8217;s but you only have cases for a dozen or so, then obviously it isn&#8217;t worth
+creating a table that large only to fill it almost entirely with the default label
+address.</p>
 </div>
 <div class="paragraph">
-<p>Just to reiterate, remember it is not about the magnitude of the actual values
-you&#8217;re looking for, just the difference between the highest and lowest because
+<p>To reiterate, remember it is not about the magnitude of the actual values
+you&#8217;re looking for, only the difference between the highest and lowest because
 high - low + 1 is the size of your table.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_command_line_arguments">Command Line Arguments</h3>
 <div class="paragraph">
-<p>Command line arguments, also known as program arguments, or command line parameters
+<p>Command line arguments, also known as program arguments, or command line parameters,
 are strings that are passed to the program on startup.  In high level languages like
 C, they are accessed through the parameters to the main function (naturally):</p>
 </div>
@@ -5232,7 +5259,7 @@ C, they are accessed through the parameters to the main function (naturally):</p
 </div>
 <div class="paragraph">
 <p>As you can see, <code>argc</code> contains the number of parameters and <code>argv</code> is an array of
-C strings that are those arguments.  If you run this program you&#8217;ll get something
+those arguments as C strings.  If you run this program you&#8217;ll get something
 like this:</p>
 </div>
 <div class="listingblock">
@@ -5251,7 +5278,7 @@ so you always have at least one argument.</p>
 </div>
 <div class="paragraph">
 <p>MIPS works the same way.  The number of arguments is in <code>$a0</code> and an array of strings
-is in <code>$a1</code> when main starts.  So the same program in MIPS looks like this;</p>
+is in <code>$a1</code> when main starts.  So the same program in MIPS looks like this:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -5313,7 +5340,7 @@ main:
 	li      $v0, 1   # print int
 	syscall
 
-	li      $v0, 4
+	li      $v0, 4            # print string
 	la      $a0, arguments
 	syscall
 
@@ -5325,7 +5352,7 @@ arg_loop:
 	lw      $a0, 0($a1)
 	syscall
 
-	li      $v0, 11
+	li      $v0, 11    # print character
 	li      $a0, 10    # &#39;\n&#39;
 	syscall
 
@@ -5378,7 +5405,7 @@ arguments</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>You can see that you have to put "pa" (for "program arguments") to indicate that
+<p>You can see that you have to pass "pa" (for "program arguments") to indicate that
 the following strings are arguments.  In the GUI, there is an option in
 "Settings" called "Program arguments provided to MIPS progam" which if selected will
 add a text box above the Text Segment for you to enter in the arguments to be
@@ -5400,21 +5427,25 @@ passed.</p>
 <div class="sect2">
 <h3 id="_delayed_branches_and_delayed_loads">Delayed Branches and Delayed Loads</h3>
 <div class="paragraph">
-<p>MIPS originally had a 1 instruction delay between when a branch or load was executed,
+<p>MIPS originally had a 1-instruction delay between when a branch or load was executed,
 and when it actually jumped or completed the load.  By default, SPIM has both of
 these turned off but you can turn them on with the arguments <code>-delayed_branches</code>
-and <code>-delayed_loads</code> respectively or use the <code>-bare</code> which turns on both, as
+and <code>-delayed_loads</code> respectively, or use the <code>-bare</code> which turns on both, as
 well as disabling pseudoinstructions (ie it simulates the "bare" machine without
 any of the niceties).  MARS is the same as SPIM in that it defaults to the more
 user friendly mode, but you can turn on delayed branches in the settings (but
 not delayed loads, that isn&#8217;t supported as far as I can tell).  From the command
 line you can turn it on with the <code>db</code> argument and you can turn off pseudoinstructions
-with <code>np</code> (for next section).</p>
+with <code>np</code> (for the next section).</p>
 </div>
 <div class="paragraph">
-<p>Now, why would you ever want to do any of this?  The only reason I can think of,
-and the only one that I&#8217;ve ever run into, is if your professor requires it for
-some unknown reason.  To handle delayed branches, all you have to do is add a
+<p>The only reason you&#8217;d probably ever want to do this to yourself is if your professor
+requires it for some unknown reason.  There is some learning value to seeing how
+pseudoinstructions are turned into actual instructions, but there&#8217;s absolutely nothing
+useful to be gained in turning on the delays.</p>
+</div>
+<div class="paragraph">
+<p>To handle delayed branches, all you have to do is add a
 <code>nop</code> (No Operation) instruction after every branch or jump instruction
 (including <code>jal</code> and <code>jr</code>).  The solution is identical for delayed loads, put a
 <code>nop</code> after every load instruction.</p>
@@ -5426,9 +5457,9 @@ real hardware and were trying to minimize program size and maximize speed, you
 would definitely do this (if that hardware had delayed branches/loads).  However,
 it&#8217;s a bad idea for two reasons.  First, it takes longer to figure out which
 instructions you can move and why, and it makes your program harder to read since
-you naturally don&#8217;t expect a later instruction to occur before the previous one.
+you naturally don&#8217;t expect an instruction to occur before the previous one.
 Second, and more importantly, it means your program will no longer work if you
-turn delayed branches/loads off again.  Using <code>nop</code> means the change is quick,
+turn delayed branches/loads off again.  Using a <code>nop</code> means the change is quick,
 easy, and you can still run it in the simulator&#8217;s default mode if needed.</p>
 </div>
 <div class="paragraph">
@@ -5443,8 +5474,8 @@ will work as a <code>nop</code> under all conditions and simulators.</p>
 <h3 id="_no_pseudoinstructions_allowed">No Pseudoinstructions Allowed</h3>
 <div class="paragraph">
 <p>Far more common than requiring delayed loads is forbidding pseudoinstructions,
-either all of them, or some subset of them.  This forces us to do what actually
-happens when you use those instructions manually.</p>
+either all of them, or some subset of them.  This forces us to explicitly write
+what actually happens when you use those pseudoinstructions.</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 7. Pseudoinstruction Equivalents</caption>
@@ -5620,19 +5651,19 @@ extra register to hold the "plus 1" value if you still need the original.</p>
 <div class="paragraph">
 <p>Another thing I should comment on is the <code>la</code> equivalence.  The reason it is
 a pseudoinstruction in the first place is that an address is 32 bits.  That&#8217;s also
-the size of a whole instruction.  Obviously, there&#8217;s no way to represent a whole
+the size of a whole instruction.  Clearly there&#8217;s no way to represent a whole
 address and anything else at the same time.  The lower left corner of the
 greensheet has the actual formats of the 3 different types of instructions and
 even the jump format still needs 6 bits for the opcode.  This is why <code>lui</code> exists,
 in order to facilitate getting a full address into a register by doing it in two
-halves, 16 + 16.  The lower 16 can be added or or&#8217;d after the <code>lui</code>.</p>
+halves, 16 + 16.  The lower 16 can be placed with <code>addi</code> or <code>ori</code> after the <code>lui</code>.</p>
 </div>
 <div class="paragraph">
 <p>That begs the question, what actually goes in the upper half?  Well, since
 we&#8217;re dealing with addresses in the <code>.data</code> section, the upper portion should
-match the upper part of address of the <code>.data</code> section, which in SPIM is
-<code>0x10000000</code> in bare mode.  In normal mode it is <code>0x10010000</code>, but you&#8217;d be
-able to use <code>la</code> in normal mode.  However, in MARS, it is always <code>0x10010000</code>,
+match the upper part of address of the <code>.data</code> section.  In SPIM the <code>data</code> section
+starts at <code>0x10000000</code> in bare mode.  In normal mode it is <code>0x10010000</code>, but you&#8217;d be
+able to use <code>la</code> in normal mode.  However, in MARS it is always <code>0x10010000</code>,
 so you won&#8217;t be able to have it work correctly in bare SPIM and MARS without
 changing that back and forth.</p>
 </div>
@@ -5718,7 +5749,7 @@ arg_loop_test:
 </div>
 </div>
 <div class="paragraph">
-<p>So we need to change the move, the li&#8217;s, the la and the blt and add a nop
+<p>So we need to change the <code>move</code>, the <code>li</code>'s, the <code>la</code> and the <code>blt</code> and add a <code>nop</code>
 after any branches or loads.</p>
 </div>
 <div class="listingblock">
@@ -5792,7 +5823,7 @@ arg_loop_test:
 </div>
 </div>
 <div class="paragraph">
-<p>So, following the table, you can see the <code>move</code> became <code>or</code>, the <code>li</code>'s became
+<p>Following the table, you can see the <code>move</code> became <code>or</code>, the <code>li</code>'s became
 <code>ori</code>, we added <code>nop</code> instructions in the form of <code>or</code> with <code>$0</code> as the destination,
 and lastly, the <code>blt</code> became <code>bne</code>.  That last is worth noting, because there&#8217;s no
 reason to do a complicated transformation if you don&#8217;t have to and <code>bne</code> accomplishes
@@ -5963,16 +5994,19 @@ which case it continues counting up from there).</p>
 <a href="#_footnoteref_9">9</a>. It&#8217;s an <a href="https://www.cs.uaf.edu/2000/fall/cs301/notes/notes/node66.html">old link</a>, but not as old as SPIM so maybe using it for a frame pointer was added later
 </div>
 <div class="footnote" id="_footnotedef_10">
-<a href="#_footnoteref_10">10</a>. When I find the post I read years ago about how using tabs saves CO2 I&#8217;ll put it here, but I&#8217;m joking.  I use tabs because it makes sense and there are accessibility reasons too: <a href="https://www.reddit.com/r/javascript/comments/c8drjo/nobody_talks_about_the_real_reason_to_use_tabs/" class="bare">https://www.reddit.com/r/javascript/comments/c8drjo/nobody_talks_about_the_real_reason_to_use_tabs/</a>
+<a href="#_footnoteref_10">10</a>. Besides, <a href="https://www.cs.uaf.edu/2000/fall/cs301/notes/notes/node66.html">it&#8217;s</a>, the same one we referenced last chapter about fp == s8
 </div>
 <div class="footnote" id="_footnotedef_11">
-<a href="#_footnoteref_11">11</a>. <a href="https://gcc.gnu.org/onlinedocs/gcc/Labels-as-Values.html" class="bare">https://gcc.gnu.org/onlinedocs/gcc/Labels-as-Values.html</a>
+<a href="#_footnoteref_11">11</a>. When I find the post I read years ago about how using tabs saves CO2 I&#8217;ll put it here, but I&#8217;m joking.  I use tabs because it makes sense and there are accessibility reasons too: <a href="https://www.reddit.com/r/javascript/comments/c8drjo/nobody_talks_about_the_real_reason_to_use_tabs/" class="bare">https://www.reddit.com/r/javascript/comments/c8drjo/nobody_talks_about_the_real_reason_to_use_tabs/</a>
+</div>
+<div class="footnote" id="_footnotedef_12">
+<a href="#_footnoteref_12">12</a>. <a href="https://gcc.gnu.org/onlinedocs/gcc/Labels-as-Values.html" class="bare">https://gcc.gnu.org/onlinedocs/gcc/Labels-as-Values.html</a>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 0.9.10<br>
-Last updated 2022-02-08 00:05:58 -0700
+Version 0.9.11<br>
+Last updated 2022-02-08 17:30:49 -0700
 </div>
 </div>
 </body>
