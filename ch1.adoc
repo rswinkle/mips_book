@@ -100,17 +100,35 @@ arrays of ints/words, floats, doubles etc. you'd have to multiply by the sizeof(
 
 "But, `.space` only lets you declare uninitialized arrays, how do I do initialized ones?"
 
-Well, the syntax is an extension of declaring a single variable of that type.  You specify
-all the values, comma separated.  This actually gives you another way to declare a string
-or a character array, though I can't really think of a reason you'd want to.  You could
-declare a `.byte` array and list all the characters individually.  See below for examples.
+Actually, it appears `.space` initializes everything to 0 similar to global/static
+data in C and C{plus}{plus}, though I can't find that documented anywhere.
+
+Aside from that, there are two ways depending on whether you want to initialize
+every element to the same value or not.
+
+For different values, the syntax is an extension of declaring a single variable
+of that type.  You specify all the values, comma separated.  This actually gives
+you another way to declare a string or a character array, though I can't really
+think of a reason you'd want to.  You could declare a `.byte` array and list all
+the characters individually.
+
+However, if you want an array with all elements initialized to the same value there
+is a more convenient option that I learned very recently.  After the type you
+put the value you want, a colon, and then the number of elements.  So `a: .word 123 : 10`
+would declare a 10 integer array with all elements set to 123.  This works for all
+types in MARS, but SPIM does not support this syntax for floats and doubles.  Since
+you'll probably not have to deal with floating point types at all, let alone arrays
+of them initialized to a particular value, this isn't a huge loss.
+
+Given what we just covered, this:
 
 [source,c,linenums]
 ----
 int a[20];
 double b[20];
 int c[10] = { 9,8,7,6,5,4,3,2,1,0 };
-char d[3] = { 'a', 'b', 'c' }
+int d[5] = { 42, 42, 42, 42, 42 };
+char e[3] = { 'a', 'b', 'c' };
 ----
 
 becomes
@@ -121,8 +139,12 @@ becomes
 a:        .space 80
 b:        .space 160
 c:        .word 9,8,7,6,5,4,3,2,1,0
-d:        .byte 'a', 'b', 'c'
+d:        .word 42 : 5
+e:        .byte 'a', 'b', 'c'
 ----
 
+For more examples of array declarations, see 
+https://raw.githubusercontent.com/rswinkle/mips_book/master/code/array_decls.s[array_decls.s].
+You don't have to understand the rest of the code, just that it prints out each of the arrays.
 
 

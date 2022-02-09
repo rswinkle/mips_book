@@ -521,7 +521,7 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <div class="details">
 <span id="author" class="author">Robert Winkler</span><br>
 <span id="email" class="email"><a href="mailto:mips@robertwinkler.com">mips@robertwinkler.com</a></span><br>
-<span id="revnumber">version 0.9.11,</span>
+<span id="revnumber">version 0.9.12,</span>
 <span id="revdate">2022-02-08</span>
 <br><span id="revremark">Beta</span>
 </div>
@@ -1126,20 +1126,43 @@ arrays of ints/words, floats, doubles etc. you&#8217;d have to multiply by the s
 <p>"But, <code>.space</code> only lets you declare uninitialized arrays, how do I do initialized ones?"</p>
 </div>
 <div class="paragraph">
-<p>Well, the syntax is an extension of declaring a single variable of that type.  You specify
-all the values, comma separated.  This actually gives you another way to declare a string
-or a character array, though I can&#8217;t really think of a reason you&#8217;d want to.  You could
-declare a <code>.byte</code> array and list all the characters individually.  See below for examples.</p>
+<p>Actually, it appears <code>.space</code> initializes everything to 0 similar to global/static
+data in C and C&#43;&#43;, though I can&#8217;t find that documented anywhere.</p>
+</div>
+<div class="paragraph">
+<p>Aside from that, there are two ways depending on whether you want to initialize
+every element to the same value or not.</p>
+</div>
+<div class="paragraph">
+<p>For different values, the syntax is an extension of declaring a single variable
+of that type.  You specify all the values, comma separated.  This actually gives
+you another way to declare a string or a character array, though I can&#8217;t really
+think of a reason you&#8217;d want to.  You could declare a <code>.byte</code> array and list all
+the characters individually.</p>
+</div>
+<div class="paragraph">
+<p>However, if you want an array with all elements initialized to the same value there
+is a more convenient option that I learned very recently.  After the type you
+put the value you want, a colon, and then the number of elements.  So <code>a: .word 123 : 10</code>
+would declare a 10 integer array with all elements set to 123.  This works for all
+types in MARS, but SPIM does not support this syntax for floats and doubles.  Since
+you&#8217;ll probably not have to deal with floating point types at all, let alone arrays
+of them initialized to a particular value, this isn&#8217;t a huge loss.</p>
+</div>
+<div class="paragraph">
+<p>Given what we just covered, this:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="c"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
-<span class="normal">4</span></pre></div></td><td class="code"><pre><span></span><span class="tok-kt">int</span><span class="tok-w"> </span><span class="tok-n">a</span><span class="tok-p">[</span><span class="tok-mi">20</span><span class="tok-p">];</span><span class="tok-w"></span>
+<span class="normal">4</span>
+<span class="normal">5</span></pre></div></td><td class="code"><pre><span></span><span class="tok-kt">int</span><span class="tok-w"> </span><span class="tok-n">a</span><span class="tok-p">[</span><span class="tok-mi">20</span><span class="tok-p">];</span><span class="tok-w"></span>
 <span class="tok-kt">double</span><span class="tok-w"> </span><span class="tok-n">b</span><span class="tok-p">[</span><span class="tok-mi">20</span><span class="tok-p">];</span><span class="tok-w"></span>
 <span class="tok-kt">int</span><span class="tok-w"> </span><span class="tok-n">c</span><span class="tok-p">[</span><span class="tok-mi">10</span><span class="tok-p">]</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-mi">9</span><span class="tok-p">,</span><span class="tok-mi">8</span><span class="tok-p">,</span><span class="tok-mi">7</span><span class="tok-p">,</span><span class="tok-mi">6</span><span class="tok-p">,</span><span class="tok-mi">5</span><span class="tok-p">,</span><span class="tok-mi">4</span><span class="tok-p">,</span><span class="tok-mi">3</span><span class="tok-p">,</span><span class="tok-mi">2</span><span class="tok-p">,</span><span class="tok-mi">1</span><span class="tok-p">,</span><span class="tok-mi">0</span><span class="tok-w"> </span><span class="tok-p">};</span><span class="tok-w"></span>
-<span class="tok-kt">char</span><span class="tok-w"> </span><span class="tok-n">d</span><span class="tok-p">[</span><span class="tok-mi">3</span><span class="tok-p">]</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-sc">&#39;a&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-sc">&#39;b&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-sc">&#39;c&#39;</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"></span>
+<span class="tok-kt">int</span><span class="tok-w"> </span><span class="tok-n">d</span><span class="tok-p">[</span><span class="tok-mi">5</span><span class="tok-p">]</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-mi">42</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">42</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">42</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">42</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">42</span><span class="tok-w"> </span><span class="tok-p">};</span><span class="tok-w"></span>
+<span class="tok-kt">char</span><span class="tok-w"> </span><span class="tok-n">e</span><span class="tok-p">[</span><span class="tok-mi">3</span><span class="tok-p">]</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-sc">&#39;a&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-sc">&#39;b&#39;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-sc">&#39;c&#39;</span><span class="tok-w"> </span><span class="tok-p">};</span><span class="tok-w"></span>
 </pre></td></tr></table></code></pre>
 </div>
 </div>
@@ -1152,13 +1175,20 @@ declare a <code>.byte</code> array and list all the characters individually.  Se
 <span class="normal">2</span>
 <span class="normal">3</span>
 <span class="normal">4</span>
-<span class="normal">5</span></pre></div></td><td class="code"><pre><span></span>.data
+<span class="normal">5</span>
+<span class="normal">6</span></pre></div></td><td class="code"><pre><span></span>.data
 a:        .space 80
 b:        .space 160
 c:        .word 9,8,7,6,5,4,3,2,1,0
-d:        .byte &#39;a&#39;, &#39;b&#39;, &#39;c&#39;
+d:        .word 42 : 5
+e:        .byte &#39;a&#39;, &#39;b&#39;, &#39;c&#39;
 </pre></td></tr></table></code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>For more examples of array declarations, see
+<a href="https://raw.githubusercontent.com/rswinkle/mips_book/master/code/array_decls.s">array_decls.s</a>.
+You don&#8217;t have to understand the rest of the code, just that it prints out each of the arrays.</p>
 </div>
 </div>
 <div class="sect2">
@@ -6005,8 +6035,8 @@ which case it continues counting up from there).</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 0.9.11<br>
-Last updated 2022-02-08 17:30:49 -0700
+Version 0.9.12<br>
+Last updated 2022-02-08 19:59:09 -0700
 </div>
 </div>
 </body>
