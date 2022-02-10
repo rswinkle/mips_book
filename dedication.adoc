@@ -1,0 +1,7 @@
+[dedication]
+== Dedication
+
+This book is dedicated to all its xref:supporters.adoc#_supporters[supporters] and all the students
+I've helped with MIPS over the years who inspired me to create it.
+
+Thank you.

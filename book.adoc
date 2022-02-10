@@ -2,11 +2,12 @@
 
 = MIPS Assembly Programmming
 Robert Winkler <mips@robertwinkler.com>
-v0.9.12, 2022-02-08: Beta
+v0.9.13, 2022-02-10: Beta
 :toc:
 
-//include::contents.adoc[]
 include::info.adoc[]
+
+include::dedication.adoc[]
 
 include::ch0.adoc[]
 
@@ -41,4 +42,6 @@ include::ch7.adoc[]
 include::exercises/ch7_exercises.adoc[]
 
 include::refs.adoc[]
+
+include::supporters.adoc[]
 
