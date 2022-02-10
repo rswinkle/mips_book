@@ -4,8 +4,8 @@
 === Corporate
 [%autowidth,cols="1a,1a,1a",frame=none,grid=none]
 |===
-|supporter1
-|firstname lastname
+|http://www.robertwinkler.com/projects/mips_book/[MIPS Assembly Programming]
+|http://www.robertwinkler.com/[Robert Winkler]
 |supporter3
 |===
 
@@ -14,7 +14,7 @@
 |===
 |supporter4
 |supporter5
-|supporter6
+|http://portablegl.com/[PortableGL]
 
 |supporter7
 | {nbsp}
@@ -24,7 +24,7 @@
 ==== Gold
 [%autowidth,cols="1a,1a,1a",frame=none,grid=none]
 |===
-|supporter8
+|http://www.robertwinkler.com/projects/sdl_img.html[sdl_img]
 |supporter9
 |supporter10
 
