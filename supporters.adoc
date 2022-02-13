@@ -9,7 +9,7 @@
 |supporter3
 |===
 
-=== Platinum
+==== Platinum
 [%autowidth,cols="1a,1a,1a",frame=none,grid=none]
 |===
 |supporter4

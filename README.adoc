@@ -1,10 +1,7 @@
 = MIPS Assembly Programming
 
 This repo is the workspace of a book on MIPS assembly programming written
-in asciidoc.  The book is fairly complete and completely useable already,
-though there's plenty of polish, some editing, and maybe a dozen pages
-of additional content that could be added.
-
+in asciidoc.
 
 == Download
 Get the source from https://github.com/rswinkle/mips_book[Github].
@@ -17,6 +14,13 @@ http://www.robertwinkler.com/projects/mips_book/mips_book.html[HTML Page]
 
 http://www.robertwinkler.com/projects/mips_book/mips_book.pdf[PDF]
 
+== Code
+You can get all code seen or mentioned in the book in the
+https://github.com/rswinkle/mips_book/tree/main/code[code] directory.
+
+== Exercise Solutions
+You can support the book by purchasing the chapter exercise solutions
+https://store.robertwinkler.com/[here].
 
 == License
 
