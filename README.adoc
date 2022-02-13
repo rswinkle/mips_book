@@ -22,6 +22,10 @@ https://github.com/rswinkle/mips_book/tree/main/code[code] directory.
 You can support the book by purchasing the chapter exercise solutions
 https://store.robertwinkler.com/[here].
 
+== Contact Me/Tutoring
+If you're interested in contacting me regarding MIPS tutoring or any other
+business request related to the book, you can reach me at mips@robertwinkler.com.
+
 == License
 
 The book (all adoc files and final generated pdf/html) is under a
