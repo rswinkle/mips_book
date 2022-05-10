@@ -1,6 +1,8 @@
 
 === Exercises
 
+include::../support.adoc[]
+
 . Convert the following C code to MIPS.
 +
 [source,c,linenums]

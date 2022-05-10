@@ -8,8 +8,7 @@ This book is available online in both
 http://www.robertwinkler.com/projects/mips_book/mips_book.html[HTML] and
 http://www.robertwinkler.com/projects/mips_book/mips_book.pdf[PDF] form.
 
-You can support the book and purchase the chapter exercise solutions
-https://store.robertwinkler.com/[here].
+include::support.adoc[]
 
 The repo for the book, where you can get the code referenced and report
 any errors (submit an issue or even a pull request) is

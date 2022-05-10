@@ -1,6 +1,7 @@
 
-
 === Exercises
+
+include::../support.adoc[]
 
 . Create a MIPS data section that declares variables equivalent to the following.  This will not be a runnable program without a main.
 +
