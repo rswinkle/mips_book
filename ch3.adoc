@@ -101,8 +101,8 @@ we test for the opposite of what was in the if statement.  This will always be
 the case when jumping forward because (if we want to keep the same order of code)
 we can only jump _over_ a block of code, whereas in C we fall into the block if
 the condition is true.  In the process of mentally compiling a bit of C to
-assembly, it can be helpful to some to change to jump based
-logic first.  For example the previous C would become:
+assembly, it can be helpful to change to jump based logic first.  For example
+the previous C would become:
 
 [source,c,linenums]
 ----
@@ -145,8 +145,8 @@ be supported everywhere but is not on the green sheet) would take 2:
 	mul   $t0, $t0, $t1   # a *= 2
 ----
 
-Given that, when multiplying or dividing by a power of 2 it's common practice
-to use `sll` or `sra`.  This is true in all assembly languages because
+This is why, when multiplying or dividing by a constant power of 2 it's common
+practice to use `sll` or `sra`.  This is true in all assembly languages because
 multiplication and division are relatively costly operations so using shifts
 when you can saves performance even if you didn't actually save instructions.
 
@@ -186,7 +186,7 @@ greater_0:
 You can see how the first swaps the order of the actual code which keeps the
 actual conditions the same as in C, while the second does what we discussed
 before and inverts the condition in order keep the the blocks in the same
-order.  In both cases, an extra unconditional branch and label is necessary
+order.  In both cases, an extra unconditional branch and label are necessary
 so we don't fall through the else case.  This is inefficient and wasteful,
 not to mention complicates the code unecessarily.  Remember how our job
 is to match the behavior, not the exact structure?  Imagine how we could
@@ -387,7 +387,6 @@ were false, otherwise you'd have jumped.  If you tried to emulate the same
 thing with an *and*, as you saw in the larger snippet above, you'd need a
 bunch of extra labels and jumps for each term.
 
-// TODO add example of mixed compond expression if (A || B && C)
 What about mixed compound statements?
 
 [source,c,linenums]
@@ -472,8 +471,6 @@ done_if:
 	ori   $t1, $t1, 0xAA   # b |= 0xAA
 ----
 
-		
-
 ==== If-Else Chain
 
 Ok, let's look at a larger example.  Say you're trying to determine
@@ -500,8 +497,8 @@ set somewhere before.
 }
 ----
 
-With chains like these, you following everything we've learned before, it
-comes out looking like this (assuming score is `$t0` and letter_grade is `$t1`):
+With chains like these, if you follow everything we've learned, it comes out
+looking like this (assuming score is `$t0` and letter_grade is `$t1`):
 
 [source,mips,linenums]
 ----
@@ -531,7 +528,7 @@ not_b:
 not_c:
 	li     $t2, 60
 	blt    $t0, $t2, grade_done   # if (score < 60) goto grade_done
-	li     $t1, 68           # leter_grade = 'D'
+	li     $t1, 68                # leter_grade = 'D'
 
 grade_done:
 	li     $v0, 4      # print str
@@ -542,7 +539,7 @@ grade_done:
 	move   $a0, $t1    # char to print
 	syscall
 
-	move   $a0, 10    # print '\n'
+	move   $a0, 10     # print '\n'
 	syscall
 ----
 	
@@ -551,7 +548,7 @@ of each condition to jump to the next test, until we get one that fails
 (aka was true in the original C condition) and set the appropriate grade.
 
 You can arrange chains like this in either direction, it doesn't have to match
-the order of the C code.  As long as it works the same, do whatever makes the 
+the order of the C code.  As long as it works the same, do whatever makes the
 code simpler and more sensible to you.
 
 === Conclusion

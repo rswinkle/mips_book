@@ -192,8 +192,8 @@ There a few things to note from the example.
 
 We don't declare global variables for age or height.  We could, but there's no reason
 to since we have to have them in registers to do the addition anyway.  Instead, we
-copy/save height to `$t0` so we can use `$v0`  for 2 more syscalls,
-then add age to `$t0`.
+copy/save age to `$t0` so we can use `$v0`  for 2 more syscalls,
+then add height to `$t0`.
 
 This is generally how it works.  Use registers for local variables unless
 required to do otherwise.  We'll cover xref:ch5.adoc#_the_convention[more about]

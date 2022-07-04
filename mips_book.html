@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 2.0.16">
+<meta name="generator" content="Asciidoctor 2.0.17">
 <meta name="author" content="Robert Winkler">
 <title>MIPS Assembly Programmming</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
@@ -194,7 +194,8 @@ body.toc2.toc-right{padding-left:0;padding-right:20em}}
 #content h1>a.link:hover,h2>a.link:hover,h3>a.link:hover,#toctitle>a.link:hover,.sidebarblock>.content>.title>a.link:hover,h4>a.link:hover,h5>a.link:hover,h6>a.link:hover{color:#a53221}
 details,.audioblock,.imageblock,.literalblock,.listingblock,.stemblock,.videoblock{margin-bottom:1.25em}
 details{margin-left:1.25rem}
-details>summary{cursor:pointer;display:block;position:relative;line-height:1.6;margin-bottom:.625rem;-webkit-tap-highlight-color:transparent}
+details>summary{cursor:pointer;display:block;position:relative;line-height:1.6;margin-bottom:.625rem;outline:none;-webkit-tap-highlight-color:transparent}
+details>summary::-webkit-details-marker{display:none}
 details>summary::before{content:"";border:solid transparent;border-left:solid;border-width:.3em 0 .3em .5em;position:absolute;top:.5em;left:-1.25rem;transform:translateX(15%)}
 details[open]>summary::before{border:solid transparent;border-top:solid;border-width:.5em .3em 0;transform:translateY(15%)}
 details>summary::after{content:"";width:1.25rem;height:1em;position:absolute;top:.3em;left:-1.25rem}
@@ -236,9 +237,8 @@ pre.prettyprint li:not(:first-child) code[data-lang]::before{display:none}
 table.linenotable{border-collapse:separate;border:0;margin-bottom:0;background:none}
 table.linenotable td[class]{color:inherit;vertical-align:top;padding:0;line-height:inherit;white-space:normal}
 table.linenotable td.code{padding-left:.75em}
-table.linenotable td.linenos{border-right:1px solid;opacity:.35;padding-right:.5em}
-pre.pygments .lineno{border-right:1px solid;opacity:.35;display:inline-block;margin-right:.75em}
-pre.pygments .lineno::before{content:"";margin-right:-.125em}
+table.linenotable td.linenos,pre.pygments .linenos{border-right:1px solid;opacity:.35;padding-right:.5em;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
+pre.pygments span.linenos{display:inline-block;margin-right:.75em}
 .quoteblock{margin:0 1em 1.25em 1.5em;display:table}
 .quoteblock:not(.excerpt)>.title{margin-left:-1.5em;margin-bottom:.75em}
 .quoteblock blockquote,.quoteblock p{color:rgba(0,0,0,.85);font-size:1.15rem;line-height:1.75;word-spacing:.1em;letter-spacing:0;font-style:italic;text-align:justify}
@@ -275,7 +275,7 @@ table.frame-none>colgroup+*>:first-child>*,table.frame-sides>colgroup+*>:first-c
 table.frame-none>:last-child>:last-child>*,table.frame-sides>:last-child>:last-child>*{border-bottom-width:0}
 table.frame-none>*>tr>:first-child,table.frame-ends>*>tr>:first-child{border-left-width:0}
 table.frame-none>*>tr>:last-child,table.frame-ends>*>tr>:last-child{border-right-width:0}
-table.stripes-all tr,table.stripes-odd tr:nth-of-type(odd),table.stripes-even tr:nth-of-type(even),table.stripes-hover tr:hover{background:#f8f8f7}
+table.stripes-all>*>tr,table.stripes-odd>*>tr:nth-of-type(odd),table.stripes-even>*>tr:nth-of-type(even),table.stripes-hover>*>tr:hover{background:#f8f8f7}
 th.halign-left,td.halign-left{text-align:left}
 th.halign-right,td.halign-right{text-align:right}
 th.halign-center,td.halign-center{text-align:center}
@@ -291,10 +291,11 @@ ol{margin-left:1.75em}
 ul li ol{margin-left:1.5em}
 dl dd{margin-left:1.125em}
 dl dd:last-child,dl dd:last-child>:last-child{margin-bottom:0}
-ol>li p,ul>li p,ul dd,ol dd,.olist .olist,.ulist .ulist,.ulist .olist,.olist .ulist{margin-bottom:.625em}
+li p,ul dd,ol dd,.olist .olist,.ulist .ulist,.ulist .olist,.olist .ulist{margin-bottom:.625em}
 ul.checklist,ul.none,ol.none,ul.no-bullet,ol.no-bullet,ol.unnumbered,ul.unstyled,ol.unstyled{list-style-type:none}
 ul.no-bullet,ol.no-bullet,ol.unnumbered{margin-left:.625em}
 ul.unstyled,ol.unstyled{margin-left:0}
+li>p:empty:only-child::before{content:"";display:inline-block}
 ul.checklist>li>p:first-child{margin-left:-1em}
 ul.checklist>li>p:first-child>.fa-square-o:first-child,ul.checklist>li>p:first-child>.fa-check-square-o:first-child{width:1.25em;font-size:.8em;position:relative;bottom:.125em}
 ul.checklist>li>p:first-child>input[type=checkbox]:first-child{margin-right:.25em}
@@ -337,8 +338,6 @@ sup.footnote a:active,sup.footnoteref a:active{text-decoration:underline}
 #footnotes .footnote a:first-of-type{font-weight:bold;text-decoration:none;margin-left:-1.05em}
 #footnotes .footnote:last-of-type{margin-bottom:0}
 #content #footnotes{margin-top:-.625em;margin-bottom:0;padding:.75em 0}
-.gist .file-data>table{border:0;background:#fff;width:100%;margin-bottom:0}
-.gist .file-data>table td.line-data{width:99%}
 div.unbreakable{page-break-inside:avoid}
 .big{font-size:larger}
 .small{font-size:smaller}
@@ -438,11 +437,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 @media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
 </style>
 <style>
-pre { line-height: 125%; }
-td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
-span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
-td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
-span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
 pre.pygments .hll { background-color: #ffffcc }
 pre.pygments { background: #f8f8f8; }
 pre.pygments .tok-c { color: #408080; font-style: italic } /* Comment */
@@ -520,8 +514,8 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <div class="details">
 <span id="author" class="author">Robert Winkler</span><br>
 <span id="email" class="email"><a href="mailto:mips@robertwinkler.com">mips@robertwinkler.com</a></span><br>
-<span id="revnumber">version 0.9.16,</span>
-<span id="revdate">2022-05-10</span>
+<span id="revnumber">version 0.9.17,</span>
+<span id="revdate">2022-07-04</span>
 <br><span id="revremark">Beta</span>
 </div>
 <div id="toc" class="toc">
@@ -1684,8 +1678,8 @@ main:
 <div class="paragraph">
 <p>We don&#8217;t declare global variables for age or height.  We could, but there&#8217;s no reason
 to since we have to have them in registers to do the addition anyway.  Instead, we
-copy/save height to <code>$t0</code> so we can use <code>$v0</code>  for 2 more syscalls,
-then add age to <code>$t0</code>.</p>
+copy/save age to <code>$t0</code> so we can use <code>$v0</code>  for 2 more syscalls,
+then add height to <code>$t0</code>.</p>
 </div>
 <div class="paragraph">
 <p>This is generally how it works.  Use registers for local variables unless
@@ -1943,8 +1937,8 @@ we test for the opposite of what was in the if statement.  This will always be
 the case when jumping forward because (if we want to keep the same order of code)
 we can only jump <em>over</em> a block of code, whereas in C we fall into the block if
 the condition is true.  In the process of mentally compiling a bit of C to
-assembly, it can be helpful to some to change to jump based
-logic first.  For example the previous C would become:</p>
+assembly, it can be helpful to change to jump based logic first.  For example
+the previous C would become:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2005,8 +1999,8 @@ be supported everywhere but is not on the green sheet) would take 2:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Given that, when multiplying or dividing by a power of 2 it&#8217;s common practice
-to use <code>sll</code> or <code>sra</code>.  This is true in all assembly languages because
+<p>This is why, when multiplying or dividing by a constant power of 2 it&#8217;s common
+practice to use <code>sll</code> or <code>sra</code>.  This is true in all assembly languages because
 multiplication and division are relatively costly operations so using shifts
 when you can saves performance even if you didn&#8217;t actually save instructions.</p>
 </div>
@@ -2069,7 +2063,7 @@ greater_0:
 <p>You can see how the first swaps the order of the actual code which keeps the
 actual conditions the same as in C, while the second does what we discussed
 before and inverts the condition in order keep the the blocks in the same
-order.  In both cases, an extra unconditional branch and label is necessary
+order.  In both cases, an extra unconditional branch and label are necessary
 so we don&#8217;t fall through the else case.  This is inefficient and wasteful,
 not to mention complicates the code unecessarily.  Remember how our job
 is to match the behavior, not the exact structure?  Imagine how we could
@@ -2561,8 +2555,8 @@ set somewhere before.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>With chains like these, you following everything we&#8217;ve learned before, it
-comes out looking like this (assuming score is <code>$t0</code> and letter_grade is <code>$t1</code>):</p>
+<p>With chains like these, if you follow everything we&#8217;ve learned, it comes out
+looking like this (assuming score is <code>$t0</code> and letter_grade is <code>$t1</code>):</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2630,7 +2624,7 @@ not_b:
 not_c:
 	li     $t2, 60
 	blt    $t0, $t2, grade_done   # if (score &lt; 60) goto grade_done
-	li     $t1, 68           # leter_grade = &#39;D&#39;
+	li     $t1, 68                # leter_grade = &#39;D&#39;
 
 grade_done:
 	li     $v0, 4      # print str
@@ -2641,7 +2635,7 @@ grade_done:
 	move   $a0, $t1    # char to print
 	syscall
 
-	move   $a0, 10    # print &#39;\n&#39;
+	move   $a0, 10     # print &#39;\n&#39;
 	syscall
 </pre></td></tr></table></code></pre>
 </div>
@@ -3340,7 +3334,7 @@ loopcols:
 	add   $t4, $t4, $t2    # t4 = i * cols + j
 
 	sll   $t4  $t4, 2      # t4 = (i * cols + j) * sizeof(int)
-	add   $t4, $t4, $t0    $ t4 = &amp;array[i][j] (calculated as array + (i*cols + j)*4)
+	add   $t4, $t4, $t0    # t4 = &amp;array[i][j] (calculated as array + (i*cols + j)*4)
 
 	sw    $t3, 0($t4)      # array[i][j] = i + j
 
@@ -3736,7 +3730,7 @@ it&#8217;s actually used/needed as a frame pointer.</p>
 <pre>int hello_name_number(char* name, int number)
 {
 	printf("Hello %s!\n", name);
-	return number*10;
+	return number + 10;
 }</pre>
 </div>
 </div>
@@ -3745,9 +3739,30 @@ it&#8217;s actually used/needed as a frame pointer.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>.data
-hello_space:  .asciiz "Hello "
-exclaim_nl:   .asciiz "!\n"
+<pre class="pygments highlight"><code data-lang="mips"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span></pre></div></td><td class="code"><pre><span></span>.data
+hello_space:  .asciiz &quot;Hello &quot;
+exclaim_nl:   .asciiz &quot;!\n&quot;
 
 .text
 # int hello_name_number(char* name, int number)
@@ -3761,12 +3776,13 @@ hello_name_number:
 	move      $a0, $t0    # print name (v0 is still 4)
 	syscall
 
-	la        $a0, exclaim_nl  # print "!\n"
+	la        $a0, exclaim_nl  # print &quot;!\n&quot;
 	syscall
 
 
-	addi    $v0, $a1, 10  # return number+10
-	jr      $ra</pre>
+	addi    $v0, $a1, 10  # return number + 10
+	jr      $ra
+</pre></td></tr></table></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3780,7 +3796,7 @@ is in <code>$v0</code> before returning.</p>
 <div class="sect3">
 <h4 id="_using_the_stack">Using the Stack</h4>
 <div class="paragraph">
-<p>Ok, first let&#8217;s establish the rules on when you <em>have</em> to use the stack (You can
+<p>First, let&#8217;s establish the rules on when you <em>have</em> to use the stack (You can
 always use it for arbitrary local variables, like a local array for example, but
 generally don&#8217;t if you don&#8217;t have a good reason).</p>
 </div>
@@ -3816,7 +3832,7 @@ at the same time.</p>
 </ol>
 </div>
 <div class="paragraph">
-<p>Ok let&#8217;s look at an example for the first two.  Any example for the last rule
+<p>Let&#8217;s look at an example for the first two.  Any example for the last rule
 would be prohibitively large and complicated.</p>
 </div>
 <div class="listingblock">
@@ -6312,8 +6328,8 @@ which case it continues counting up from there).</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 0.9.16<br>
-Last updated 2022-05-10 11:20:21 -0700
+Version 0.9.17<br>
+Last updated 2022-07-04 00:55:55 -0700
 </div>
 </div>
 </body>

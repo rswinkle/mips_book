@@ -9,7 +9,6 @@ them in assembly shortly, you might be wondering what a "Calling Convention" is.
 In short, it is an agreement between the caller and callee about how to treat/use
 certain registers.  We'll get to the why and how later.
 
-
 === Functions
 
 In assembly, a function is simply a label with a return instruction associated with it;
@@ -39,7 +38,6 @@ label.
 But how do you call a function in assembly?  You use the instruction Jump and Link:
 `jal func_label`.
 Let's change the hello world program from chapter 0 to call a function:
-
 
 [source,mips,linenums]
 ----
@@ -86,9 +84,6 @@ every branch instruction is executed before the jump actually happens.  So `jal`
 adds 8 instead of 4 to account for that extra instruction delay.  However,
 every simulator we've mentioned does non-delayed branching by default so you
 can ignore it.
-
-// TODO I'll cover using delayed branching in the chapter covering stupid prof
-// requirements like not using pseudoinstructions etc.
 
 === The Convention
 
@@ -186,12 +181,13 @@ Let's start with something simple that doesn't use the stack.
 int hello_name_number(char* name, int number)
 {
 	printf("Hello %s!\n", name);
-	return number*10;
+	return number + 10;
 }
 ----
 
 According to the convention that becomes:
 
+[source,mips,linenums]
 ----
 .data
 hello_space:  .asciiz "Hello "
@@ -213,7 +209,7 @@ hello_name_number:
 	syscall
 
 
-	addi    $v0, $a1, 10  # return number+10
+	addi    $v0, $a1, 10  # return number + 10
 	jr      $ra
 ----
 
@@ -225,7 +221,7 @@ is in `$v0` before returning.
 
 ==== Using the Stack
 
-Ok, first let's establish the rules on when you _have_ to use the stack (You can
+First, let's establish the rules on when you _have_ to use the stack (You can
 always use it for arbitrary local variables, like a local array for example, but
 generally don't if you don't have a good reason).
 
@@ -250,7 +246,7 @@ forget they can also use the a and v registers for temporaries.  16 is more than
 enough to handle pretty much any function because you rarely need 17 discrete values
 at the same time.
 
-Ok let's look at an example for the first two.  Any example for the last rule
+Let's look at an example for the first two.  Any example for the last rule
 would be prohibitively large and complicated.
 
 

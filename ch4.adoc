@@ -389,7 +389,7 @@ loopcols:
 	add   $t4, $t4, $t2    # t4 = i * cols + j
 
 	sll   $t4  $t4, 2      # t4 = (i * cols + j) * sizeof(int)
-	add   $t4, $t4, $t0    $ t4 = &array[i][j] (calculated as array + (i*cols + j)*4)
+	add   $t4, $t4, $t0    # t4 = &array[i][j] (calculated as array + (i*cols + j)*4)
 
 	sw    $t3, 0($t4)      # array[i][j] = i + j
 
