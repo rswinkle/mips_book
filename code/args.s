@@ -1,4 +1,3 @@
-
 .data
 
 there_are:  .asciiz "There are "
@@ -38,7 +37,6 @@ arg_loop:
 	addi    $a1, $a1, 4    # argv++ ie a1 = &argv[i]
 arg_loop_test:
 	blt     $t1, $t0, arg_loop  # while (i < argc)
-
 
 	li      $v0, 10
 	syscall

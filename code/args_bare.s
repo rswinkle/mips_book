@@ -1,5 +1,3 @@
-
-
 # in bare mode the .data section starts at 0x10000000
 # without -bare, spim puts it at 0x10010000, so your lui will change
 # but if you weren't doing bare you'd probably just be using la
@@ -53,7 +51,6 @@ arg_loop:
 arg_loop_test:
 	bne     $t1, $t0, arg_loop  # while (i != argc)
 	or      $0, $0, $0
-
 
 	ori     $v0, $0, 10
 	syscall
