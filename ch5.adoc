@@ -359,7 +359,7 @@ us an instruction initializing an `i`.
 
 Second, for `save_vals`, we save not only `$ra` because we call another function,
 but also two s registers to save `i` and our stopping point.  The second is not
-actually necessary.  Because it's a constant, we could load 10 into a register
+actually necessary; because it's a constant, we could load 10 into a register
 right before the check every iteration of the loop.  Which version is better depends on
 several factors, like how long or complex the loop is, how many times it executes, and
 of course personal preference.

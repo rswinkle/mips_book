@@ -33,7 +33,7 @@ main:
 	sll     $t1, $t1, 2     # offset *= 4 (sizeof(word))
 	add     $t0, $t0, $t1   # t0 = switch_labels + byte_offset = &switch_labels[grade-'A']
 	lw      $t0, 0($t0)     # load address from jump table
-	jr      $t0             # jump to 
+	jr      $t0             # jump to address
 
 a_label:
 	la      $a0, a_str

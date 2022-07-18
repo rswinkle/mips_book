@@ -514,8 +514,8 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <div class="details">
 <span id="author" class="author">Robert Winkler</span><br>
 <span id="email" class="email"><a href="mailto:mips@robertwinkler.com">mips@robertwinkler.com</a></span><br>
-<span id="revnumber">version 0.9.17,</span>
-<span id="revdate">2022-07-04</span>
+<span id="revnumber">version 0.9.18,</span>
+<span id="revdate">2022-07-17</span>
 <br><span id="revremark">Beta</span>
 </div>
 <div id="toc" class="toc">
@@ -4021,7 +4021,7 @@ us an instruction initializing an <code>i</code>.</p>
 <div class="paragraph">
 <p>Second, for <code>save_vals</code>, we save not only <code>$ra</code> because we call another function,
 but also two s registers to save <code>i</code> and our stopping point.  The second is not
-actually necessary.  Because it&#8217;s a constant, we could load 10 into a register
+actually necessary; because it&#8217;s a constant, we could load 10 into a register
 right before the check every iteration of the loop.  Which version is better depends on
 several factors, like how long or complex the loop is, how many times it executes, and
 of course personal preference.</p>
@@ -5287,7 +5287,7 @@ main:
 	sll     $t1, $t1, 2     # offset *= 4 (sizeof(word))
 	add     $t0, $t0, $t1   # t0 = switch_labels + byte_offset = &amp;switch_labels[grade-&#39;A&#39;]
 	lw      $t0, 0($t0)     # load address from jump table
-	jr      $t0             # jump to 
+	jr      $t0             # jump to address
 
 a_label:
 	la      $a0, a_str
@@ -5444,10 +5444,15 @@ is in <code>$a1</code> when main starts.  So the same program in MIPS looks like
 <span class="normal">38</span>
 <span class="normal">39</span>
 <span class="normal">40</span>
-<span class="normal">41</span></pre></div></td><td class="code"><pre><span></span>.data
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span></pre></div></td><td class="code"><pre><span></span>
+.data
 
 there_are:  .asciiz &quot;There are &quot;
 arguments:  .asciiz &quot; command line arguments:\n&quot;
+
 
 .text
 
@@ -5462,7 +5467,7 @@ main:
 	li      $v0, 1   # print int
 	syscall
 
-	li      $v0, 4            # print string
+	li      $v0, 4
 	la      $a0, arguments
 	syscall
 
@@ -5474,7 +5479,7 @@ arg_loop:
 	lw      $a0, 0($a1)
 	syscall
 
-	li      $v0, 11    # print character
+	li      $v0, 11
 	li      $a0, 10    # &#39;\n&#39;
 	syscall
 
@@ -5482,6 +5487,7 @@ arg_loop:
 	addi    $a1, $a1, 4    # argv++ ie a1 = &amp;argv[i]
 arg_loop_test:
 	blt     $t1, $t0, arg_loop  # while (i &lt; argc)
+
 
 	li      $v0, 10
 	syscall
@@ -5801,8 +5807,8 @@ in comments above each label so you don&#8217;t forget.  Of course, none of this
 if you&#8217;re allowed to just use <code>la</code> which is true the vast majority of the time.</p>
 </div>
 <div class="paragraph">
-<p>Let&#8217;s look at a small example.  We&#8217;ll convert the following code from
-args.s to bare mode:</p>
+<p>Let&#8217;s look at a small example.  We&#8217;ll convert the args.s from above (reproduced
+here for convenience) to bare mode:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -5836,12 +5842,28 @@ args.s to bare mode:</p>
 <span class="normal">28</span>
 <span class="normal">29</span>
 <span class="normal">30</span>
-<span class="normal">31</span></pre></div></td><td class="code"><pre><span></span>.data
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span></pre></div></td><td class="code"><pre><span></span>
+.data
 
 there_are:  .asciiz &quot;There are &quot;
 arguments:  .asciiz &quot; command line arguments:\n&quot;
 
+
 .text
+
 main:
 	move    $t0, $a0  # save argc
 
@@ -5849,7 +5871,13 @@ main:
 	la      $a0, there_are
 	syscall
 
-	# some code removed for brevity
+	move    $a0, $t0
+	li      $v0, 1   # print int
+	syscall
+
+	li      $v0, 4
+	la      $a0, arguments
+	syscall
 
 	li      $t1, 0   # i = 0
 	j       arg_loop_test
@@ -5867,6 +5895,10 @@ arg_loop:
 	addi    $a1, $a1, 4    # argv++ ie a1 = &amp;argv[i]
 arg_loop_test:
 	blt     $t1, $t0, arg_loop  # while (i &lt; argc)
+
+
+	li      $v0, 10
+	syscall
 </pre></td></tr></table></code></pre>
 </div>
 </div>
@@ -5908,18 +5940,66 @@ after any branches or loads.</p>
 <span class="normal">30</span>
 <span class="normal">31</span>
 <span class="normal">32</span>
-<span class="normal">33</span></pre></div></td><td class="code"><pre><span></span>.data
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span></pre></div></td><td class="code"><pre><span></span>
+
+# in bare mode the .data section starts at 0x10000000
+# without -bare, spim puts it at 0x10010000, so your lui will change
+# but if you weren&#39;t doing bare you&#39;d probably just be using la
+
+# MARS .data always starts at 0x10010000, whether pseudoinstructions
+# or delayed branching are on or not.
+
+.data
 
 there_are:  .asciiz &quot;There are &quot;
 arguments:  .asciiz &quot; command line arguments:\n&quot;
 
+# run with spim -bare -file args_bare.s
+
 .text
 
+.globl main
 main:
 	or      $t0, $0, $a0  # save argc
 
 	ori     $v0, $0, 4
 	lui     $a0, 0x1000    # there_are is at beginning of data so just lui, lower is 0
+	syscall
+
+	or      $a0, $0, $t0
+	ori     $v0, $0, 1   # print int
+	syscall
+
+	ori     $v0, $0, 4
+	lui     $a0, 0x1000
+	ori     $a0, $a0, 11   # 11 is length in bytes of &quot;There are &quot; 10 chars + &#39;\0&#39;
+	#la      $a0, arguments
 	syscall
 
 	ori     $t1, $0, 0   # i = 0
@@ -5941,6 +6021,10 @@ arg_loop:
 arg_loop_test:
 	bne     $t1, $t0, arg_loop  # while (i != argc)
 	or      $0, $0, $0
+
+
+	ori     $v0, $0, 10
+	syscall
 </pre></td></tr></table></code></pre>
 </div>
 </div>
@@ -5950,13 +6034,6 @@ arg_loop_test:
 and lastly, the <code>blt</code> became <code>bne</code>.  That last is worth noting, because there&#8217;s no
 reason to do a complicated transformation if you don&#8217;t have to and <code>bne</code> accomplishes
 the same thing here.</p>
-</div>
-<div class="paragraph">
-<p>See the example program
-<a href="https://raw.githubusercontent.com/rswinkle/mips_book/master/code/args_bare.s">args_bare.s</a>
-which is just
-<a href="https://raw.githubusercontent.com/rswinkle/mips_book/master/code/args.s">args.s</a>
-in bare mode for a complete example.</p>
 </div>
 </div>
 <div class="sect2">
@@ -6328,8 +6405,8 @@ which case it continues counting up from there).</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 0.9.17<br>
-Last updated 2022-07-04 00:55:55 -0700
+Version 0.9.18<br>
+Last updated 2022-07-17 21:14:32 -0700
 </div>
 </div>
 </body>
