@@ -5808,7 +5808,7 @@ here for convenience) to bare mode:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="mips"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<pre class="pygments highlight"><code data-lang="riscv"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
 <span class="normal"> 4</span>
@@ -5895,12 +5895,12 @@ arg_loop_test:
 </div>
 </div>
 <div class="paragraph">
-<p>So we need to change the <code>move</code>, the <code>li</code>'s, the <code>la</code> and the <code>blt</code> and add a <code>nop</code>
+<p>So we need to change the <code>move</code>s,<code>li</code>'s, <code>la</code>'s,  and the the <code>j</code>.
 after any branches or loads.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="mips"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
+<pre class="pygments highlight"><code data-lang="riscv"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
 <span class="normal"> 4</span>
@@ -6015,9 +6015,10 @@ arg_loop_test:
 </div>
 </div>
 <div class="paragraph">
-<p>Following the table, you can see the <code>move</code> became <code>or</code>, the <code>li</code>'s became
+<p>Following the table, you can see the <code>mv</code> became <code>or</code>, the <code>li</code> became
 <code>ori</code>, we added <code>nop</code> instructions in the form of <code>or</code> with <code>$0</code> as the destination,
-and lastly, the <code>blt</code> became <code>bne</code>.  That last is worth noting, because there&#8217;s no
+the <code>blt</code> became <code>bne</code>, and lastly the <code>la</code> became <code>lui</code> plus an <code>ori</code> if necessary
+for the byte offset.  The <code>blt</code> to <code>bne</code> is worth noting, because there&#8217;s no
 reason to do a complicated transformation if you don&#8217;t have to and <code>bne</code> accomplishes
 the same thing here.</p>
 </div>

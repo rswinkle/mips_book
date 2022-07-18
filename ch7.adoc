@@ -475,22 +475,23 @@ if you're allowed to just use `la` which is true the vast majority of the time.
 Let's look at a small example.  We'll convert the args.s from above (reproduced
 here for convenience) to bare mode:
 
-[source,mips,linenums]
+[source,riscv,linenums]
 ----
 include::code/args.s[]
 ----
 
-So we need to change the `move`, the ``li``'s, the `la` and the `blt` and add a `nop`
+So we need to change the ``move``s,``li``'s, ``la``'s,  and the the `j`.
 after any branches or loads.
 
-[source,mips,linenums]
+[source,riscv,linenums]
 ----
 include::code/args_bare.s[]
 ----
 
-Following the table, you can see the `move` became `or`, the ``li``'s became
+Following the table, you can see the `mv` became `or`, the `li` became
 `ori`, we added `nop` instructions in the form of `or` with `$0` as the destination,
-and lastly, the `blt` became `bne`.  That last is worth noting, because there's no
+the `blt` became `bne`, and lastly the `la` became `lui` plus an `ori` if necessary
+for the byte offset.  The `blt` to `bne` is worth noting, because there's no
 reason to do a complicated transformation if you don't have to and `bne` accomplishes
 the same thing here.
 
