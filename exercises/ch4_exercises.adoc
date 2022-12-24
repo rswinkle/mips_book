@@ -36,7 +36,7 @@ int main()
 ----
 
 . Write a MIPS program to find and print the average of the following array.
-Just use integer division.
+Use integer division.
 +
 [source,mips,linenums]
 ----

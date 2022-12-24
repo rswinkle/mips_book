@@ -103,7 +103,7 @@ different operating systems on the same architecture.  This is because different
 architectures have different numbers of registers, and some registers like `$ra`
 have hardcoded uses.  The op `jal` modifies `$ra`, and `$0` is a constant 0 and
 there's no way to change either of those facts.  That still leaves a lot of
-flexibility about designing a calling convention.  While they mostly match,
+flexibility when designing a calling convention.  While they mostly match,
 you'll find several variations of MIPS calling conventions online.  They
 usually differ in how they setup a stack frame.  The convention covered
 in this chapter is consistent with, and sufficient for, almost every college
