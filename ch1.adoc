@@ -113,8 +113,8 @@ think of a reason you'd want to.  You could declare a `.byte` array and list all
 the characters individually.
 
 However, if you want an array with all elements initialized to the same value there
-is a more convenient option that I learned very recently.  After the type you
-put the value you want, a colon, and then the number of elements.  So `a: .word 123 : 10`
+is a more convenient option.  After the type you put the value you want, a colon,
+and then the number of elements.  So `a: .word 123 : 10`
 would declare a 10 integer array with all elements set to 123.  This works for all
 types in MARS, but SPIM does not support this syntax for floats and doubles.  Since
 you'll probably not have to deal with floating point types at all, let alone arrays

@@ -108,13 +108,7 @@ over all the pieces in overview.  You can copy paste these into your editor of c
 
 [source,c,linenums]
 ----
-#include <stdio.h>
-
-int main()
-{
-	printf("Hello World!\n");
-	return 0;
-}
+include::code/hello.c[]
 ----
 
 It is pretty self explanatory.  You have to include stdio.h so you can use the
@@ -137,17 +131,7 @@ Now, the same program in MIPS:
 
 [source,mips,linenums]
 ----
-.data
-hello:   .asciiz "Hello World!\n"
-
-.text
-main:
-	li   $v0, 4      # load immediate, v0 = 4 (4 is print string system call)
-	la   $a0, hello  # load address of string to print into a0
-	syscall
-
-	li   $v0, 10     # exit syscall
-	syscall
+include::code/hello.s[]
 ----
 
 The `.data` section is where you declare global variables, which includes string
