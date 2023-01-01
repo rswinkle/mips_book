@@ -5,7 +5,7 @@
 We mentioned system calls (aka syscalls from now on) in chapter 0 when we were
 going over our "Hello World" program, but what exactly are they?
 
-Essentially, they are the built in functions of a operating system; in this case,
+Essentially, they are the built in functions of an operating system; in this case,
 the simple operating system of the MIPS simulators.  They provide access to all the
 fundamental features, like input and output to/from both the console and files,
 allocating memory, and exiting.  That covers all the 17 syscalls supported by spim,
@@ -191,7 +191,7 @@ main:
 There a few things to note from the example.
 
 We don't declare global variables for age or height.  We could, but there's no reason
-to since we have to have them in registers to do the addition anyway.  Instead, we
+to since we need them in registers to perform the addition anyway.  Instead, we
 copy/save age to `$t0` so we can use `$v0`  for 2 more syscalls,
 then add height to `$t0`.
 

@@ -3,7 +3,7 @@
 
 == Chapter 3: Branches and Logic
 
-We can't go much farther in our MIPS programming journey without covering branching.
+We can't go much further in our MIPS programming journey without covering branching.
 Almost every non-trivial program requires some logic, even if it's only a few `if` or
 `if-else` statements.  In other words, almost every program requires branching, a way
 to do a instead of b, or to do a only if certain conditions are met.
@@ -37,7 +37,7 @@ relevant instructions are listed in the following table:
 
 | Set Less Than Immediate Unsigned | sltiu | slt rd, rs, imm | rd = (rs < imm) ? 1 : 0
 
-| Set Less Than Unsigned | sltu | sltu rd, rs, imm | rd = (rs < imm) ? 1 : 0
+| Set Less Than Unsigned | sltu | sltu rd, rs, rt | rd = (rs < rt) ? 1 : 0
 
 |===
 
@@ -280,8 +280,8 @@ do_something:
 
 dont_do_something:
 
-	// You can see how the first success is all you need:
-	// Compare that with and below
+	// You can see how the first success is all you need
+	// Compare that with and below:
 
 	if (a && b && c) {
 		something;
@@ -480,21 +480,7 @@ set somewhere before.
 
 [source,c,linenums]
 ----
-	char letter_grade;
-	if (score >= 90) {
-		letter_grade = 'A';
-	} else if (score >= 80) {
-		letter_grade = 'B';
-	} else if (score >= 70) {
-		letter_grade = 'C';
-	} else if (score >= 60) {
-		letter_grade = 'D';
-	} else {
-		letter_grade = 'F';
-	}
-
-	printf("You got a %c\n", letter_grade);
-}
+include::code/branching_example.c[]
 ----
 
 With chains like these, if you follow everything we've learned, it comes out
@@ -502,47 +488,9 @@ looking like this (assuming score is `$t0` and letter_grade is `$t1`):
 
 [source,mips,linenums]
 ----
-.data
-grade_str: .asciiz "You got a "
-
-.text
-	li     $t1, 70   # letter_grade default to 'F' ascii value
-	
-	li     $t2, 90
-	blt    $t0, $t2, not_a   # if (score < 90) goto not_a
-	li     $t1, 65           # leter_grade = 'A'
-	j      grade_done
-
-not_a:
-	li     $t2, 80
-	blt    $t0, $t2, not_b   # if (score < 80) goto not_b
-	li     $t1, 66           # leter_grade = 'B'
-	j      grade_done
-
-not_b:
-	li     $t2, 70
-	blt    $t0, $t2, not_c   # if (score < 70) goto not_c
-	li     $t1, 67           # leter_grade = 'C'
-	j      grade_done
-
-not_c:
-	li     $t2, 60
-	blt    $t0, $t2, grade_done   # if (score < 60) goto grade_done
-	li     $t1, 68                # leter_grade = 'D'
-
-grade_done:
-	li     $v0, 4      # print str
-	la     $a0, grade_str
-	syscall
-
-	li     $v0, 11     # print character
-	move   $a0, $t1    # char to print
-	syscall
-
-	move   $a0, 10     # print '\n'
-	syscall
+include::code/branching_example.s[]
 ----
-	
+
 You can see how we set a default value and then test for the opposite
 of each condition to jump to the next test, until we get one that fails
 (aka was true in the original C condition) and set the appropriate grade.

@@ -18,7 +18,6 @@
 
 # misc
 experiments/
-*.c
 *~
 *.kate-swp
 CMakeFiles/*
