@@ -1,6 +1,6 @@
 == Info
 
-Copyright (C) 2021-2022 http://robertwinkler.com[Robert Winkler]
+Copyright (C) 2021-2023 http://robertwinkler.com[Robert Winkler]
 
 Licensed under https://creativecommons.org/licenses/by-nc-sa/4.0/[Creative Commons].
 
@@ -15,5 +15,5 @@ any errors (submit an issue or even a pull request) is
 https://github.com/rswinkle/mips_book[here].
 
 If you're interested in contacting me regarding MIPS tutoring or any other
-business request related to the book, you can reach me at mips@robertwinkler.com.
+business request related to the book, you can reach me at books@robertwinkler.com.
 

@@ -50,7 +50,7 @@ I highly recommend you use Linux. It's easier in every way to do dev work
 on Linux vs Windows or Mac.  Many assignments require it, which often necessitates
 using a virtual machine (which is painful, especially on laptops) and/or ssh-ing
 into a school Linux server, which is also less than ideal.  In general, you'll have
-to learn how to use the unix terminal eventually and will probably use it to some
+to learn how to use the Unix terminal eventually and will probably use it to some
 extent in your career so it also makes sense to get used to it asap.
 
 That being said, Windows does now have WSL so you can get the full Ubuntu or Debian
