@@ -4,9 +4,9 @@
 
 == Chapter 5: Functions and the MIPS Calling Convention
 
-While I'm sure everyone here probably knows what functions are, and we'll cover
-them in assembly shortly, you might be wondering what a "Calling Convention" is.
-In short, it is an agreement between the caller and callee about how to treat/use
+While I'm sure everyone here probably knows what functions are, you might
+be wondering what a "Calling Convention" is.  In short, it is an
+agreement between the caller and callee about how to treat/use
 certain registers.  We'll get to the why and how later.
 
 === Functions
