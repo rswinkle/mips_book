@@ -2917,7 +2917,7 @@ only one jump + label, rather than 2 since you can forgo the the initial <code>i
 <span class="tok-nl">loop</span><span class="tok-p">:</span><span class="tok-w"></span>
 <span class="tok-w">	</span><span class="tok-n">do_something</span><span class="tok-p">;</span><span class="tok-w"></span>
 <span class="tok-w">	</span><span class="tok-n">i</span><span class="tok-o">++</span><span class="tok-w"></span>
-<span class="tok-w">	</span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">i</span><span class="tok-w"> </span><span class="tok-o">&lt;</span><span class="tok-w"> </span><span class="tok-n">a</span><span class="tok-p">)</span><span class="tok-w"></span>
+<span class="tok-w">	</span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">i</span><span class="tok-w"> </span><span class="tok-o">&lt;</span><span class="tok-w"> </span><span class="tok-mi">10</span><span class="tok-p">)</span><span class="tok-w"></span>
 <span class="tok-w">		</span><span class="tok-k">goto</span><span class="tok-w"> </span><span class="tok-n">loop</span><span class="tok-p">;</span><span class="tok-w"></span>
 </pre></td></tr></table></code></pre>
 </div>
@@ -2970,8 +2970,8 @@ are most often used for, looping through data structures, most commonly arrays.<
 variables of the same type, almost always related in some way.  Naturally, you
 want to operate on them all together in various ways; sorting, searching,
 accumulating, etc.  Given that the only way to do that is with loops, in this
-section we&#8217;ll cover different ways of looping through arrays, and dealing with
-multi-dimentional arrays.</p>
+section we&#8217;ll cover different ways of looping through arrays, including
+multidimensional arrays.</p>
 </div>
 <div class="sect3">
 <h4 id="_1d_arrays">1D Arrays</h4>
@@ -3022,7 +3022,7 @@ sum_loop:
 </div>
 </div>
 <div class="paragraph">
-<p>We initialize the relevant variables beforehand (<code>numbers</code> and <code>$t3</code> could be set
+<p>We initialize the relevant variables beforehand (<code>numbers</code> and <code>10</code> could be loaded
 every iteration but that&#8217;s less efficient).  Now what&#8217;s with the <code>i*4</code>?  We already
 discussed using shifts to multiply and divide by powers of 2 in a previous chapter,
 but here we&#8217;re doing something that higher level languages do automatically for you
@@ -3197,9 +3197,13 @@ to a 1D array with rows*cols elements in the same order:</p>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="c"><table class="linenotable"><tr><td class="linenos"><div class="linenodiv"><pre><span class="normal">1</span>
 <span class="normal">2</span>
-<span class="normal">3</span></pre></div></td><td class="code"><pre><span></span><span class="tok-w">	</span><span class="tok-c1">// The memory of these two arrays are identical</span>
-<span class="tok-w">	</span><span class="tok-kt">int</span><span class="tok-w"> </span><span class="tok-n">array2d</span><span class="tok-p">[</span><span class="tok-mi">2</span><span class="tok-p">][</span><span class="tok-mi">4</span><span class="tok-p">]</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-mi">1</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">2</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">3</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">4</span><span class="tok-w"> </span><span class="tok-p">},</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-mi">5</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">6</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">7</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">8</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-p">};</span><span class="tok-w"></span>
-<span class="tok-w">	</span><span class="tok-kt">int</span><span class="tok-w"> </span><span class="tok-n">array1d</span><span class="tok-p">[</span><span class="tok-mi">8</span><span class="tok-p">]</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-mi">1</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">2</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">3</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">4</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">5</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">6</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">7</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">8</span><span class="tok-w"> </span><span class="tok-p">};</span><span class="tok-w"></span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span></pre></div></td><td class="code"><pre><span></span><span class="tok-w">	</span><span class="tok-cp">#define ROWS 2</span>
+<span class="tok-w">	</span><span class="tok-cp">#define COLS 4</span>
+<span class="tok-w">	</span><span class="tok-c1">// The memory of these two arrays are identical</span>
+<span class="tok-w">	</span><span class="tok-kt">int</span><span class="tok-w"> </span><span class="tok-n">array</span><span class="tok-p">[</span><span class="tok-n">ROWS</span><span class="tok-p">][</span><span class="tok-n">COLS</span><span class="tok-p">]</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-mi">1</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">2</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">3</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">4</span><span class="tok-w"> </span><span class="tok-p">},</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-mi">5</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">6</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">7</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">8</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-p">};</span><span class="tok-w"></span>
+<span class="tok-w">	</span><span class="tok-kt">int</span><span class="tok-w"> </span><span class="tok-n">array1d</span><span class="tok-p">[</span><span class="tok-n">ROWS</span><span class="tok-o">*</span><span class="tok-n">COLS</span><span class="tok-p">]</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-mi">1</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">2</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">3</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">4</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">5</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">6</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">7</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">8</span><span class="tok-w"> </span><span class="tok-p">};</span><span class="tok-w"></span>
 </pre></td></tr></table></code></pre>
 </div>
 </div>
@@ -3209,7 +3213,7 @@ to a 1D array with rows*cols elements in the same order:</p>
 </div>
 <div class="paragraph">
 <p>What this means is that when we declare a 2D array, it&#8217;s basically a 1D array with
-the size equal to the rows * columns.  Also, when we loop through a 2D array, we can
+the size equal to rows * columns.  Also, when we loop through a 2D array, we can
 often treat it like a 1D array with a single loop.  So everything that we learned
 before applies.</p>
 </div>
@@ -3332,7 +3336,7 @@ loopcols:
 </div>
 </div>
 <div class="paragraph">
-<p>It&#8217;s a bit shorter but again, how much are those extra labels and branching worth?
+<p>It&#8217;s a bit shorter but again, how much are the extra label and branch worth?
 For me, this one&#8217;s a toss up.  On the other hand, either of the last 2 versions are
 better than the literal translation below:</p>
 </div>
