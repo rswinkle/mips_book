@@ -3,9 +3,7 @@
 there_are:  .asciiz "There are "
 arguments:  .asciiz " command line arguments:\n"
 
-
 .text
-
 main:
 	move    $t0, $a0  # save argc
 
