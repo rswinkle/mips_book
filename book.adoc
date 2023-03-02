@@ -2,7 +2,7 @@
 
 = MIPS Assembly Programmming
 Robert Winkler <mips@robertwinkler.com>
-v0.9.22, 2023-1-9: Beta
+v1.0.0, 2023-3-1
 :toc:
 
 include::info.adoc[]

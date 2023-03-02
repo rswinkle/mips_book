@@ -71,7 +71,7 @@ sugar and features like graphics, memory mapped I/O, etc.
 
 SPIM and QtSpim are in the Debian/Ubuntu repos so you can install them with the following
 
-[source,bash]
+[source,console]
 ----
 $ sudo apt install qtspim spim
 ----
@@ -120,7 +120,7 @@ then return 0 to exit.  Returning 0 indicates success and there were no errors.
 You can compile and run it in a linux/unix terminal as shown below.  You
 can substitute clang or another compiler for gcc if you want.
 
-[source,bash]
+[source,console]
 ----
 $ gcc -o hello hello.c
 $ ./hello
@@ -157,7 +157,7 @@ Now that we have our hello world MIPS program, how do we run it?  Well the easie
 and quickest{mars_slow} way is of course to do it on the command line, which can be done like
 this for spim:
 
-[source,bash]
+[source,console]
 ----
 $ spim -file hello.s
 SPIM Version 8.0 of January 8, 2010
@@ -170,7 +170,7 @@ Hello World!
 
 or this for MARS:
 
-[source,bash]
+[source,console]
 ----
 $ java -jar ~/Mars4_5.jar hello.s
 MARS 4.5  Copyright 2003-2014 Pete Sanderson and Kenneth Vollmar
@@ -195,7 +195,7 @@ Whereas with QtSpim you only have to hit "run".
 
 QtSpim does let you start and load the file in one step from the command line
 
-[source,bash]
+[source,console]
 ----
 $ qtspim hello.s
 ----

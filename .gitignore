@@ -27,6 +27,8 @@ stats/*
 !build/Makefile
 !build/*.make
 *.swp
+tags
+scratch/
 
 # at least until the book is in a more stable state
 build/*.html
