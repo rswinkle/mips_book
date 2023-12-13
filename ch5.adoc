@@ -166,7 +166,7 @@ The `$sp` register is technically preserved but not in the same way.  Basically
 what you allocate (subtract) you have to deallocate (add) before returning
 from a function, thus preserving the original value.
 
-You can ignore `$at, $k0-$k1, $gp` and most of the time `$fp` too.  In over 5 years
+You can ignore `$at, $k0-$k1, $gp` and most of the time `$fp` too.  In over 7 years
 of tutoring I've helped students with MIPS from at least 2 dozen different colleges
 and I think I've only seen a professor force his students to use `$fp`
 or pass more than 4 arguments twice.  You can see{fp_is_s8} register 30 sometimes
