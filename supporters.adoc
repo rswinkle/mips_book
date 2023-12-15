@@ -25,7 +25,7 @@
 [%autowidth,cols="1a,1a,1a",frame=none,grid=none]
 |===
 |http://www.robertwinkler.com/projects/sdl_img.html[sdl_img]
-|supporter9
+|Nick, Columbia CS Student
 |supporter10
 
 |supporter11
