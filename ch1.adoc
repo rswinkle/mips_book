@@ -62,7 +62,7 @@ int main()
 
 The first thing you have to remember when converting from a higher level language
 to assembly (any assembly), is that what matters is whether it is functionally
-the same, not whether everything is done in exactly the same way{what_matters}.
+the same, not whether everything is done in exactly the same way.{what_matters}
 In this instance, that means realizing that your literal strings and your local
 variables `name` and `age` become globals in MIPS.
 
