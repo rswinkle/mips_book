@@ -26,7 +26,10 @@
 |===
 |http://www.robertwinkler.com/projects/sdl_img.html[sdl_img]
 |Nick, Columbia CS Student
-|supporter10
+|Dr. Michael Rogers +
+Assistant Professor +
+Computer Science +
+University of Wisconsin Oshkosh
 
 |supporter11
 |supporter12
