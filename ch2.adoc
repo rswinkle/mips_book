@@ -1,4 +1,4 @@
-:mars_syscalls: footnote:[https://courses.missouristate.edu/KenVollmar/mars/Help/SyscallHelp.html]
+:mars_syscalls: footnote:[https://dpetersanderson.github.io/Help/SyscallHelp.html]
 
 == Chapter 2: System Calls
 

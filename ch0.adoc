@@ -1,6 +1,6 @@
 :mars_slow: footnote:[Starting up the MARS GUI (an old Java app) is often annoyingly slow]
 :mars_versions: footnote:[Some schools/professors have their own versions with extra features and other improvements over the old version available on the MARS website]
-:mars_commandline: footnote:[https://courses.missouristate.edu/KenVollmar/mars/Help/MarsHelpCommand.html]
+:mars_commandline: footnote:[https://dpetersanderson.github.io/Help/MarsHelpCommand.html]
 
 == Chapter 0: Hello World
 
@@ -81,7 +81,7 @@ You can probably find them in the repos for other distros too and install them s
 If it's not in your repos or you're on Windows (and not using WSL) or Mac you can
 download them, and MARS at these addresses
 
-* https://courses.missouristate.edu/KenVollmar/mars/download.htm[MARS]
+* https://github.com/dpetersanderson/MARS/[MARS]
 * https://sourceforge.net/projects/spimsimulator/files/[QtSpim]
 
 === Handy Resources
@@ -93,7 +93,7 @@ It's possible you already have a physical copy of this as it's actually the tear
 and Hennessey textbook https://amzn.to/3zN71KP[_Computer Architecture and Design_]
 that is commonly used in college courses.
 
-The second thing is the list of https://courses.missouristate.edu/KenVollmar/mars/Help/SyscallHelp.html[syscalls]
+The second thing is the list of https://dpetersanderson.github.io/Help/SyscallHelp.html[syscalls]
 from the MARS website.
 
 I recommend you download/bookmark both and keep them open while working because
