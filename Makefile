@@ -14,7 +14,7 @@ htmlbook:
 	asciidoctor book.adoc -o mips_book.html
 
 epubbook:
-	asciidoctor-epub3 book.adoc -o mips_book.epub
+	asciidoctor-epub3 -a ebook-validate book.adoc -o mips_book.epub
 
 clean:
 	rm mips_book.pdf
