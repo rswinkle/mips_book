@@ -2,7 +2,7 @@
 
 = MIPS Assembly Programmming
 Robert Winkler <books@robertwinkler.com>
-v1.0.8, 2024-11-30
+v1.0.9, 2024-11-30
 :front-cover-image: images/mips_book.png
 :title-page-background-image: image:images/mips_book.png[fit=none,pdfwidth=50%,position=top]
 //:title-logo-image: image:images/mips_book.png[fit=none,pdfwidth=50%,position=top]
