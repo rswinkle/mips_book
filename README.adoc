@@ -10,11 +10,13 @@ Get the source from https://github.com/rswinkle/mips_book[Github].
 The pre-built book is available in the root directory in html, pdf, and
 epub formats and they're also available on my website and Leanpub:
 
-https://www.robertwinkler.com/projects/mips_book/mips_book.html[HTML Page]
-https://www.robertwinkler.com/projects/mips_book/mips_book.pdf[PDF]
-https://www.robertwinkler.com/projects/mips_book/mips_book.epub[PDF]
+* https://www.robertwinkler.com/projects/mips_book/mips_book.html[HTML Page]
+* https://www.robertwinkler.com/projects/mips_book/mips_book.pdf[PDF]
+* https://www.robertwinkler.com/projects/mips_book/mips_book.epub[EPUB]
 
+++++
 <iframe width='160' height='400' src='https://leanpub.com/mipsassemblyprogrammming/embed' frameborder='0' allowtransparency='true'></iframe>
+++++
 
 == Code
 You can get all code seen or mentioned in the book in the
