@@ -39,7 +39,8 @@ University of Wisconsin Oshkosh
 ===== Silver
 [%autowidth,cols="1a,1a,1a",frame=none,grid=none]
 |===
-|supporter14
+|Atlas Gong +
+https://cs.mcgill.ca/~agong2
 |supporter15
 |supporter16
 
