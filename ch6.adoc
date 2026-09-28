@@ -120,7 +120,7 @@ With all of the opcodes that end in ._x_, the x is either s for single
 precision or d for double precision.
 
 The _y_ in the Compare instructions are one of eq, lt, le.
-Naturally _op_ would be the matching ==, <, <=.  Unfortunately, you don't
+Naturally _op_ would be the matching ==, <, \<=.  Unfortunately, you don't
 get _not equal_, _greater than_, or _greater equal_, even as pseudoinstructions,
 but it's easy enough to flip the order of operands or branch on the
 opposite result.

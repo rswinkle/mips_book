@@ -513,8 +513,8 @@ pre.pygments .tok-il { color: #666666 } /* Literal.Number.Integer.Long */
 <div class="details">
 <span id="author" class="author">Robert Winkler</span><br>
 <span id="email" class="email"><a href="mailto:books@robertwinkler.com">books@robertwinkler.com</a></span><br>
-<span id="revnumber">version 1.0.12,</span>
-<span id="revdate">2026-03-06</span>
+<span id="revnumber">version 1.0.13,</span>
+<span id="revdate">2026-09-28</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
@@ -1859,7 +1859,7 @@ relevant instructions are listed in the following table:</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Branch Less Than Or Equal</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">ble</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">ble rs, rt, label</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">if (rs &#8656; rt) goto label</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">if (rs &lt;= rt) goto label</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Branch Greater Than Or Equal</p></td>
@@ -4534,7 +4534,7 @@ precision or d for double precision.</p>
 </div>
 <div class="paragraph">
 <p>The <em>y</em> in the Compare instructions are one of eq, lt, le.
-Naturally <em>op</em> would be the matching ==, &lt;, &#8656;.  Unfortunately, you don&#8217;t
+Naturally <em>op</em> would be the matching ==, &lt;, &lt;=.  Unfortunately, you don&#8217;t
 get <em>not equal</em>, <em>greater than</em>, or <em>greater equal</em>, even as pseudoinstructions,
 but it&#8217;s easy enough to flip the order of operands or branch on the
 opposite result.</p>
@@ -6479,8 +6479,8 @@ University of Wisconsin Oshkosh</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.0.12<br>
-Last updated 2026-03-06 11:03:06 -0700
+Version 1.0.13<br>
+Last updated 2026-09-28 04:30:34 -0700
 </div>
 </div>
 </body>

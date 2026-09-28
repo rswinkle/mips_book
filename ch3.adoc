@@ -27,7 +27,7 @@ relevant instructions are listed in the following table:
 
 | Branch Greater Than | bgt | bgt rs, rt, label | if (rs > rt) goto label
 
-| Branch Less Than Or Equal | ble | ble rs, rt, label | if (rs <= rt) goto label
+| Branch Less Than Or Equal | ble | ble rs, rt, label | if (rs \<= rt) goto label
 
 | Branch Greater Than Or Equal | bge | bge rs, rt, label | if (rs >= rt) goto label
 
