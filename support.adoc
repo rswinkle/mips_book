@@ -1,4 +1,6 @@
 
 You can support the book and purchase the chapter exercise solutions
-from https://store.robertwinkler.com/[my store] or
-https://leanpub.com/mipsassemblyprogrammming[Leanpub].
+from https://store.robertwinkler.com/[my store],
+https://leanpub.com/mipsassemblyprogrammming[Leanpub], or
+https://rswinkle.itch.io/[itch.io].
+

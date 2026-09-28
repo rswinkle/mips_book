@@ -21,7 +21,8 @@ https://github.com/rswinkle/mips_book/tree/main/code[code] directory.
 
 == Exercise Solutions
 Support the book and buy the solutions to the chapter exercises
-at https://store.robertwinkler.com/[my store] or at https://leanpub.com/mipsassemblyprogrammming[Leanpub]
+from https://store.robertwinkler.com/[my store], https://leanpub.com/mipsassemblyprogrammming[Leanpub],
+or https://rswinkle.itch.io/[itch.io].
 
 == Contact Me/Tutoring
 If you're interested in contacting me regarding MIPS tutoring or any other
