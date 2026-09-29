@@ -480,7 +480,7 @@ here for convenience) to bare mode:
 include::code/args.s[]
 ----
 
-So we need to change the ``move``s,``li``'s, ``la``'s,  and the the `j`.
+So we need to change the ``move``s,``li``'s, ``la``'s,  and the `j`.
 after any branches or loads.
 
 [source,riscv,linenums]
